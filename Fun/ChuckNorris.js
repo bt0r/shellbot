@@ -10,7 +10,7 @@ module.exports = {
         request(this.url, function (error, response, body) {
             let jsonResponse = JSON.parse(body);
             let fact = entities.decode(jsonResponse[0].fact);
-            console.log('[ChuckNorris] New fact found : ' + fact);
+            console.log('[ChuckNorris] New fact found ('+message.author.username+') : ' + fact);
             message.reply(fact);
         });
     }
