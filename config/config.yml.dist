@@ -1,5 +1,6 @@
-config:
+parameters:
     token: ~ # Your bot token
+    commandPrefix: "!" # Commands prefix
 channels: # Configurations of channels
     news_3: # Channel named as "news" with position 3
         message_restriction: # If you want to apply a regexp on posted messages
@@ -9,3 +10,5 @@ channels: # Configurations of channels
         message_restriction:
             regexp: "(?:Hello|Hi|Hey)"
             error_message: Oh wait, start to say hi first 😏
+        modules_enabled:
+            - YourModule # Enable a specific module
