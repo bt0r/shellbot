@@ -30,14 +30,14 @@ client.on('message', message => {
 
                 }
             }
-        }
 
-        // Modules
-        let modulesEnabled = channelConfig.modules_enabled;
-        console.log(modulesEnabled);
-        if(channelConfig !== null && modulesEnabled!== null && message.content.startsWith(config.parameters.commandPrefix)){
-            if(modulesEnabled.chuckNorris && message.content == chuckNorris.name){
-                chuckNorris.fetchOne(message);
+            // Modules
+            let modulesEnabled = channelConfig.modules_enabled;
+            console.log(modulesEnabled);
+            if(modulesEnabled !== null && message.content.startsWith(config.parameters.commandPrefix)){
+                if(modulesEnabled.chuckNorris && message.content == chuckNorris.name){
+                    chuckNorris.fetchOne(message);
+                }
             }
         }
     }
