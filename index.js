@@ -17,7 +17,7 @@ client.on('message', message => {
         // Check if message is posted in a restricted channel
         if(channelConfig !== null){
             let messageRestriction = channelConfig.message_restriction;
-            if(messageRestriction.regexp !== null && messageRestriction.error_message !== null){
+            if(messageRestriction!== null && messageRestriction.regexp !== null && messageRestriction.error_message !== null){
                 // If message is forbidden, remove it
                 if(!message.content.match(messageRestriction.regexp)){
                     message.delete();
