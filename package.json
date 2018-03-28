@@ -1,0 +1,29 @@
+{
+  "name": "shellbot",
+  "version": "1.0.0",
+  "description": "Discord bot of ShellCode.fr",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bt0r/shellbot.git"
+  },
+  "keywords": [
+    "shellbot",
+    "shellcode",
+    "discord",
+    "bot"
+  ],
+  "author": "bt0r",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bt0r/shellbot/issues"
+  },
+  "homepage": "https://github.com/bt0r/shellbot#readme",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "request": "^2.85.0"
+  }
+}
