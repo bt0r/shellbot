@@ -24,6 +24,7 @@
   "homepage": "https://github.com/bt0r/shellbot#readme",
   "dependencies": {
     "discord.js": "^11.3.2",
+    "html-entities": "^1.2.1",
     "request": "^2.85.0"
   }
 }
