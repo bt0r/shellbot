@@ -34,8 +34,10 @@ client.on('message', message => {
             // Modules
             let modulesEnabled = channelConfig.modules_enabled;
             console.log(modulesEnabled);
+            console.log(config.parameters.commandPrefix);
             if(modulesEnabled !== null && message.content.startsWith(config.parameters.commandPrefix)){
-                if(modulesEnabled.chuckNorris && message.content == chuckNorris.name){
+                let messageContent = message.content.split(config.parameters.commandPrefix)[1];
+                if(modulesEnabled.chuckNorris && messageContent == chuckNorris.name){
                     chuckNorris.fetchOne(message);
                 }
             }
