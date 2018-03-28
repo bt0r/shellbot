@@ -25,6 +25,7 @@
   "dependencies": {
     "discord.js": "^11.3.2",
     "html-entities": "^1.2.1",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "yamljs": "^0.3.0"
   }
 }
