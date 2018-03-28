@@ -1,0 +1,11 @@
+config:
+    token: ~ # Your bot token
+channels: # Configurations of channels
+    news_3: # Channel named as "news" with position 3
+        message_restriction: # If you want to apply a regexp on posted messages
+            regexp: "^\[[\w\.\-\(\)#éùàè\&'\"\|@]+\].+https?:\/\/.+\.\w{1,4}$"
+            error_message: Your message does not support the supported format, please format your sentence like this : "[Category] Title of your news http://link.com"
+    welcome_0:
+        message_restriction:
+            regexp: "(?:Hello|Hi|Hey)"
+            error_message: Oh wait, start to say hi first 😏
