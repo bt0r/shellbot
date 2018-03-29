@@ -2,6 +2,8 @@
 YAML = require('yamljs');
 config = YAML.load('config/config.yml');
 const chuckNorris = require('./Fun/ChuckNorris');
+const buttsPicture = require('./Fun/ButtsPicture');
+const boobsPicture = require('./Fun/BoobsPicture');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -15,7 +17,7 @@ client.on('message', message => {
         let channel = message.channel;
         let channelConfig = config.channels[channel.name+"_"+channel.position];
         // Check if message is posted in a restricted channel
-        if(channelConfig !== null){
+        if(channelConfig !== undefined){
             let messageRestriction = channelConfig.message_restriction;
             if(messageRestriction !== undefined && messageRestriction.regexp !== null && messageRestriction.error_message !== null){
                 // If message is forbidden, remove it
@@ -33,12 +35,18 @@ client.on('message', message => {
 
             // Modules
             let modulesEnabled = channelConfig.modules_enabled;
-            console.log(modulesEnabled);
-            console.log(config.parameters.commandPrefix);
             if(modulesEnabled !== null && message.content.startsWith(config.parameters.commandPrefix)){
                 let messageContent = message.content.split(config.parameters.commandPrefix)[1];
+                // Chucks
                 if(modulesEnabled.chuckNorris && messageContent == chuckNorris.name){
                     chuckNorris.fetchOne(message);
+                }
+                // Boobs & Butts
+                if(modulesEnabled.buttsPicture && messageContent == buttsPicture.name){
+                    buttsPicture.fetchOne(message);
+                }
+                if(modulesEnabled.boobsPicture && messageContent == boobsPicture.name){
+                    boobsPicture.fetchOne(message);
                 }
             }
         }
