@@ -4,6 +4,7 @@ config = YAML.load('config/config.yml');
 const chuckNorris = require('./Fun/ChuckNorris');
 const buttsPicture = require('./Fun/ButtsPicture');
 const boobsPicture = require('./Fun/BoobsPicture');
+const qwant = require('./Utils/Qwant');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -47,6 +48,10 @@ client.on('message', message => {
                 }
                 if(modulesEnabled.boobsPicture && messageContent == boobsPicture.name){
                     boobsPicture.fetchOne(message);
+                }
+                // Qwant
+                if(modulesEnabled.qwant && messageContent.startsWith(qwant.name)){
+                    qwant.search(message);
                 }
             }
         }
