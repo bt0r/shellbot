@@ -9,10 +9,10 @@ module.exports = {
 
         let messageContent = message.content.split(" ");
         console.log(messageContent);
-        let query = messageContent[1] !== undefined ? messageContent[1] : "";
-        if(query !== ""){
-            console.log('[Qwant] Search query ' + query + ' from ' + message.author.username);
-            let url = this.url + "q=" + query;
+        messageContent.shift();
+        if(messageContent!== undefined && messageContent !== ""){
+            console.log('[Qwant] Search query ' + messageContent + ' from ' + message.author.username);
+            let url = this.url + "q=" + messageContent;
             console.log(url);
             let options = {
                 url: url,
