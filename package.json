@@ -4,7 +4,8 @@
   "description": "Discord bot of ShellCode.fr",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "set NODE_ENV=production && ts-node index.ts"
   },
   "repository": {
     "type": "git",
