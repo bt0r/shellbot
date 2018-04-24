@@ -7,7 +7,12 @@ export class Logger {
      */
     private _logger;
 
-    constructor() {
+    /**
+     * Logger instance (Singleton)
+     */
+    private static instance: Logger;
+
+    private constructor() {
         configure('./config/log4js.json')
         this.logger = getLogger("Shellbot")
 
@@ -22,25 +27,30 @@ export class Logger {
         return this._logger;
     }
 
-    set logger(logger) {
+    set logger(logger: any) {
         this._logger = logger;
     }
 
-    debug(message) {
+    public debug(message: string) {
         return this.logger.debug(message)
     }
 
-    info(message) {
+    public info(message: string) {
         return this.logger.info(message)
     }
 
-    warning(message) {
+    public warning(message: string) {
         return this.logger.warning(message)
     }
 
-    error(message) {
+    public error(message: string) {
         return this.logger.error(message)
     }
 
-
+    public static getInstance() {
+        if (!Logger.instance) {
+            Logger.instance = new Logger();
+        }
+        return Logger.instance;
+    }
 }
