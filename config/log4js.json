@@ -1,29 +1,38 @@
 {
   "appenders": {
-    "access": {
-      "type": "dateFile",
-      "filename": "var/logs/access.log",
-      "pattern": "-yyyy-MM-dd",
-      "category": "http"
-    },
-    "app": {
+    "prod": {
       "type": "file",
-      "filename": "var/logs/app.log",
+      "filename": "var/logs/prod.log",
       "maxLogSize": 10485760,
       "numBackups": 3
     },
-    "errorFile": {
+    "dev": {
+      "type": "file",
+      "filename": "var/logs/dev.log",
+      "maxLogSize": 10485760,
+      "numBackups": 3
+    },
+    "error": {
       "type": "file",
       "filename": "var/logs/errors.log"
     },
-    "errors": {
+    "errorsFilter": {
       "type": "logLevelFilter",
       "level": "ERROR",
-      "appender": "errorFile"
+      "appender": "error"
+    },
+    "debugFilter": {
+      "type": "logLevelFilter",
+      "level": "DEBUG",
+      "appender": "dev"
+    },
+    "prodFilter": {
+      "type": "logLevelFilter",
+      "level": "INFO",
+      "appender": "prod"
     }
   },
   "categories": {
-    "default": { "appenders": [ "app", "errors" ], "level": "DEBUG" },
-    "http": { "appenders": [ "access"], "level": "DEBUG" }
+    "default": { "appenders": [ "prodFilter", "errorsFilter","debugFilter" ], "level": "DEBUG" }
   }
 }
