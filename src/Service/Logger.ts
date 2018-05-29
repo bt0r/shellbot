@@ -13,9 +13,9 @@ export class Logger {
     private static instance: Logger;
 
     private constructor() {
-        configure('./config/log4js.json')
-        this.logger = getLogger("Shellbot")
-
+        configure('./config/log4js.json');
+        this.logger = getLogger("Shellbot");
+        console.log("test");
         if (process.env === "production") {
             this.logger.level = 'info';
         } else {
@@ -40,7 +40,7 @@ export class Logger {
     }
 
     public warning(message: string) {
-        return this.logger.warning(message)
+        return this.logger.warn(message)
     }
 
     public error(message: string) {
