@@ -4,7 +4,6 @@ import {Inject} from "typescript-ioc";
 
 export class Logger {
     @Inject
-
     /**
      * Log4Js Logger
      */
@@ -18,7 +17,6 @@ export class Logger {
     private constructor() {
         configure('./config/log4js.json');
         this.logger = getLogger("Shellbot");
-        console.log("test");
         if (process.env['NODE_ENV'] === "production") {
             this.logger.level = 'info';
         } else {
