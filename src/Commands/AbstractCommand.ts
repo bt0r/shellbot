@@ -1,6 +1,5 @@
 'use strict';
 import {Logger} from "../Service/Logger";
-import * as YAML from "yamljs";
 
 interface CommandInterface{
     name: string;
@@ -13,13 +12,6 @@ export abstract class AbstractCommand implements CommandInterface{
      * @private
      */
     private _logger: Logger = Logger.getInstance();
-
-    /**
-     * Config
-     * @type {any}
-     * @private
-     */
-    private _config = YAML.load('config/config.yml');
     /**
      * Name of the command
      * @type string
@@ -64,13 +56,6 @@ export abstract class AbstractCommand implements CommandInterface{
         return this._logger;
     }
 
-    /**
-     * Return the shellbot config
-     * @returns {Object}
-     */
-    public get config(): Object {
-        return this._config;
-    }
 
     public abstract do();
 

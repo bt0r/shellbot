@@ -25,7 +25,7 @@ export class Listener {
 
 
     constructor(shellbotClient: ShellbotClient) {
-        Listener.createEmitter();
+        Listener.getInstance();
         this.logger         = Logger.getInstance();
         this.shellbotClient = shellbotClient;
         let discordClient   = this.shellbotClient.discordClient;
@@ -56,9 +56,8 @@ export class Listener {
             let [command, ...args] = content.split(' ');
             let [_, commandName]   = command.split(commandPrefix);
 
-            let author = message.author;
             // Try to send the command
-            CommandFactory.instantiate(commandName,author);
+            CommandFactory.instantiate(commandName,message);
         }
     }
 
@@ -98,7 +97,7 @@ export class Listener {
         this._shellbotClient = shellbotClient;
     }
 
-    public static createEmitter() {
+    public static getInstance() {
         if (!this.EMITTER) {
             this.EMITTER = new CommandEmitter();
         }
