@@ -16,11 +16,11 @@ export class CommandFactory{
                 break;
         }
         if(commandFound !== null && config.isCommandEnabled(commandName,message.channel)){
-            this.send(commandFound,message.author);
+            this.send(commandFound,message);
         }
     }
-    private static send(command: AbstractCommand,author: User){
-        command = command.worker();
+    private static send(command: AbstractCommand,message: Message){
+        command = command.worker(message);
         let emitter = Listener.getInstance();
         emitter.on('shellbot.command',function(data){
             console.log(data.command.name);
@@ -28,7 +28,7 @@ export class CommandFactory{
         });
         emitter.emit("shellbot.command",{
             command: command,
-            author: author
+            author: message.author
         });
     }
 }

@@ -1,9 +1,10 @@
 'use strict';
-import {Logger} from "../Service/Logger";
+import {Logger}  from "../Service/Logger";
+import {Message} from "discord.js";
 
 interface CommandInterface{
     name: string;
-    do();
+    do(message:Message);
 }
 export abstract class AbstractCommand implements CommandInterface{
     /**
@@ -52,15 +53,14 @@ export abstract class AbstractCommand implements CommandInterface{
         this.log('error', message);
     }
 
-    private get logger(): Logger {
+    protected get logger(): Logger {
         return this._logger;
     }
 
+    public abstract do(message: Message);
 
-    public abstract do();
-
-    public worker(){
-        this.do();
+    public worker(message: Message){
+        this.do(message);
 
         return this;
     }
