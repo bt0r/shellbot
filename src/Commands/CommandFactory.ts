@@ -1,10 +1,10 @@
 'use strict'
-import {Chuck} from "./Chuck";
-import {Listener} from "../Listener/Listener";
-import {Message, User} from "discord.js";
+import {Chuck}           from "./Chuck";
+import {Listener}        from "../Listener/Listener";
+import {Message, User}   from "discord.js";
 import {AbstractCommand} from "./AbstractCommand";
-import {Container} from "typescript-ioc";
-import {Config} from "../Service/Config";
+import {Container}       from "typescript-ioc";
+import {Config}          from "../Service/Config";
 
 export class CommandFactory{
     static instantiate(commandName: string,message: Message){
