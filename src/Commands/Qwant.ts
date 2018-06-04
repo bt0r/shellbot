@@ -3,6 +3,9 @@ import {Message}         from "discord.js";
 import * as request      from "request";
 import * as striptags    from "striptags";
 
+/**
+ * This command allow you to search something on the Qwant search engine !
+ */
 export class Qwant extends AbstractCommand {
     static NAME: string       = "qwant";
     private url: string       = "https://api.qwant.com/api/search/web?count=10&";
