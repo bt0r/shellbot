@@ -5,6 +5,8 @@ import {Message}         from "discord.js";
 import {AbstractCommand} from "./AbstractCommand";
 import {Container}       from "typescript-ioc";
 import {Config}          from "../Service/Config";
+import {Boobs}           from "./Boobs";
+import {Qwant}           from "./Qwant";
 
 export class CommandFactory {
     static instantiate(commandName: string, message: Message) {
@@ -13,6 +15,12 @@ export class CommandFactory {
         switch (commandName) {
             case Chuck.NAME:
                 commandFound = new Chuck();
+                break;
+            case Boobs.NAME:
+                commandFound = new Boobs();
+                break;
+            case Qwant.NAME:
+                commandFound = new Qwant();
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, message.channel)) {
