@@ -15,8 +15,8 @@ export class Boobs extends AbstractCommand {
     }
 
     do(message: Message) {
-        var logger = this.logger;
-        logger.info('Fetching new booby picture');
+        var command = this;
+        command.info('Fetching new booby picture');
         request(this.url, function (error, response, body) {
             let jsonResponse = JSON.parse(body);
             let boobsPicture = "http://media.oboobs.ru/" + jsonResponse[0].preview.replace("boobs_preview", "boobs");
@@ -24,7 +24,7 @@ export class Boobs extends AbstractCommand {
             let model        = jsonResponse[0].model !== null ? " - " + jsonResponse[0].model : "";
             let title        = `<@${authorId}> ${model}`;
 
-            logger.info('New boobs found (' + message.author.username + ') : ' + boobsPicture);
+            command.info('New boobs found (' + message.author.username + ') : ' + boobsPicture);
             let messageResponse = message.channel.send(title, {
                 file: boobsPicture
             });

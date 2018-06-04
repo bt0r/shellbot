@@ -2,15 +2,11 @@
 import {AbstractCommand} from "./AbstractCommand";
 import * as request      from "request";
 import {Message}         from "discord.js";
-import {AllHtmlEntities}     from "html-entities";
+import {AllHtmlEntities} from "html-entities";
 
 export class Chuck extends AbstractCommand {
     public static NAME: string = "chuck";
-    /**
-     * URL of Chuck noris API
-     * @type {string}
-     */
-    private url: string = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
+    private url: string        = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
 
     constructor() {
         super();
@@ -18,13 +14,13 @@ export class Chuck extends AbstractCommand {
     }
 
     do(message: Message) {
-        var logger = this.logger;
-        logger.info('Fetching new fact');
+        var command = this;
+        command.info('Fetching new fact');
         request(this.url, function (error, response, body) {
             let jsonResponse = JSON.parse(body);
-            let entities = new AllHtmlEntities();
-            let fact = entities.decode(jsonResponse[0].fact);
-            logger.info('New fact found ('+message.author.username+') : ' + fact);
+            let entities     = new AllHtmlEntities();
+            let fact         = entities.decode(jsonResponse[0].fact);
+            command.info('New fact found (' + message.author.username + ') : ' + fact);
             message.reply(fact);
         });
     }

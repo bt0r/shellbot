@@ -21,8 +21,8 @@ export class Qwant extends AbstractCommand {
         messageContent.shift(); // Remove command name !qwant
         let messageContentStr = messageContent.join(" ");
         if (messageContentStr !== undefined && messageContentStr !== "") {
-            let logger = this.logger;
-            logger.info("Search query ${messageContent} from ${message.author.username}");
+            let command = this;
+            command.info("Search query ${messageContent} from ${message.author.username}");
             let url     = this.url + "q=" + messageContentStr;
             let options = {
                 url: url,
@@ -39,7 +39,7 @@ export class Qwant extends AbstractCommand {
                     let content = "**" + title + "**\n<" + link + ">";
                     resultContent += "\n" + content;
                 }
-                logger.info("${result.length} results found.");
+                command.info("${result.length} results found.");
                 message.reply(resultContent);
             });
         }
