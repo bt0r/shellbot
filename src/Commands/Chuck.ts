@@ -5,7 +5,7 @@ import {Message}         from "discord.js";
 import {AllHtmlEntities}     from "html-entities";
 
 export class Chuck extends AbstractCommand {
-    static NAME: string = "chuck";
+    public static NAME: string = "chuck";
     /**
      * URL of Chuck noris API
      * @type {string}
