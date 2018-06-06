@@ -11,4 +11,9 @@ channels: # Configurations of channels
             regexp: "(?:Hello|Hi|Hey)"
             error_message: Oh wait, start to say hi first 😏
         modules_enabled:
-            - YourModule # Enable a specific module
+            YourModule: true # Enable a specific module
+            YourModule2:
+                enabled: true
+                conf:
+                    - A
+                    - B
