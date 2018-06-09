@@ -2,17 +2,24 @@
 import {Logger}  from "../Service/Logger";
 import {Message} from "discord.js";
 
-interface CommandInterface{
+interface CommandInterface {
     name: string;
-    do(message:Message);
+
+    do(message: Message);
 }
-export abstract class AbstractCommand implements CommandInterface{
+
+export abstract class AbstractCommand implements CommandInterface {
     /**
      * Logger Log4Js
      * @type {Logger}
      * @private
      */
     private _logger: Logger = Logger.getInstance();
+
+    /**
+     * Config of current command
+     */
+    private _config: object;
     /**
      * Name of the command
      * @type string
@@ -59,9 +66,17 @@ export abstract class AbstractCommand implements CommandInterface{
 
     public abstract do(message: Message);
 
-    public worker(message: Message){
+    public worker(message: Message) {
         this.do(message);
 
         return this;
+    }
+
+    public get config(): any{
+        return this._config;
+    }
+
+    public set config(config: any) {
+        this._config = config;
     }
 }
