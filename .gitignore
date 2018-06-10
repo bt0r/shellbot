@@ -3,3 +3,4 @@ config/config.yml
 node_modules
 npm-debug.log
 src/**/*.js
+/var
