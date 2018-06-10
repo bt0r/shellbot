@@ -1,10 +1,10 @@
 'use strict';
-import {Inject} from "typescript-ioc";
-import * as YAML from "yamljs";
-import {Channel, TextChannel} from "discord.js";
+import {Inject}      from "typescript-ioc";
+import * as YAML     from "yamljs";
+import {TextChannel} from "discord.js";
 
 
-export class Config{
+export class Config {
     @Inject
     /**
      * Config
@@ -27,8 +27,8 @@ export class Config{
      * @param {string} channel
      * @returns {boolean}
      */
-    public isCommandEnabled(command :string,channel: TextChannel){
-        let configChannel = this._config.channels[channel.name+"_"+channel.position];
-       return configChannel && configChannel.modules_enabled[command];
+    public isCommandEnabled(command: string, channel: TextChannel) {
+        let configChannel = this._config.channels[channel.name + "_" + channel.position];
+        return configChannel && configChannel.modules_enabled[command];
     }
 }
