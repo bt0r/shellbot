@@ -1,6 +1,6 @@
-import {AbstractCommand} from "./AbstractCommand";
-import {Message}         from "discord.js";
-import * as request      from "request";
+import {AbstractCommand}    from "./AbstractCommand";
+import {Message, RichEmbed} from "discord.js";
+import * as request         from "request";
 
 export class Cat extends AbstractCommand {
     public static NAME: string = "cat";
@@ -18,18 +18,37 @@ export class Cat extends AbstractCommand {
     do(message: Message) {
         var command = this;
         command.info('Fetching new cat picture');
-        let authorId = message.author.id;
-        let title    = `<@${authorId}>`;
+        let authorId     = message.author.id;
+        let title        = `<@${authorId}>`;
+        let waitingEmbed = new RichEmbed();
+        waitingEmbed.setImage(this.config.loading_image);
+        waitingEmbed.setTitle(this.config.lang.waiting);
 
-        request(command.url, function (error, response, body) {
-            let jsonResponse = JSON.parse(body);
-            if (jsonResponse.file) {
-                let url = jsonResponse.file;
-                command.info('New cat found (' + url + ')');
-                message.channel.send(title, {
-                    file: url
-                });
-            }
-        });
+        message.channel.send(title, waitingEmbed).then(message => {
+            request(command.url, function (error, response, body) {
+                if (response.statusCode == 200) {
+                    let jsonResponse = JSON.parse(body);
+                    if (jsonResponse.file) {
+                        let url = jsonResponse.file;
+                        command.info('New cat found (' + url + ')');
+                        let richEmbed = new RichEmbed();
+                        richEmbed.setImage(url);
+                        message.edit(title, richEmbed);
+                    }
+                } else {
+                    message.edit(command.config.lang.error).then(message => {
+                        setTimeout(function () {
+                            message.delete();
+                        }, 10000);
+                    });
+                }
+            });
+        }).catch(message => {
+            message.edit(command.config.lang.error).then(message => {
+                setTimeout(function () {
+                    message.delete();
+                }, 10000);
+            });
+        })
     }
 }
