@@ -6,11 +6,15 @@ import {AllHtmlEntities} from "html-entities";
 
 export class Chuck extends AbstractCommand {
     public static NAME: string = "chuck";
-    private url: string        = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
+    private _url: string       = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
 
     constructor() {
         super();
         this.name = Chuck.NAME;
+    }
+
+    public get url() {
+        return this._url;
     }
 
     do(message: Message) {
