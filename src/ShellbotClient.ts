@@ -1,8 +1,8 @@
 'use strict'
-import {Client} from "discord.js";
-import * as YAML from "yamljs";
+import {Client}   from "discord.js";
+import * as YAML  from "yamljs";
 import {Listener} from "./Listener/Listener";
-import {Logger} from "./Service/Logger";
+import {Logger}   from "./Service/Logger";
 
 
 export class ShellbotClient {
