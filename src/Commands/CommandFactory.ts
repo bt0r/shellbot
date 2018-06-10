@@ -9,6 +9,7 @@ import {Boobs}           from "./Boobs";
 import {Qwant}           from "./Qwant";
 import {Cat}             from "./Cat";
 import {Weather}         from "./Weather";
+import {Bonjour}         from "./Bonjour";
 
 export class CommandFactory {
     static instantiate(commandName: string, message: Message) {
@@ -29,6 +30,9 @@ export class CommandFactory {
                 break;
             case Weather.NAME:
                 commandFound = new Weather();
+                break;
+            case Bonjour.NAME:
+                commandFound = new Bonjour();
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, message.channel)) {
