@@ -17,3 +17,26 @@ channels: # Configurations of channels
                 conf:
                     - A
                     - B
+            chuck: true
+            boobs: true
+            qwant: true
+            cat:
+                enabled: true
+                token: YourToken
+                loading_image: "https://media.giphy.com/media/3o7WTJ0yHFA2GzOA2k/giphy.gif"
+                lang:
+                  waiting: Please wait while trying to find a cat ...
+                  error: An error occured when trying to find a cat :'(
+            weather:
+                enabled: true
+                token: YourToken
+                default_country_code: en
+                unit: metric
+                lang:
+                  title: Weather
+                  city_missing: There is no city, how can i help you ?
+                  country_code_missing: There is no country code, please add an default ISO country code like 'fr', 'us'.. in your config file or in your request
+                  unit_missing: There is no unit, please add one in your config file, allowed : metric or imperial
+                  error: An error occured, please report this to an admin
+                  not_found: This city was not found, please try another one.
+            bonjour: true
