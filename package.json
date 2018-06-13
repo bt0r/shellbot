@@ -24,9 +24,11 @@
   },
   "homepage": "https://github.com/bt0r/shellbot#readme",
   "dependencies": {
+    "@types/cheerio": "^0.22.7",
     "@types/html-entities": "^1.2.16",
     "@types/node": "^10.3.0",
     "@types/request": "^2.47.0",
+    "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.3.2",
     "html-entities": "^1.2.1",
     "log4js": "^2.8.0",
