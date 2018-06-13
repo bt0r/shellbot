@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import {configure, getLogger} from 'log4js';
 import {Inject} from "typescript-ioc";
 

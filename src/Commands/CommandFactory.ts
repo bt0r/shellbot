@@ -1,19 +1,20 @@
-'use strict'
-import {Chuck}           from "./Chuck";
-import {Listener}        from "../Listener/Listener";
-import {Message}         from "discord.js";
-import {AbstractCommand} from "./AbstractCommand";
-import {Container}       from "typescript-ioc";
-import {Config}          from "../Service/Config";
-import {Boobs}           from "./Boobs";
-import {Qwant}           from "./Qwant";
-import {Cat}             from "./Cat";
-import {Weather}         from "./Weather";
-import {Bonjour}         from "./Bonjour";
+"use strict";
+import {Chuck}                from "./Chuck";
+import {Listener}             from "../Listener/Listener";
+import {Message, TextChannel} from "discord.js";
+import {AbstractCommand}      from "./AbstractCommand";
+import {Container}            from "typescript-ioc";
+import {Config}               from "../Service/Config";
+import {Boobs}                from "./Boobs";
+import {Qwant}                from "./Qwant";
+import {Cat}                  from "./Cat";
+import {Weather}              from "./Weather";
+import {Bonjour}              from "./Bonjour";
 
 export class CommandFactory {
     static instantiate(commandName: string, message: Message) {
         let config       = Container.get(Config);
+        let channel      = message.channel as TextChannel;
         let commandFound = null;
         switch (commandName) {
             case Chuck.NAME:
@@ -35,10 +36,9 @@ export class CommandFactory {
                 commandFound = new Bonjour();
                 break;
         }
-        if (commandFound !== null && config.isCommandEnabled(commandName, message.channel)) {
-            let channel       = message.channel;
-            let configChannel = config.config.channels[channel.name + "_" + channel.position];
-            let commandConfig = configChannel.modules_enabled[commandName];
+        if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
+            let configChannel   = config.config.channels[channel.name + "_" + channel.position];
+            let commandConfig   = configChannel.modules_enabled[commandName];
             commandFound.config = commandConfig;
 
             this.send(commandFound, message);

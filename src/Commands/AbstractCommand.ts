@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import {Logger}  from "../Service/Logger";
 import {Message} from "discord.js";
 

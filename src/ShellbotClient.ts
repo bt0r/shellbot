@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 import {Client}   from "discord.js";
 import * as YAML  from "yamljs";
 import {Listener} from "./Listener/Listener";

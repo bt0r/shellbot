@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import {AbstractCommand} from "./AbstractCommand";
 import * as request      from "request";
 import {Message}         from "discord.js";

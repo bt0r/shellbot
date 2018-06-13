@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import {Inject}      from "typescript-ioc";
 import * as YAML     from "yamljs";
 import {TextChannel} from "discord.js";

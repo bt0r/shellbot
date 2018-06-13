@@ -1,3 +1,4 @@
+"use strict";
 import {AbstractCommand}    from "./AbstractCommand";
 import {Message, RichEmbed} from "discord.js";
 import * as request         from "request";
@@ -33,23 +34,24 @@ export class Cat extends AbstractCommand {
         waitingEmbed.setImage(this.config.loading_image);
         waitingEmbed.setTitle(this.config.lang.waiting);
 
-        message.channel.send(waitingEmbed).then(message => {
-            request(command.url, function (error, response, body) {
-                if (response.statusCode == 200) {
-                    let url = response.request.href;
-                    command.info('New cat found (' + url + ')');
-                    let richEmbed = new RichEmbed();
-                    richEmbed.setImage(url);
-                    message.edit(title, richEmbed);
-                } else {
-                    message.edit(command.config.lang.error).then(message => {
-                        setTimeout(function () {
-                            message.delete();
-                        }, 10000);
-                    });
-                }
-            });
-        }).catch(message => {
+        message.channel.send(waitingEmbed).then((message :Message)=> {
+                request(command.url, function (error, response, body) {
+                    if (response.statusCode == 200) {
+                        let url = response.request.href;
+                        command.info('New cat found (' + url + ')');
+                        let richEmbed = new RichEmbed();
+                        richEmbed.setImage(url);
+                        message.edit(title, richEmbed);
+                    } else {
+                        message.edit(command.config.lang.error).then(message => {
+                            setTimeout(function () {
+                                message.delete();
+                            }, 10000);
+                        });
+                    }
+                });
+
+        }).catch((message :Message) => {
             message.edit(command.config.lang.error).then(message => {
                 setTimeout(function () {
                     message.delete();

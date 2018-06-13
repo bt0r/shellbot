@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import {Channel, GuildMember, Message, User} from "discord.js";
 import {Logger} from "../Service/Logger";
