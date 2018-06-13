@@ -35,7 +35,6 @@ export class Cat extends AbstractCommand {
 
         message.channel.send(waitingEmbed).then(message => {
             request(command.url, function (error, response, body) {
-                console.log(response.statusCode);
                 if (response.statusCode == 200) {
                     let url = response.request.href;
                     command.info('New cat found (' + url + ')');
