@@ -1,14 +1,14 @@
 "use strict";
-import {Logger}  from "../Service/Logger";
 import {Message} from "discord.js";
+import {Logger} from "../Service/Logger";
 
-interface CommandInterface {
+interface ICommand {
     name: string;
 
     do(message: Message);
 }
 
-export abstract class AbstractCommand implements CommandInterface {
+export abstract class AbstractCommand implements ICommand {
     /**
      * Logger Log4Js
      * @type {Logger}
@@ -35,35 +35,6 @@ export abstract class AbstractCommand implements CommandInterface {
         this._name = name;
     }
 
-    /**
-     * Log with Log4js
-     * @param severity
-     * @param message
-     */
-    private log(severity: string, message: string) {
-        this.logger[severity](`[${this.name}] ${message}`);
-    }
-
-    protected debug(message) {
-        this.log('debug', message);
-    }
-
-    protected info(message) {
-        this.log('info', message);
-    }
-
-    protected warning(message) {
-        this.log('warning', message);
-    }
-
-    protected error(message) {
-        this.log('error', message);
-    }
-
-    protected get logger(): Logger {
-        return this._logger;
-    }
-
     public abstract do(message: Message);
 
     public worker(message: Message) {
@@ -72,11 +43,40 @@ export abstract class AbstractCommand implements CommandInterface {
         return this;
     }
 
-    public get config(): any{
+    public get config(): any {
         return this._config;
     }
 
     public set config(config: any) {
         this._config = config;
+    }
+
+    protected debug(message) {
+        this.log("debug", message);
+    }
+
+    protected info(message) {
+        this.log("info", message);
+    }
+
+    protected warning(message) {
+        this.log("warning", message);
+    }
+
+    protected error(message) {
+        this.log("error", message);
+    }
+
+    protected get logger(): Logger {
+        return this._logger;
+    }
+
+    /**
+     * Log with Log4js
+     * @param severity
+     * @param message
+     */
+    private log(severity: string, message: string) {
+        this.logger[severity](`[${this.name}] ${message}`);
     }
 }
