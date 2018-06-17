@@ -8,6 +8,8 @@
         "variable-name": [true,
             "check-format",
             "allow-leading-underscore"
-        ]},
+        ],
+        "max-line-length": [true, 255]
+    },
     "rulesDirectory": []
 }
