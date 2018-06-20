@@ -119,8 +119,8 @@ export class Weather extends AbstractCommand {
                 for (let day in result) {
                     let weatherValues = "";
                     for (let weather in result[day]) {
-                        weather = result[day][weather];
-                        weatherValues += " " + weather.hour + " " + weather.value;
+                        let weatherAll: any = result[day][weather];
+                        weatherValues += " " + weatherAll.hour as string + " " + weatherAll.value as string;
                     }
                     embedFields.push({
                         name: day,
