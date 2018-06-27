@@ -6,7 +6,7 @@ import {AbstractCommand} from "./AbstractCommand";
 /**
  * 🔞 This command will show some randoms boobies 🔞
  */
-export class Boobs extends AbstractCommand {
+export class Butts extends AbstractCommand {
     public static NAME: string = "butts";
     private _url: string = "http://api.obutts.ru/butts/1/1/random";
 

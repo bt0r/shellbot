@@ -1,20 +1,21 @@
 "use strict";
-import {Chuck}                from "./Chuck";
-import {Listener}             from "../Listener/Listener";
 import {Message, TextChannel} from "discord.js";
-import {AbstractCommand}      from "./AbstractCommand";
-import {Container}            from "typescript-ioc";
-import {Config}               from "../Service/Config";
-import {Boobs}                from "./Boobs";
-import {Qwant}                from "./Qwant";
-import {Cat}                  from "./Cat";
-import {Weather}              from "./Weather";
-import {Bonjour}              from "./Bonjour";
+import {Container} from "typescript-ioc";
+import {Listener} from "../Listener/Listener";
+import {Config} from "../Service/Config";
+import {AbstractCommand} from "./AbstractCommand";
+import {Bonjour} from "./Bonjour";
+import {Boobs} from "./Boobs";
+import {Butts} from "./Butts";
+import {Cat} from "./Cat";
+import {Chuck} from "./Chuck";
+import {Qwant} from "./Qwant";
+import {Weather} from "./Weather";
 
 export class CommandFactory {
-    static instantiate(commandName: string, message: Message) {
-        let config       = Container.get(Config);
-        let channel      = message.channel as TextChannel;
+    public static instantiate(commandName: string, message: Message) {
+        const config = Container.get(Config);
+        const channel = message.channel as TextChannel;
         let commandFound = null;
         switch (commandName) {
             case Chuck.NAME:
@@ -22,6 +23,9 @@ export class CommandFactory {
                 break;
             case Boobs.NAME:
                 commandFound = new Boobs();
+                break;
+            case Butts.NAME:
+                commandFound = new Butts();
                 break;
             case Qwant.NAME:
                 commandFound = new Qwant();
@@ -37,8 +41,8 @@ export class CommandFactory {
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
-            let configChannel   = config.config.channels[channel.name + "_" + channel.position];
-            let commandConfig   = configChannel.modules_enabled[commandName];
+            const configChannel = config.config.channels[channel.name + "_" + channel.position];
+            const commandConfig = configChannel.modules_enabled[commandName];
             commandFound.config = commandConfig;
 
             this.send(commandFound, message);
@@ -46,12 +50,12 @@ export class CommandFactory {
     }
 
     private static send(command: AbstractCommand, message: Message) {
-        command     = command.worker(message);
-        let emitter = Listener.getInstance();
+        command = command.worker(message);
+        const emitter = Listener.getInstance();
 
         emitter.emit("shellbot.command", {
-            command: command,
-            author: message.author
+            author: message.author,
+            command,
         });
     }
 }
