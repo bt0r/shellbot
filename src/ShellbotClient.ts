@@ -1,9 +1,8 @@
 "use strict";
-import {Client}   from "discord.js";
-import * as YAML  from "yamljs";
+import {Client} from "discord.js";
+import * as YAML from "yamljs";
 import {Listener} from "./Listener/Listener";
-import {Logger}   from "./Service/Logger";
-
+import {Logger} from "./Service/Logger";
 
 export class ShellbotClient {
     /**
@@ -11,7 +10,7 @@ export class ShellbotClient {
      * @type {any}
      * @private
      */
-    private _config = YAML.load('config/config.yml');
+    private _config = YAML.load("config/config.yml");
 
     /**
      * Discord.JS bot client
@@ -28,16 +27,17 @@ export class ShellbotClient {
     private _logger: Logger = Logger.getInstance();
 
     constructor() {
-        this.logger.info('Shellbot is starting...')
+        this.logger.info("Shellbot is starting...");
 
         this.discordClient.login(this.config.parameters.token).then(() => {
-            this.logger.info('Shellbot logged !');
+            this.logger.info("Shellbot logged !");
         }).catch(() => {
-            this.logger.error('Shellbot cannot login :\'( ');
+            this.logger.error("Shellbot cannot login :'( ");
         });
         // Listen shellbot client
         new Listener(this);
-        this.logger.info('Shellbot started');
+
+        this.logger.info("Shellbot started");
     }
 
     /**

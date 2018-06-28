@@ -1,5 +1,5 @@
 "use strict";
-import {configure, getLogger} from 'log4js';
+import {configure, getLogger} from "log4js";
 import {Inject} from "typescript-ioc";
 
 export class Logger {
@@ -15,12 +15,12 @@ export class Logger {
     private static instance: Logger;
 
     private constructor() {
-        configure('./config/log4js.json');
+        configure("./config/log4js.json");
         this.logger = getLogger("Shellbot");
-        if (process.env['NODE_ENV'] === "production") {
-            this.logger.level = 'info';
+        if (process.env.NODE_ENV === "production") {
+            this.logger.level = "info";
         } else {
-            this.logger.level = 'debug';
+            this.logger.level = "debug";
         }
     }
 
@@ -33,19 +33,19 @@ export class Logger {
     }
 
     public debug(message: string) {
-        return this.logger.debug(message)
+        return this.logger.debug(message);
     }
 
     public info(message: string) {
-        return this.logger.info(message)
+        return this.logger.info(message);
     }
 
     public warning(message: string) {
-        return this.logger.warn(message)
+        return this.logger.warn(message);
     }
 
     public error(message: string) {
-        return this.logger.error(message)
+        return this.logger.error(message);
     }
 
     public static getInstance() {

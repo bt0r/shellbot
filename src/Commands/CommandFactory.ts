@@ -42,8 +42,7 @@ export class CommandFactory {
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
             const configChannel = config.config.channels[channel.name + "_" + channel.position];
-            const commandConfig = configChannel.modules_enabled[commandName];
-            commandFound.config = commandConfig;
+            commandFound.config = configChannel.modules_enabled[commandName];
 
             this.send(commandFound, message);
         }

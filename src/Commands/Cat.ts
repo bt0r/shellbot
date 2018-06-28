@@ -1,11 +1,11 @@
 "use strict";
-import {AbstractCommand}    from "./AbstractCommand";
 import {Message, RichEmbed} from "discord.js";
-import * as request         from "request";
+import * as request from "request";
+import {AbstractCommand} from "./AbstractCommand";
 
 export class Cat extends AbstractCommand {
     public static NAME: string = "cat";
-    private _url: string       = "http://thecatapi.com/api/images/get?format=src&results_per_page=1&api_key=";
+    private _url: string = "http://thecatapi.com/api/images/get?format=src&results_per_page=1&api_key=";
 
     constructor() {
         super();
@@ -20,43 +20,43 @@ export class Cat extends AbstractCommand {
         this._url = url;
     }
 
-    do(message: Message) {
+    public do(message: Message) {
         if (!this.config.token) {
             this.error("Token is missing, please add one on your config");
             return;
         }
-        this.url    = this.url + this.config.token;
-        var command = this;
-        command.info('Fetching new cat picture');
-        let authorId     = message.author.id;
-        let title        = `<@${authorId}>`;
-        let waitingEmbed = new RichEmbed();
+        this.url = this.url + this.config.token;
+        const command = this;
+        command.info("Fetching new cat picture");
+        const authorId = message.author.id;
+        const title = `<@${authorId}>`;
+        const waitingEmbed = new RichEmbed();
         waitingEmbed.setImage(this.config.loading_image);
         waitingEmbed.setTitle(this.config.lang.waiting);
 
-        message.channel.send(waitingEmbed).then((message :Message)=> {
-                request(command.url, function (error, response, body) {
-                    if (response.statusCode == 200) {
-                        let url = response.request.href;
-                        command.info('New cat found (' + url + ')');
-                        let richEmbed = new RichEmbed();
-                        richEmbed.setImage(url);
-                        message.edit(title, richEmbed);
-                    } else {
-                        message.edit(command.config.lang.error).then(message => {
-                            setTimeout(function () {
-                                message.delete();
-                            }, 10000);
-                        });
-                    }
-                });
+        message.channel.send(waitingEmbed).then((message2: Message) => {
+            request(command.url, (error, response, body) => {
+                if (response.statusCode === 200) {
+                    const url = response.request.href;
+                    command.info(`New cat found (${url})`);
+                    const richEmbed = new RichEmbed();
+                    richEmbed.setImage(url);
+                    message2.edit(title, richEmbed);
+                } else {
+                    message2.edit(command.config.lang.error).then((message3: Message) => {
+                        setTimeout(() => {
+                            message3.delete();
+                        }, 10000);
+                    });
+                }
+            });
 
-        }).catch((message :Message) => {
-            message.edit(command.config.lang.error).then(message => {
-                setTimeout(function () {
-                    message.delete();
+        }).catch((message2: Message) => {
+            message2.edit(command.config.lang.error).then((message3: Message) => {
+                setTimeout(() => {
+                    message3.delete();
                 }, 10000);
             });
-        })
+        });
     }
 }

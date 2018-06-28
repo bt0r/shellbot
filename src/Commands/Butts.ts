@@ -29,9 +29,9 @@ export class Butts extends AbstractCommand {
             const messageResponse = message.channel.send(title, {
                 file: boobsPicture,
             });
-            messageResponse.then(async function(message: Message) {
-                await message.react("👍");
-                await message.react("👎");
+            messageResponse.then(async (message2: Message) => {
+                await message2.react("👍");
+                await message2.react("👎");
             });
         });
     }

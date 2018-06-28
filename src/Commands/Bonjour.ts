@@ -1,8 +1,8 @@
 "use strict";
-import {AbstractCommand}    from "./AbstractCommand";
+import * as cheerio from "cheerio";
 import {Message, RichEmbed} from "discord.js";
-import * as request         from "request";
-import * as cheerio         from "cheerio";
+import * as request from "request";
+import {AbstractCommand} from "./AbstractCommand";
 
 /**
  *  🔞 This command will show some randoms boobies using BonjourToutLeMonde 🔞
@@ -10,8 +10,8 @@ import * as cheerio         from "cheerio";
  */
 export class Bonjour extends AbstractCommand {
     public static NAME: string = "bonjour";
-    private _url: string       = "http://www.bonjourtoutlemonde.com";
-    private _choices           = [
+    private _url: string = "http://www.bonjourtoutlemonde.com";
+    private _choices = [
         {name: "Bonjour madame", by: "id", tag: "bonjour-madame"},
         {name: "Bonjour salope", by: "id", tag: "bonjour-salope"},
         {name: "Bonjour voisine", by: "id", tag: "bonjour-voisine"},
@@ -22,7 +22,7 @@ export class Bonjour extends AbstractCommand {
         {name: "Bonjour le cul", by: "href", tag: "#bonjour-le-cul"},
         {name: "Bonjour fétish", by: "id", tag: "bonjour-fetish"},
         {name: "Bonjour la grosse", by: "id", tag: "bonjour-la-grosse"},
-        {name: "Bonjour latine", by: "id", tag: "bonjour-latine"}
+        {name: "Bonjour latine", by: "id", tag: "bonjour-latine"},
     ];
 
     constructor() {
@@ -30,15 +30,14 @@ export class Bonjour extends AbstractCommand {
         this.name = "bonjour";
     }
 
-    do(message: Message) {
-        this.info('Fetching new bonjour picture');
-        let command = this;
+    public do(message: Message) {
+        this.info("Fetching new bonjour picture");
+        const command = this;
 
-        let [commandName, choiceAsked] = message.content.split(" ");
-        var selectedChoice             = null;
+        const [commandName, choiceAsked] = message.content.split(" ");
+        let selectedChoice = null;
         if (choiceAsked) {
-            for (let i = 0; i < this.choices.length; i++) {
-                let choice = this.choices[i];
+            for (const choice of this.choices) {
                 if (choice.name.toLowerCase().includes(choiceAsked.toLowerCase())) {
                     selectedChoice = choice;
                     break;
@@ -46,36 +45,34 @@ export class Bonjour extends AbstractCommand {
             }
         }
         if (!selectedChoice) {
-            let randomChoicePosition: number = Math.floor(Math.random() * this.choices.length);
-            selectedChoice                   = this.choices[randomChoicePosition];
+            const randomChoicePosition: number = Math.floor(Math.random() * this.choices.length);
+            selectedChoice = this.choices[randomChoicePosition];
             this.info(`Selected random position ${randomChoicePosition} and it gives: name=${selectedChoice.name} | tag=${selectedChoice.tag}`);
         }
-
-
-        request(this.url, function (error, response, body) {
-            if(response.statusCode == 200){
-                let $             = cheerio.load(body);
-                let cheerioResult = $('a[' + selectedChoice.by + '="' + selectedChoice.tag + '"]');
+        request(this.url, (error, response, body) => {
+            if (response.statusCode === 200) {
+                let $ = cheerio.load(body);
+                const cheerioResult = $("a[" + selectedChoice.by + "=\"" + selectedChoice.tag + "\"]");
 
                 if (cheerioResult && cheerioResult != null) {
-                    $            = cheerio.load(cheerioResult.html());
-                    let imageSrc = $('img').attr('src');
+                    $ = cheerio.load(cheerioResult.html());
+                    const imageSrc = $("img").attr("src");
 
-                    if (imageSrc && imageSrc != '') {
+                    if (imageSrc && imageSrc !== "") {
                         command.info(`Fetching image: ${imageSrc}`);
-                        let richEmbed = new RichEmbed();
+                        const richEmbed = new RichEmbed();
                         richEmbed.setImage(imageSrc);
                         richEmbed.setTitle(selectedChoice.name);
-                        message.channel.send(richEmbed).then(async function (message: Message) {
-                            await message.react("👍");
-                            await message.react("👎");
+                        message.channel.send(richEmbed).then(async (message2: Message) => {
+                            await message2.react("👍");
+                            await message2.react("👎");
                         });
                     }
                 }
-            }else{
-                let error = "Cannot fetch Bonjour picture, please contact an admin or make a pull request on github";
-                command.error(error);
-                message.reply(error);
+            } else {
+                const errorMessage = "Cannot fetch Bonjour picture, please contact an admin or make a pull request on github";
+                command.error(errorMessage);
+                message.reply(errorMessage);
             }
         });
     }
