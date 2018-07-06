@@ -12,17 +12,20 @@ export class Bonjour extends AbstractCommand {
     public static NAME: string = "bonjour";
     private _url: string = "http://www.bonjourtoutlemonde.com";
     private _choices = [
-        {name: "Bonjour madame", by: "id", tag: "bonjour-madame"},
-        {name: "Bonjour salope", by: "id", tag: "bonjour-salope"},
-        {name: "Bonjour voisine", by: "id", tag: "bonjour-voisine"},
-        {name: "Bonjour culotte", by: "id", tag: "bonjour-culotte"},
-        {name: "Bonjour téton", by: "href", tag: "#bonjour-teton"},
-        {name: "Bonjour fesse", by: "id", tag: "bonjour-fesse"},
-        {name: "Bonjour l'asiat", by: "href", tag: "#bonjour-l-asiat"},
-        {name: "Bonjour le cul", by: "href", tag: "#bonjour-le-cul"},
-        {name: "Bonjour fétish", by: "id", tag: "bonjour-fetish"},
-        {name: "Bonjour la grosse", by: "id", tag: "bonjour-la-grosse"},
-        {name: "Bonjour latine", by: "id", tag: "bonjour-latine"},
+        {name: "Bonjour madame", url: "1-bonjour-madame.html"},
+        {name: "Bonjour salope", url: "2-bonjour-salope.html"},
+        {name: "Bonjour voisine", url: "3-bonjour-voisine.html"},
+        {name: "Bonjour culotte", url: "5-bonjour-culotte.html"},
+        {name: "Bonjour téton", url: "20-bonjour-teton.html"},
+        {name: "Bonjour fesse", url: "40-bonjour-fesse.html"},
+        {name: "Bonjour l'asiat", url: "46-bonjour-l-asiat.html"},
+        {name: "Bonjour le cul", url: "47-bonjour-le-cul.html"},
+        {name: "Bonjour fétish", url: "85-bonjour-fetish.html"},
+        {name: "Bonjour la grosse", url: "89-bonjour-la-grosse.html"},
+        {name: "Bonjour latine", url: "90-bonjour-latine.html"},
+        {name: "Bonjour geexy", url: "53-geexy.html"},
+        {name: "Bonjour jailbait", url: "99-bonjour-jailbait.html"},
+        {name: "Bonjour demoiselle", url: "135-daily-demoiselle.html"},
     ];
 
     constructor() {
@@ -37,7 +40,8 @@ export class Bonjour extends AbstractCommand {
         const [commandName, choiceAsked] = message.content.split(" ");
         let selectedChoice = null;
         if (choiceAsked) {
-            for (const choice of this.choices) {
+            for (const choiceId in this.choices) {
+                const choice = this.choices[choiceId];
                 if (choice.name.toLowerCase().includes(choiceAsked.toLowerCase())) {
                     selectedChoice = choice;
                     break;
@@ -49,17 +53,21 @@ export class Bonjour extends AbstractCommand {
             selectedChoice = this.choices[randomChoicePosition];
             this.info(`Selected random position ${randomChoicePosition} and it gives: name=${selectedChoice.name} | tag=${selectedChoice.tag}`);
         }
-        request(this.url, (error, response, body) => {
+
+        const urlToScrap = this.url + "/" + this.getTodayDate() + "/" + selectedChoice.url;
+        this.debug("Will try to scrap this url > " + urlToScrap);
+
+        request(urlToScrap, (error, response, body) => {
+            command.debug("Status code is > " + response.statusCode);
+
             if (response.statusCode === 200) {
-                let $ = cheerio.load(body);
-                const cheerioResult = $("a[" + selectedChoice.by + "=\"" + selectedChoice.tag + "\"]");
+                try {
+                    const $ = cheerio.load(body);
+                    const imageSrc = $("#single-image").attr("src");
 
-                if (cheerioResult && cheerioResult != null) {
-                    $ = cheerio.load(cheerioResult.html());
-                    const imageSrc = $("img").attr("src");
+                    command.debug("Obtained image > " + imageSrc);
 
-                    if (imageSrc && imageSrc !== "") {
-                        command.info(`Fetching image: ${imageSrc}`);
+                    if (imageSrc) {
                         const richEmbed = new RichEmbed();
                         richEmbed.setImage(imageSrc);
                         richEmbed.setTitle(selectedChoice.name);
@@ -68,6 +76,10 @@ export class Bonjour extends AbstractCommand {
                             await message2.react("👎");
                         });
                     }
+                } catch (e) {
+                    command.error(e);
+                    const errorMessage = "Cannot fetch Bonjour picture, please contact an admin or make a pull request on github";
+                    message.reply(errorMessage);
                 }
             } else {
                 const errorMessage = "Cannot fetch Bonjour picture, please contact an admin or make a pull request on github";
@@ -87,5 +99,28 @@ export class Bonjour extends AbstractCommand {
 
     public get choices() {
         return this._choices;
+    }
+
+    private getTodayDate() {
+        const todayDate = new Date();
+        let day;
+        let month;
+        const todayDay = todayDate.getDate();
+        if (todayDay < 10) {
+            day = "0" + todayDay;
+        } else {
+            day = todayDay.toString();
+        }
+
+        const todayMonth = todayDate.getMonth() + 1;
+        if (todayMonth < 10) {
+            month = "0" + todayMonth;
+        } else {
+            month = todayMonth.toString();
+        }
+
+        const year = todayDate.getFullYear();
+
+        return day + "-" + month + "-" + year;
     }
 }
