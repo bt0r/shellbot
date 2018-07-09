@@ -7,18 +7,29 @@ Shellcode.fr est une communauté passionné par tout ce qui touche à l'informat
 L'objectif est de se retrouver autour d'une même passion afin de s'entraider/discuter/s'informer.
 
 # How to install it
-Clone it `git clone https://github.com/bt0r/shellbot.git`
+#### Clone it `git clone https://github.com/bt0r/shellbot.git`
 
-Npm it `npm install`
+#### Npm it 
+```SHELL 
+npm install
+npm install -g typescript ts-node tslint
+```
 
-Edit it `config/config.yml` (based on `config.yml.dist`)
+#### Edit it `config/config.yml` (based on `config.yml.dist`)
 
-Launch it `node index.js`
+
+Launch it `ts-node index.ts`
 
 That's it ! 😎
 
 # Features
-Actually ? Nothing 😎 
+- **Chuck**: Show a random chuck norris fact (actually in french), command: `!chuck`
+- **Weather**: Show the weather for a specific city, can be use for all the city around the world (OpenWeatherMap API), command: `!weather <city> <countryCode ISO2>`. Example: `!weather montreal ca`
+- **Qwant**: Search a term on Qwant search engine, command : `!qwant <query>`
+- **Cat**: Show a random cat picture, command : `!cat`
+- **BonjourToutLeMonde**: Show the sexy "Bonjour" picture of the day, can be use randomly with `!bonjour` or with a specific term like "l'asiat":  `!bonjour l'asiat`
+- **Butts/Boobs**: Show a random boob/butt picture, command: `!butts` or `!boobs`
+
 
 # Contact
 [ShellCode Discord](https://discord.gg/NDpZXN5)
