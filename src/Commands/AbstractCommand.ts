@@ -38,7 +38,11 @@ export abstract class AbstractCommand implements ICommand {
     public abstract do(message: Message);
 
     public worker(message: Message) {
-        this.do(message);
+        try {
+            this.do(message);
+        } catch (e) {
+            this.error(e);
+        }
 
         return this;
     }
