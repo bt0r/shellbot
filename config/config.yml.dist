@@ -1,6 +1,21 @@
 parameters:
     token: ~ # Your bot token
     commandPrefix: "!" # Commands prefix
+    welcome: # Will send a welcome message with reactions to auto-assign roles to the new users.
+        enabled: true
+        message: Hey ! Welcome to our discord server, please select a role betweens these ones: \n :computer: Geek \n :video_game: Gamer
+        success_message: Role %s added !
+        error_message: Cannot add %s role ! please contact an administrator
+        reactions:
+            computer: # A name for the reaction, can be what you want.
+                role: "000000000"  # The role ID to apply, Be careful and use double quote "" and do not use role ID as an integer
+                emoji: "💻" # Emoji you want to show (in unicode for normal emoji and use emoji ID for custom emoji)
+            video_game:
+                role : "1111111"
+                emoji: "🎮"
+            security:
+                role: "2222222"
+                emoji: "379722463313002516" # Custom emoji ID
 channels: # Configurations of channels
     news_3: # Channel named as "news" with position 3
         message_restriction: # If you want to apply a regexp on posted messages
@@ -22,14 +37,14 @@ channels: # Configurations of channels
             qwant: true
             cat:
                 enabled: true
-                token: YourToken
+                token: YourToken # Add your API token here, want to have one ? check this out : http://thecatapi.com/api-key-registration.html
                 loading_image: "https://media.giphy.com/media/3o7WTJ0yHFA2GzOA2k/giphy.gif"
                 lang:
                   waiting: Please wait while trying to find a cat ...
                   error: An error occured when trying to find a cat :'(
             weather:
                 enabled: true
-                token: YourToken
+                token: YourToken # Add your API token here, want to have one ? check this out : https://openweathermap.org/appid#get
                 default_country_code: en
                 unit: metric
                 lang:
