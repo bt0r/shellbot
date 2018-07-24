@@ -23,7 +23,7 @@ export class Qwant extends AbstractCommand {
         const messageContentStr = messageContent.join(" ");
         if (messageContentStr !== undefined && messageContentStr !== "") {
             const command = this;
-            command.info("Search query ${messageContent} from ${message.author.username}");
+            command.info(`Search query ${messageContent} from ${message.author.username}`);
             const url = this.url + "q=" + messageContentStr;
             const options = {
                 headers: {"User-Agent": this.userAgent},
@@ -34,13 +34,14 @@ export class Qwant extends AbstractCommand {
                 const jsonResponse = JSON.parse(body);
                 const results = jsonResponse.data.result.items;
                 let resultContent = "";
-                for (const result of results) {
+                for (const resultId in results) {
+                    const result = results[resultId];
                     const link = result.url;
                     const title = striptags(result.title);
                     const content = "**" + title + "**\n<" + link + ">";
                     resultContent += "\n" + content;
                 }
-                command.info("${result.length} results found.");
+                command.info(`${results.length} results found.`);
                 message.reply(resultContent);
             });
         }
