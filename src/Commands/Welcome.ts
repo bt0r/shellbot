@@ -1,6 +1,6 @@
 "use strict";
 
-import {Client, DMChannel, GuildMember, Message, MessageReaction, User} from "discord.js";
+import {Client, DMChannel, Guild, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {Config} from "../Service/Config";
 import {Logger} from "../Service/Logger";
@@ -104,8 +104,10 @@ export class Welcome {
                                 if (guildMember !== undefined) {
                                     guildMember.removeRole(reaction.role, removeRoleReason).then(() => {
                                         this.logger.info(removeRoleReason);
+                                        guildMember.send(this.welcomeConfig.success_removed_message.replace("%role%", reactionName));
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
+                                        guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
                                     });
                                     break;
                                 }
@@ -114,8 +116,10 @@ export class Welcome {
                                 if (guildMember !== undefined) {
                                     guildMember.addRole(reaction.role, addRoleReason).then(() => {
                                         this.logger.info(addRoleReason);
+                                        guildMember.send(this.welcomeConfig.success_message.replace("%role%", reactionName));
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
+                                        guildMember.send(this.welcomeConfig.error_message.replace("%role%", reactionName));
                                     });
                                     break;
                                 }

@@ -4,8 +4,10 @@ parameters:
     welcome: # Will send a welcome message with reactions to auto-assign roles to the new users.
         enabled: true
         message: Hey ! Welcome to our discord server, please select a role betweens these ones: \n :computer: Geek \n :video_game: Gamer
-        success_message: Role %s added !
-        error_message: Cannot add %s role ! please contact an administrator
+        success_message: ✔ Role %role% added !
+        success_removed_message: ✔ Role %role% removed !
+        error_message: ❌ Cannot add %role% role ! please contact an administrator.
+        error_removed_message: ❌ Cannot remove role %role% ! please contact an administrator.
         reactions:
             computer: # A name for the reaction, can be what you want.
                 role: "000000000"  # The role ID to apply, Be careful and use double quote "" and do not use role ID as an integer
