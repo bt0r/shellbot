@@ -101,20 +101,24 @@ export class Welcome {
                         switch (action) {
                             case "remove":
                                 const removeRoleReason = `Role ${reactionName} automatically removed to user ${user.username}`;
-                                guildMember.removeRole(reaction.role, removeRoleReason).then(() => {
-                                    this.logger.info(removeRoleReason);
-                                }).catch(() => {
-                                    this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
-                                });
-                                break;
+                                if (guildMember !== undefined) {
+                                    guildMember.removeRole(reaction.role, removeRoleReason).then(() => {
+                                        this.logger.info(removeRoleReason);
+                                    }).catch(() => {
+                                        this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
+                                    });
+                                    break;
+                                }
                             case "add":
                                 const addRoleReason = `Role ${reactionName} automatically added to user ${user.username}`;
-                                guildMember.addRole(reaction.role, addRoleReason).then(() => {
-                                    this.logger.info(addRoleReason);
-                                }).catch(() => {
-                                    this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
-                                });
-                                break;
+                                if (guildMember !== undefined) {
+                                    guildMember.addRole(reaction.role, addRoleReason).then(() => {
+                                        this.logger.info(addRoleReason);
+                                    }).catch(() => {
+                                        this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
+                                    });
+                                    break;
+                                }
                         }
                         break;
                     }
