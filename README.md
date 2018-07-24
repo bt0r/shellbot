@@ -29,7 +29,7 @@ That's it ! 😎
 - **Cat**: Show a random cat picture, command : `!cat`
 - **BonjourToutLeMonde**: Show the sexy "Bonjour" picture of the day, can be use randomly with `!bonjour` or with a specific term like "l'asiat":  `!bonjour l'asiat`
 - **Butts/Boobs**: Show a random boob/butt picture, command: `!butts` or `!boobs`
-
+- **Welcome message/Auto assign role**: When a user join the server, a welcome message is sent to him. The user can choose betweens multiple discord "reactions" to auto assign roles. Example: When clicking on 🔨 button, the user will be a handyman, with 📘 a writer etc.
 
 # Contact
 [ShellCode Discord](https://discord.gg/NDpZXN5)
