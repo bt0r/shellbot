@@ -16,7 +16,7 @@ export class Config {
      * Return the shellbot config
      * @returns {Object}
      */
-    public get config(): object {
+    public get config(): any {
         return this._config;
     }
 

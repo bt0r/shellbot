@@ -1,7 +1,8 @@
 "use strict";
 
-import {Channel, GuildMember, Message, User} from "discord.js";
+import {Channel, Client, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {CommandFactory} from "../Commands/CommandFactory";
+import {Welcome} from "../Commands/Welcome";
 import {Logger} from "../Service/Logger";
 import {ShellbotClient} from "../ShellbotClient";
 import {CommandEmitter} from "./CommandEmitter";
@@ -22,6 +23,11 @@ export class Listener {
      */
     private _shellbotClient: ShellbotClient;
 
+    /**
+     * Discord client
+     */
+    private _discordClient: Client;
+
     constructor(shellbotClient: ShellbotClient) {
         Listener.getInstance();
         this.logger         = Logger.getInstance();
@@ -30,9 +36,12 @@ export class Listener {
         discordClient.on("ready", () => this.ready());
         discordClient.on("message", (message) => this.message(message));
         discordClient.on("guildMemberAdd", (member) => this.guildMemberAdd(member));
+        discordClient.on("guildMemberRemove", (member) => this.guildMemberRemove(member));
         discordClient.on("typingStart", (channel, user) => this.typingStart(channel, user));
         discordClient.on("messageDelete", (message) => this.messageDelete(message));
         discordClient.on("disconnect", (closeEvent) => this.disconnect(closeEvent));
+        discordClient.on("messageReactionAdd", (messageReaction, user) => this.messageReactionAdd(messageReaction, user));
+        discordClient.on("messageReactionRemove", (messageReaction, user) => this.messageReactionRemove(messageReaction, user));
     }
 
     public static getInstance() {
@@ -77,6 +86,10 @@ export class Listener {
 
     private guildMemberAdd(member: GuildMember): void {
         this.logger.info(`[MEMBER-JOIN] ${member.user.username} joined the server.`);
+        // Send welcome message
+        const welcome = new Welcome();
+        const discordClient = this.shellbotClient.discordClient;
+        welcome.sendMessage(member, discordClient);
     }
 
     private guildMemberRemove(member: GuildMember): void {
@@ -85,6 +98,18 @@ export class Listener {
 
     private typingStart(channel: Channel, user: User): void {
         this.logger.debug("User " + user.username + " is typing");
+    }
+
+    private messageReactionAdd(messageReaction: MessageReaction, user: User): void {
+        const welcome = new Welcome();
+        const discordClient = this.shellbotClient.discordClient;
+        welcome.addRole(messageReaction, user, discordClient);
+    }
+
+    private messageReactionRemove(messageReaction: MessageReaction, user: User): void {
+        const welcome = new Welcome();
+        const discordClient = this.shellbotClient.discordClient;
+        welcome.removeRole(messageReaction, user, discordClient);
     }
 
     get logger(): Logger {
