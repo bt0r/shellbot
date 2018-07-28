@@ -48,7 +48,8 @@ channels: # Configurations of channels
                 enabled: true
                 token: YourToken # Add your API token here, want to have one ? check this out : https://openweathermap.org/appid#get
                 default_country_code: en
-                unit: metric
+                unit: metric  # Can be metric (meter/seconds and °C), imperial(miles/seconds and °F) or Kelvin (meter/seconds and K)
+                datetime_format: fr-FR # DateTime format, should be a ISO code (en-GB, en-US, fr-FR ...)
                 lang:
                   title: Weather
                   city_missing: There is no city, how can i help you ?
