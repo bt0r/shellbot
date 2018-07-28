@@ -31,7 +31,9 @@ export class Weather extends AbstractCommand {
         emoji: "☀️",
     };
 
-    private _url: string = "http://api.openweathermap.org/data/2.5/forecast?q=%city%,%countryCode%&mode=json&appid=%token%&units=%unit%";
+    private _url: string = "http://api.openweathermap.org/data/2.5/forecast?q=%city%,%countryCode%&mode=json&appid=%token%&units=%units%";
+    private _defaultUnit: string = "metric";
+    private _defaultDateFormat: string = "fr-FR";
 
     constructor() {
         super();
@@ -46,6 +48,14 @@ export class Weather extends AbstractCommand {
         this._url = url;
     }
 
+    public get defaultUnit(): string {
+        return this._defaultUnit;
+    }
+
+    public get defaultDateFormat(): string {
+        return this._defaultDateFormat;
+    }
+
     public do(message: Message) {
         const config = this.config;
         const logger = this.logger;
@@ -56,6 +66,9 @@ export class Weather extends AbstractCommand {
         let _ = null;
         let city = null;
         let countryCode = null;
+        const unit = config.unit ? config.unit : this.defaultUnit;
+        let tempLabel = null;
+        const dateFormat = config.datetime_format ? config.datetime_format : this.defaultDateFormat;
         if (matchesWithCC && matchesWithCC.length === 3) {
             [_, city, countryCode] = matchesWithCC;
         } else if (matchesWithoutCC && matchesWithoutCC.length === 2) {
@@ -69,14 +82,22 @@ export class Weather extends AbstractCommand {
         } else if (!countryCode && config.default_country_code) {
             countryCode = config.default_country_code;
         }
-        if (!config.unit) {
-            message.reply(config.lang.unit_missing);
-            return;
+        switch (unit) {
+            default:
+                tempLabel = "°C";
+                break;
+            case "imperial":
+                tempLabel = "°F";
+                break;
+            case "kelvin":
+                tempLabel = "K";
+                break;
         }
         this.url = this.url.replace(/%city%/, city);
         this.url = this.url.replace(/%unit%/, config.unit);
         this.url = this.url.replace(/%countryCode%/, countryCode);
         this.url = this.url.replace(/%token%/, config.token);
+        this.url = this.url.replace(/%units%/, unit);
         this.info(`Fetching weather for city ${city} with country code '${countryCode}'`);
         request(this.url, (error, response, body) => {
             const jsonResponse = JSON.parse(body);
@@ -84,44 +105,61 @@ export class Weather extends AbstractCommand {
                 logger.debug(`Weather for ${city} city was fetch.`);
                 const list = jsonResponse.list;
                 const result = [];
+                let daysFetched = 0;
+                const isHour12 = dateFormat === "fr-FR" ? false : true;
                 for (const item of list) {
-                    const date = item.dt_txt;
-                    const [day, hour] = date.split(" "); // 2018-02-02 09:00:00
-                    const hourMin = hour.split(":")[0] + "h";
+                    const date = new Date(item.dt_txt);
+                    const temp = item.main.temp;
+                    const humidity = item.main.humidity;
+                    const dateOptions = {year: "numeric", month: "numeric", day: "numeric"};
+                    const dayOptions = {hour: "numeric", minute: "numeric", hour12: isHour12};
+                    const hour = new Intl.DateTimeFormat(dateFormat, dayOptions).format(date);
+                    const day = new Intl.DateTimeFormat(dateFormat, dateOptions).format(date);
 
                     const weatherId = item.weather[0].id;
                     if (!result[day]) {
+                        if (daysFetched > 2) {
+                            break; // Only show 3 days
+                        }
                         result[day] = [];
+                        daysFetched++;
                     }
+                    const weatherItem = {
+                        hour,
+                        humidity,
+                        temp,
+                        value: null,
+                    };
 
                     switch (Math.floor(weatherId / 100)) {
                         case 2:
-                            result[day].push({hourMin, value: Weather.COND_THUN.emoji});
+                            weatherItem.value = Weather.COND_THUN.emoji;
                             break;
                         case 3:
-                            result[day].push({hourMin, value: Weather.COND_DRIZ.emoji});
+                            weatherItem.value = Weather.COND_DRIZ.emoji;
                             break;
                         case 5:
-                            result[day].push({hourMin, value: Weather.COND_RAIN.emoji});
+                            weatherItem.value = Weather.COND_RAIN.emoji;
                             break;
                         case 6:
-                            result[day].push({hourMin, value: Weather.COND_SNOW.emoji});
+                            weatherItem.value = Weather.COND_SNOW.emoji;
                             break;
                         case 7:
-                            result[day].push({hourMin, value: Weather.COND_ATMO.emoji});
+                            weatherItem.value = Weather.COND_ATMO.emoji;
                             break;
                         case 8:
-                            result[day].push({hourMin, value: Weather.COND_CLEAR.emoji});
+                            weatherItem.value = Weather.COND_CLEAR.emoji;
                             break;
                     }
-                }
 
+                    result[day].push(weatherItem);
+                }
                 const embedFields = [];
                 for (const day in result) {
                     let weatherValues = "";
                     for (const weather in result[day]) {
                         const weatherAll: any = result[day][weather];
-                        weatherValues += " " + weatherAll.hourMin as string + " " + weatherAll.value as string;
+                        weatherValues += `${weatherAll.hour} ${weatherAll.value} 💧 ${weatherAll.humidity}% 🌡️ ${weatherAll.temp} ${tempLabel} \n`;
                     }
                     embedFields.push({
                         name: day,
