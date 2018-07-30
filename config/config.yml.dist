@@ -37,6 +37,9 @@ channels: # Configurations of channels
             chuck: true
             boobs: true
             qwant: true
+            quote:
+                enabled: true
+                replied_label: replied to you
             cat:
                 enabled: true
                 token: YourToken # Add your API token here, want to have one ? check this out : http://thecatapi.com/api-key-registration.html
