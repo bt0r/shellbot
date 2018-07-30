@@ -30,6 +30,7 @@ That's it ! 😎
 - **BonjourToutLeMonde**: Show the sexy "Bonjour" picture of the day, can be use randomly with `!bonjour` or with a specific term like "l'asiat":  `!bonjour l'asiat`
 - **Butts/Boobs**: Show a random boob/butt picture, command: `!butts` or `!boobs`
 - **Welcome message/Auto assign role**: When a user join the server, a welcome message is sent to him. The user can choose betweens multiple discord "reactions" to auto assign roles. Example: When clicking on 🔨 button, the user will be a handyman, with 📘 a writer etc.
+- **Quote** : Allow a user to quote someone, usage: `!quote <messageId> <reply>` [/!\ Need to activate the discord developer mod](https://discordia.me/developer-mode)
 
 # Contact
 [ShellCode Discord](https://discord.gg/NDpZXN5)

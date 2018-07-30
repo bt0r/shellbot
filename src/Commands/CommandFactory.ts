@@ -9,6 +9,7 @@ import {Boobs} from "./Boobs";
 import {Butts} from "./Butts";
 import {Cat} from "./Cat";
 import {Chuck} from "./Chuck";
+import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
 import {Weather} from "./Weather";
 
@@ -38,6 +39,9 @@ export class CommandFactory {
                 break;
             case Bonjour.NAME:
                 commandFound = new Bonjour();
+                break;
+            case Quote.NAME:
+                commandFound = new Quote();
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
