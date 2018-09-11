@@ -12,16 +12,23 @@ L'objectif est de se retrouver autour d'une même passion afin de s'entraider/di
 #### Npm it 
 ```SHELL 
 npm install
-npm install -g typescript ts-node tslint
 ```
 
 #### Edit it `config/config.yml` (based on `config.yml.dist`)
 
 
-Launch it `ts-node index.ts`
+Launch it `docker-compose up -d`
 
-That's it ! 😎
+**🎉 That's it ! 🎉 **
 
+
+You can use this repository without docker/docker-compose by using a more classical way :
+```
+git clone https://github.com/bt0r/shellbot.git
+npm install
+npm install -g typescript ts-node
+npm start
+ ```
 # Features
 - **Chuck**: Show a random chuck norris fact (actually in french), command: `!chuck`
 - **Weather**: Show the weather for a specific city, can be use for all the city around the world (OpenWeatherMap API), command: `!weather <city> <countryCode ISO2>`. Example: `!weather montreal ca`
