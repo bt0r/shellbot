@@ -1,11 +1,11 @@
 {
   "name": "shellbot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Discord bot of ShellCode.fr",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "set NODE_ENV=production && ts-node index.ts"
+    "start": "ts-node index.ts"
   },
   "repository": {
     "type": "git",
