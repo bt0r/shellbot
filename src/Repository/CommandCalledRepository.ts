@@ -21,4 +21,14 @@ export class CommandCalledRepository extends Repository<CommandCalled> {
 
         return await this.save(commandCalled);
     }
+
+    public async stats() {
+        const commandCalled = await this.createQueryBuilder("c")
+            .select("SUM(count)", "count")
+            .addSelect("command_name")
+            .groupBy("command_name")
+            .getRawMany();
+
+        return commandCalled;
+    }
 }
