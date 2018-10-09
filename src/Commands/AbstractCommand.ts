@@ -1,10 +1,14 @@
 "use strict";
 import {Message} from "discord.js";
+import {Inject} from "typescript-ioc";
+import {UserFactory} from "../Entity/UserFactory";
+import {CommandCalledRepository} from "../Repository/CommandCalledRepository";
+import {UserRepository} from "../Repository/UserRepository";
+import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
 interface ICommand {
     name: string;
-
     do(message: Message);
 }
 
@@ -14,7 +18,11 @@ export abstract class AbstractCommand implements ICommand {
      * @type {Logger}
      * @private
      */
-    private _logger: Logger = Logger.getInstance();
+    @Inject
+    private _logger: Logger;
+
+    @Inject
+    private _database: Database;
 
     /**
      * Config of current command
@@ -37,7 +45,13 @@ export abstract class AbstractCommand implements ICommand {
 
     public abstract do(message: Message);
 
-    public worker(message: Message) {
+    public async worker(message: Message) {
+        const commandCalledRepo = await this.database.manager.getCustomRepository(CommandCalledRepository);
+        const userRepo = await this.database.manager.getCustomRepository(UserRepository);
+
+        let user = UserFactory.create(message.author);
+        user = await userRepo.findOrCreate(user);
+        commandCalledRepo.add(user, this);
         try {
             this.do(message);
         } catch (e) {
@@ -73,6 +87,10 @@ export abstract class AbstractCommand implements ICommand {
 
     protected get logger(): Logger {
         return this._logger;
+    }
+
+    protected get database(): Database {
+        return this._database;
     }
 
     /**

@@ -17,7 +17,8 @@
               "public-static-field"
             ]
           }
-        ]
+        ],
+      "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }

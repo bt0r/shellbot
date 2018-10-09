@@ -1,7 +1,9 @@
 "use strict";
-import {Message} from "discord.js";
+import {Message, RichEmbed} from "discord.js";
 import * as request from "request";
 import {AbstractCommand} from "./AbstractCommand";
+import {SexRepository} from "../Repository/SexRepository";
+import {Butts} from "./Butts";
 
 /**
  * 🔞 This command will show some randoms boobies 🔞
@@ -23,15 +25,25 @@ export class Boobs extends AbstractCommand {
             const boobsPicture = "http://media.oboobs.ru/" + jsonResponse[0].preview.replace("boobs_preview", "boobs");
             const authorId = message.author.id;
             const model = jsonResponse[0].model !== null ? " - " + jsonResponse[0].model : "";
-            const title = `<@${authorId}> ${model}`;
+            const description = `<@${authorId}> ${model}`;
 
             command.info("New boobs found (" + message.author.username + ") : " + boobsPicture);
-            const messageResponse = message.channel.send(title, {
-                file: boobsPicture,
-            });
-            messageResponse.then(async (message2: Message) => {
-                await message2.react("👍");
-                await message2.react("👎");
+            const richEmbed = new RichEmbed();
+            richEmbed.setImage(boobsPicture);
+            richEmbed.setDescription(description);
+
+            // Find statistics of butts/boobs commands
+            const sexRepo = this.database.manager.getCustomRepository(SexRepository);
+            sexRepo.boobsVsButts().then((result: any) => {
+                richEmbed.setFooter(`Total: ${Butts.NAME} = ${result.butts}, ${Boobs.NAME} = ${result.boobs} `);
+                const messageResponse = message.channel.send(richEmbed);
+
+                messageResponse.then(async (message2: Message) => {
+                    await message2.react("👍");
+                    await message2.react("👎");
+                });
+            }).catch(() => {
+                this.logger.error("Error with the butts command");
             });
         });
     }

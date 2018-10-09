@@ -1,7 +1,9 @@
 "use strict";
 import {Client} from "discord.js";
+import { Inject} from "typescript-ioc";
 import * as YAML from "yamljs";
 import {Listener} from "./Listener/Listener";
+import {DependencyConfigurator} from "./Service/DependencyConfigurator";
 import {Logger} from "./Service/Logger";
 
 export class ShellbotClient {
@@ -24,11 +26,13 @@ export class ShellbotClient {
      * @type {Logger}
      * @private
      */
-    private _logger: Logger = Logger.getInstance();
+    @Inject
+    private _logger: Logger;
 
     constructor() {
         this.logger.info("Shellbot is starting...");
-
+        this.logger.info("Shellbot is instantiating...");
+        DependencyConfigurator.configure();
         this.discordClient.login(this.config.parameters.token).then(() => {
             this.logger.info("Shellbot logged !");
         }).catch(() => {
@@ -58,5 +62,9 @@ export class ShellbotClient {
 
     private get logger() {
         return this._logger;
+    }
+
+    private set logger(logger: Logger) {
+        this._logger = logger;
     }
 }

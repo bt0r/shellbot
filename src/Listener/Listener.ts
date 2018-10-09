@@ -1,8 +1,12 @@
 "use strict";
 
 import {Channel, Client, GuildMember, Message, MessageReaction, User} from "discord.js";
+import {Inject} from "typescript-ioc";
 import {CommandFactory} from "../Commands/CommandFactory";
 import {Welcome} from "../Commands/Welcome";
+import {User as DBUser} from "../Entity/User";
+import {UserRepository} from "../Repository/UserRepository";
+import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 import {ShellbotClient} from "../ShellbotClient";
 import {CommandEmitter} from "./CommandEmitter";
@@ -16,7 +20,8 @@ export class Listener {
     /**
      * Log4js Logger
      */
-    private _logger: any;
+    @Inject
+    private _logger: Logger;
 
     /**
      * Shellbot Client
@@ -28,9 +33,11 @@ export class Listener {
      */
     private _discordClient: Client;
 
+    @Inject
+    private _database: Database;
+
     constructor(shellbotClient: ShellbotClient) {
         Listener.getInstance();
-        this.logger         = Logger.getInstance();
         this.shellbotClient = shellbotClient;
         const discordClient   = this.shellbotClient.discordClient;
         discordClient.on("ready", () => this.ready());
@@ -42,6 +49,7 @@ export class Listener {
         discordClient.on("disconnect", (closeEvent) => this.disconnect(closeEvent));
         discordClient.on("messageReactionAdd", (messageReaction, user) => this.messageReactionAdd(messageReaction, user));
         discordClient.on("messageReactionRemove", (messageReaction, user) => this.messageReactionRemove(messageReaction, user));
+        discordClient.on("presenceUpdate", (oldMember, newMember) => this.presenceUpdate(oldMember, newMember));
     }
 
     public static getInstance() {
@@ -110,6 +118,17 @@ export class Listener {
         const welcome = new Welcome();
         const discordClient = this.shellbotClient.discordClient;
         welcome.removeRole(messageReaction, user, discordClient);
+    }
+
+    private async presenceUpdate(oldMember: GuildMember, newMember: GuildMember) {
+        this.logger.info("[STATUS] User " + oldMember.user.username + " is now " + newMember.user.presence.status);
+
+        let user = new DBUser();
+        user.discordId = newMember.user.id;
+        user.name = newMember.user.username;
+        user = await this._database.manager.getCustomRepository(UserRepository).findOrCreate(user);
+        user.status = newMember.user.presence.status;
+        this._database.manager.save(user);
     }
 
     get logger(): Logger {
