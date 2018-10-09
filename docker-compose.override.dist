@@ -1,0 +1,13 @@
+# docker-compose.yml
+version: '2'
+
+services:
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: "azerty"
+      MYSQL_PASSWORD: "azerty"
+    ports:
+      - 3307:3306
+  adminer:
+    ports:
+      - 8080:8080
