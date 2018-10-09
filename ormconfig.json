@@ -1,0 +1,23 @@
+{
+  "type": "mysql",
+  "host": "db",
+  "port": 3306,
+  "username": "root",
+  "password": "azerty",
+  "database": "shellcode",
+  "synchronize": true,
+  "logging": false,
+  "migrationsTableName": "migrations",
+  "entities": [
+    "src/Entity/**/*.ts"
+  ],
+  "migrations": [
+    "src/Migration/**/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "src/Migration/"
+  },
+  "subscribers": [
+    "src/Subscriber/**/*.ts"
+  ]
+}

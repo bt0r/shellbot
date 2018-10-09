@@ -1,20 +1,13 @@
 "use strict";
 import {configure, getLogger} from "log4js";
-import {Inject} from "typescript-ioc";
 
 export class Logger {
-    @Inject
     /**
      * Log4Js Logger
      */
     private _logger;
 
-    /**
-     * Logger instance (Singleton)
-     */
-    private static instance: Logger;
-
-    private constructor() {
+    public constructor() {
         configure("./config/log4js.json");
         this.logger = getLogger("Shellbot");
         if (process.env.NODE_ENV === "production") {
@@ -46,12 +39,5 @@ export class Logger {
 
     public error(message: string) {
         return this.logger.error(message);
-    }
-
-    public static getInstance() {
-        if (!Logger.instance) {
-            Logger.instance = new Logger();
-        }
-        return Logger.instance;
     }
 }

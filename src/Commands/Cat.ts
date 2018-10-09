@@ -8,7 +8,6 @@ export class Cat extends AbstractCommand {
     public static NAME: string = "cat";
     private _url: string = "http://thecatapi.com/api/images/get?format=src&results_per_page=1&api_key=";
     private _url2: string = "http://random.cat";
-
     constructor() {
         super();
         this.name = Cat.NAME;
@@ -45,7 +44,7 @@ export class Cat extends AbstractCommand {
         waitingEmbed.setTitle(this.config.lang.waiting);
 
         message.channel.send(waitingEmbed).then((message2: Message) => {
-            request(command.url, (error, response) => {
+            request(command.url,  (error, response) => {
                 if (response.statusCode === 200) {
                     const url = response.request.href;
                     command.info(`New cat found (${url})`);
@@ -73,7 +72,6 @@ export class Cat extends AbstractCommand {
                     });
                 }
             });
-
         }).catch((message2: Message) => {
             message2.edit(command.config.lang.error).then((message3: Message) => {
                 setTimeout(() => {

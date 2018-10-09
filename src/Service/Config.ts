@@ -1,10 +1,8 @@
 "use strict";
 import {TextChannel} from "discord.js";
-import {Inject} from "typescript-ioc";
 import * as YAML from "yamljs";
 
 export class Config {
-    @Inject
     /**
      * Config
      * @type {Object}
