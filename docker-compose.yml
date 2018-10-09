@@ -21,3 +21,5 @@ services:
     expose:
       - "8081"
     command: "npm start"
+    links:
+      - db
