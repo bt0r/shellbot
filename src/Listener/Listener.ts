@@ -1,6 +1,6 @@
 "use strict";
 
-import {Channel, Client, GuildMember, Message, MessageReaction, User} from "discord.js";
+import {Channel, Client, DiscordAPIError, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {CommandFactory} from "../Commands/CommandFactory";
 import {Welcome} from "../Commands/Welcome";
@@ -50,6 +50,7 @@ export class Listener {
         discordClient.on("messageReactionAdd", (messageReaction, user) => this.messageReactionAdd(messageReaction, user));
         discordClient.on("messageReactionRemove", (messageReaction, user) => this.messageReactionRemove(messageReaction, user));
         discordClient.on("presenceUpdate", (oldMember, newMember) => this.presenceUpdate(oldMember, newMember));
+        discordClient.on("error", (error) => this.error(error));
     }
 
     public static getInstance() {
@@ -69,7 +70,7 @@ export class Listener {
     }
 
     private message(message: Message): void {
-        this.logger.debug(`[NEW] ${message.author.username}: ${message.content}`);
+        this.logger.info(`[NEW] ${message.author.username}: ${message.content}`);
         // Check if command exists
         const commandPrefix = this.shellbotClient.config.parameters.commandPrefix;
         const content       = message.content;
@@ -85,7 +86,7 @@ export class Listener {
     }
 
     private messageUpdate(oldMessage: Message, newMessage: Message): void {
-        this.logger.debug(`[EDIT] ${oldMessage.author.username}: ${oldMessage.content} >>> ${newMessage.content}`);
+        this.logger.info(`[EDIT] ${oldMessage.author.username}: ${oldMessage.content} >>> ${newMessage.content}`);
     }
 
     private messageDelete(messageDelete: Message): void {
@@ -93,7 +94,7 @@ export class Listener {
     }
 
     private guildMemberAdd(member: GuildMember): void {
-        this.logger.info(`[MEMBER-JOIN] ${member.user.username} joined the server.`);
+        this.logger.info(`[MEMBER-JOIN] ${member.user.username}[${member.user.id}] joined the server.`);
         // Send welcome message
         const welcome = new Welcome();
         const discordClient = this.shellbotClient.discordClient;
@@ -101,7 +102,7 @@ export class Listener {
     }
 
     private guildMemberRemove(member: GuildMember): void {
-        this.logger.info(`[MEMBER-QUIT] ${member.user.username} quit the server.`);
+        this.logger.info(`[MEMBER-QUIT] ${member.user.username}[${member.user.id}] quit the server.`);
     }
 
     private typingStart(channel: Channel, user: User): void {
@@ -129,6 +130,10 @@ export class Listener {
         user = await this._database.manager.getCustomRepository(UserRepository).findOrCreate(user);
         user.status = newMember.user.presence.status;
         this._database.manager.save(user);
+    }
+
+    private error(error: Error) {
+        this.logger.error(error.message);
     }
 
     get logger(): Logger {
