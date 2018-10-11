@@ -47,7 +47,7 @@ export class SexService {
 
             // Find statistics of butts/boobs commands
             const stats: any = await this.fetchStats();
-            richEmbed.setFooter(`Total: ${Butts.NAME} = ${stats.butts}, ${Boobs.NAME} = ${stats.boobs} `);
+            richEmbed.setFooter(`🍑 ${Butts.NAME} = ${stats.butts} | 🍈 ${Boobs.NAME} = ${stats.boobs} `);
 
             callback(richEmbed);
         });
