@@ -23,13 +23,23 @@ export class CommandCalledRepository extends Repository<CommandCalled> {
     }
 
     public async stats() {
-        const commandCalled = await this.createQueryBuilder("c")
+       return await this.createQueryBuilder("c")
             .select("SUM(count)", "count")
             .addSelect("command_name")
             .groupBy("command_name")
             .orderBy("count", "DESC")
             .getRawMany();
+    }
 
-        return commandCalled;
+    public async topByCommand(commandName: string, max: number = 5) {
+        return await this.createQueryBuilder("c")
+            .select("MAX(count)", "hit")
+            .addSelect("u.name")
+            .leftJoin("user", "u", "user_id = u.id")
+            .where("command_name = :commandName", {commandName})
+            .groupBy("user_id")
+            .orderBy("hit", "DESC")
+            .limit(max)
+            .getRawMany();
     }
 }

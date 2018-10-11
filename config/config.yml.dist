@@ -61,3 +61,9 @@ channels: # Configurations of channels
                   error: An error occured, please report this to an admin
                   not_found: This city was not found, please try another one.
             bonjour: true
+            stats:
+                enabled: true
+                lang:
+                    error: Cannot fetch stats from the database, please check your configuration.
+                    description: What's the most used commands ? here is the result ..
+                    title: Commands statistics
