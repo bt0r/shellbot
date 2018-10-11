@@ -1,5 +1,5 @@
 "use strict";
-import {Message, RichEmbed} from "discord.js";
+import {Message} from "discord.js";
 import {Container} from "typescript-ioc";
 import {SexService} from "../Service/Command/SexService";
 import {AbstractCommand} from "./AbstractCommand";
