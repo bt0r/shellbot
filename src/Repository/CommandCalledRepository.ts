@@ -27,6 +27,7 @@ export class CommandCalledRepository extends Repository<CommandCalled> {
             .select("SUM(count)", "count")
             .addSelect("command_name")
             .groupBy("command_name")
+            .orderBy("count", "DESC")
             .getRawMany();
 
         return commandCalled;
