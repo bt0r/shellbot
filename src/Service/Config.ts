@@ -8,8 +8,11 @@ export class Config {
      * @type {Object}
      * @private
      */
-    private _config = YAML.load("config/config.yml");
+    private _config;
 
+    public constructor() {
+        this.config = YAML.load("config/config.yml");
+    }
     /**
      * Return the shellbot config
      * @returns {Object}
@@ -18,6 +21,9 @@ export class Config {
         return this._config;
     }
 
+    public set config(config) {
+        this._config = config;
+    }
     /**
      * Check if a command is enabled on a a specific channel
      * @param {string} command
