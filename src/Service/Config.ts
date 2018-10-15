@@ -31,7 +31,16 @@ export class Config {
      * @returns {boolean}
      */
     public isCommandEnabled(command: string, channel: TextChannel) {
-        const configChannel = this._config.channels[channel.name + "_" + channel.position];
-        return configChannel && configChannel.modules_enabled[command];
+        const channelConfig = this.channelConfig(channel);
+        return channelConfig && channelConfig.modules_enabled[command];
+    }
+
+    /**
+     * Return the channel config if exists
+     * @param channel
+     * @return any
+     */
+    public channelConfig(channel: TextChannel): any {
+        return this._config.channels[channel.name + "_" + channel.position];
     }
 }
