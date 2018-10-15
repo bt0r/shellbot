@@ -1,11 +1,12 @@
 "use strict";
 
-import {Channel, Client, DiscordAPIError, GuildMember, Message, MessageReaction, User} from "discord.js";
-import {Inject} from "typescript-ioc";
+import {Channel, Client, GuildMember, Message, MessageReaction, TextChannel, User} from "discord.js";
+import {Container, Inject} from "typescript-ioc";
 import {CommandFactory} from "../Commands/CommandFactory";
 import {Welcome} from "../Commands/Welcome";
 import {User as DBUser} from "../Entity/User";
 import {UserRepository} from "../Repository/UserRepository";
+import {Config} from "../Service/Config";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 import {ShellbotClient} from "../ShellbotClient";
@@ -71,6 +72,21 @@ export class Listener {
 
     private message(message: Message): void {
         this.logger.info(`[NEW] ${message.author.username}: ${message.content}`);
+        // Check if there is a restriction
+        const config: Config = Container.get(Config);
+        const channel = message.channel as TextChannel;
+        const channelConfig = config.channelConfig(channel);
+        const discordClient = this.shellbotClient.discordClient;
+        if (message.author !== discordClient.user && channelConfig && channelConfig.message_restriction &&
+            channelConfig.message_restriction.error_message &&
+            channelConfig.message_restriction.regexp) {
+            const regexp = new RegExp(channelConfig.message_restriction.regexp);
+            if (!message.content.match(regexp)) {
+                message.author.send(channelConfig.message_restriction.error_message.replace("%messageContent%", message.content)).then(() => {
+                    message.delete();
+                });
+            }
+        }
         // Check if command exists
         const commandPrefix = this.shellbotClient.config.parameters.commandPrefix;
         const content       = message.content;
