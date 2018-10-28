@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/bt0r/shellbot.svg?style=svg)](https://circleci.com/gh/bt0r/shellbot)
+
 # ShellBot
 Shellbot is a discord bot of the shellcode.fr community, want to improve this bot ? Just create a pull-request ! 
 
