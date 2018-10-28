@@ -5,5 +5,5 @@ jobs:
     - image: circleci/node:6.10.3
     steps:
     - checkout
-    - run: npm install -g typescript tslint
+    - run: sudo npm install -g typescript tslint
     - run: tslint -c tslint.json 'src/**/*.ts'
