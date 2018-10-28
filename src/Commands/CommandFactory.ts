@@ -10,8 +10,8 @@ import {Cat} from "./Cat";
 import {Chuck} from "./Chuck";
 import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
-import {Weather} from "./Weather";
 import {Stats} from "./Stats";
+import {Weather} from "./Weather";
 
 export class CommandFactory {
 
