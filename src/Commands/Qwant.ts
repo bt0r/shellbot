@@ -31,8 +31,7 @@ export class Qwant extends AbstractCommand {
             axios.get(url, options).then((response) => {
                 const results = response.data.data.result.items;
                 let resultContent = "";
-                for (const resultId in results) {
-                    const result = results[resultId];
+                for (const result of results) {
                     const link = result.url;
                     const title = striptags(result.title);
                     const content = "**" + title + "**\n<" + link + ">";
@@ -41,7 +40,7 @@ export class Qwant extends AbstractCommand {
                 command.info(`${results.length} results found.`);
                 message.reply(resultContent);
             }).catch((reason) => {
-                console.log(reason);
+                this.error(reason);
             });
         }
     }
