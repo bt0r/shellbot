@@ -1,7 +1,7 @@
 "use strict";
+import axios from "axios";
 import * as cheerio from "cheerio";
 import {Message, RichEmbed} from "discord.js";
-import * as request from "request";
 import {AbstractCommand} from "./AbstractCommand";
 
 /**
@@ -57,12 +57,12 @@ export class Bonjour extends AbstractCommand {
         const urlToScrap = this.url + "/" + this.getTodayDate() + "/" + selectedChoice.url;
         this.debug("Will try to scrap this url > " + urlToScrap);
 
-        request(urlToScrap, (error, response, body) => {
-            command.debug("Status code is > " + response.statusCode);
+        axios.get(urlToScrap).then((response) => {
+            command.debug("Status code is > " + response.status);
 
-            if (response.statusCode === 200) {
+            if (response.status === 200) {
                 try {
-                    const $ = cheerio.load(body);
+                    const $ = cheerio.load(response.data);
                     const imageSrc = $("#single-image").attr("src");
 
                     command.debug("Obtained image > " + imageSrc);

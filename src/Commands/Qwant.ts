@@ -1,6 +1,6 @@
 "use strict";
+import axios from "axios";
 import {Message} from "discord.js";
-import * as request from "request";
 import * as striptags from "striptags";
 import {AbstractCommand} from "./AbstractCommand";
 
@@ -9,7 +9,7 @@ import {AbstractCommand} from "./AbstractCommand";
  */
 export class Qwant extends AbstractCommand {
     public static NAME: string = "qwant";
-    private url: string = "https://api.qwant.com/api/search/web?count=10&";
+    private url: string = "https://api.qwant.com/api/search/web?count=10&t=web&uiv=4&";
     private userAgent: string = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0";
 
     constructor() {
@@ -27,12 +27,9 @@ export class Qwant extends AbstractCommand {
             const url = this.url + "q=" + messageContentStr;
             const options = {
                 headers: {"User-Agent": this.userAgent},
-                method: "GET",
-                url,
             };
-            request(options, (error, response, body) => {
-                const jsonResponse = JSON.parse(body);
-                const results = jsonResponse.data.result.items;
+            axios.get(url, options).then((response) => {
+                const results = response.data.data.result.items;
                 let resultContent = "";
                 for (const resultId in results) {
                     const result = results[resultId];
@@ -43,6 +40,8 @@ export class Qwant extends AbstractCommand {
                 }
                 command.info(`${results.length} results found.`);
                 message.reply(resultContent);
+            }).catch((reason) => {
+                console.log(reason);
             });
         }
     }
