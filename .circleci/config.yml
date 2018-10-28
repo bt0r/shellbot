@@ -5,4 +5,5 @@ jobs:
     - image: circleci/ruby:2.4.1
     steps:
     - checkout
+    - run: npm install -g typescript tslint
     - run: tslint -c tslint.json 'src/**/*.ts'
