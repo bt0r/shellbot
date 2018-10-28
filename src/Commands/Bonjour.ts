@@ -37,11 +37,10 @@ export class Bonjour extends AbstractCommand {
         this.info("Fetching new bonjour picture");
         const command = this;
 
-        const [commandName, choiceAsked] = message.content.split(" ");
+        const [, choiceAsked] = message.content.split(" ");
         let selectedChoice = null;
         if (choiceAsked) {
-            for (const choiceId in this.choices) {
-                const choice = this.choices[choiceId];
+            for (const choice of this.choices) {
                 if (choice.name.toLowerCase().includes(choiceAsked.toLowerCase())) {
                     selectedChoice = choice;
                     break;
