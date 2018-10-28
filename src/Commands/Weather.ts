@@ -1,6 +1,6 @@
 "use strict";
+import axios from "axios";
 import {Message} from "discord.js";
-import * as request from "request";
 import {AbstractCommand} from "./AbstractCommand";
 
 export class Weather extends AbstractCommand {
@@ -99,8 +99,8 @@ export class Weather extends AbstractCommand {
         this.url = this.url.replace(/%token%/, config.token);
         this.url = this.url.replace(/%units%/, unit);
         this.info(`Fetching weather for city ${city} with country code '${countryCode}'`);
-        request(this.url, (error, response, body) => {
-            const jsonResponse = JSON.parse(body);
+        axios.get(this.url).then((response) => {
+            const jsonResponse = response.data;
             if (jsonResponse.cod === "200") {
                 logger.debug(`Weather for ${city} city was fetch.`);
                 const list = jsonResponse.list;
