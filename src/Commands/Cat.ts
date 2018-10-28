@@ -1,13 +1,14 @@
 "use strict";
+import axios, {AxiosResponse} from "axios";
 import * as cheerio from "cheerio";
 import {Message, RichEmbed} from "discord.js";
-import * as request from "request";
 import {AbstractCommand} from "./AbstractCommand";
 
 export class Cat extends AbstractCommand {
     public static NAME: string = "cat";
     private _url: string = "http://thecatapi.com/api/images/get?format=src&results_per_page=1&api_key=";
     private _url2: string = "http://random.cat";
+
     constructor() {
         super();
         this.name = Cat.NAME;
@@ -25,10 +26,6 @@ export class Cat extends AbstractCommand {
         return this._url2;
     }
 
-    public set url2(url2: string) {
-        this._url2 = url2;
-    }
-
     public do(message: Message) {
         if (!this.config.token) {
             this.error("Token is missing, please add one on your config");
@@ -44,18 +41,18 @@ export class Cat extends AbstractCommand {
         waitingEmbed.setTitle(this.config.lang.waiting);
 
         message.channel.send(waitingEmbed).then((message2: Message) => {
-            request(command.url,  (error, response) => {
-                if (response.statusCode === 200) {
-                    const url = response.request.href;
+            axios.get(command.url).then((response: AxiosResponse) => {
+                if (response.status === 200) {
+                    const url = response.request.res.responseUrl;
                     command.info(`New cat found (${url})`);
                     const richEmbed = new RichEmbed();
                     richEmbed.setFooter("By thecatapi.com");
                     richEmbed.setImage(url);
                     message2.edit(title, richEmbed);
                 } else {
-                    request(command.url2, (error2, response2, body2) => {
-                        const $ = cheerio.load(body2);
-                        if (response2.statusCode === 200) {
+                    axios.get(command.url2).then((response2) => {
+                        const $ = cheerio.load(response2.data);
+                        if (response2.status === 200) {
                             const url = $("#cat").prop("src");
                             command.info(`New cat found (${url})`);
                             const richEmbed = new RichEmbed();
