@@ -1,6 +1,6 @@
 "use strict";
 
-import {Client, DMChannel, Guild, GuildMember, Message, MessageReaction, User} from "discord.js";
+import {Client, DMChannel, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {Config} from "../Service/Config";
 import {Logger} from "../Service/Logger";
@@ -37,15 +37,13 @@ export class Welcome {
 
     /**
      * Send the welcome message in DM
-     * @param {module:discord.js.GuildMember} member
-     * @param {module:discord.js.Client} discordClient
      */
     public sendMessage(member: GuildMember, discordClient: Client) {
         const welcomeConfig = this.welcomeConfig;
         if (welcomeConfig && welcomeConfig.enabled) {
             member.send(welcomeConfig.message).then(async (message: Message) => {
                 const reactions = welcomeConfig.reactions;
-                for (const reactionName in reactions) {
+                for (const reactionName of reactions) {
                     const reaction: any = reactions[reactionName];
                     if (reaction.role && reaction.emoji) {
                         const emojiValue = reaction.emoji.toString().trim();
@@ -68,9 +66,6 @@ export class Welcome {
 
     /**
      * Add role when user clicks on a reaction
-     * @param {module:discord.js.MessageReaction} messageReaction
-     * @param {module:discord.js.User} user
-     * @param {module:discord.js.Client} discordClient
      */
     public addRole(messageReaction: MessageReaction, user: User, discordClient: Client): void {
         this.changeRole(messageReaction, user, discordClient, "add");
@@ -78,9 +73,6 @@ export class Welcome {
 
     /**
      * Remove role when user clicks on a reaction
-     * @param {module:discord.js.MessageReaction} messageReaction
-     * @param {module:discord.js.User} user
-     * @param {module:discord.js.Client} discordClient
      */
     public removeRole(messageReaction: MessageReaction, user: User, discordClient: Client): void {
         this.changeRole(messageReaction, user, discordClient, "remove");
@@ -94,10 +86,10 @@ export class Welcome {
                 const guildMember = guild.members.get(user.id);
                 // Fetch role by the emoji
                 const reactions = this.welcomeConfig.reactions;
-                for (const reactionName in reactions) {
+                for (const reactionName of reactions) {
                     const reaction: any = reactions[reactionName];
                     const reactionEmoji = messageReaction.emoji;
-                    if (reactionEmoji.name == reaction.emoji || reactionEmoji.id == reaction.emoji) {
+                    if (reactionEmoji.name === reaction.emoji || reactionEmoji.id === reaction.emoji) {
                         switch (action) {
                             case "remove":
                                 const removeRoleReason = `Role ${reactionName} automatically removed to user ${user.username}`;
@@ -109,8 +101,8 @@ export class Welcome {
                                         this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
                                     });
-                                    break;
                                 }
+                                break;
                             case "add":
                                 const addRoleReason = `Role ${reactionName} automatically added to user ${user.username}`;
                                 if (guildMember !== undefined) {
@@ -121,8 +113,9 @@ export class Welcome {
                                         this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_message.replace("%role%", reactionName));
                                     });
-                                    break;
+
                                 }
+                                break;
                         }
                         break;
                     }
