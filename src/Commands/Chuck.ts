@@ -1,7 +1,7 @@
 "use strict";
+import axios from "axios";
 import {Message} from "discord.js";
 import {AllHtmlEntities} from "html-entities";
-import * as request from "request";
 import {AbstractCommand} from "./AbstractCommand";
 
 export class Chuck extends AbstractCommand {
@@ -20,8 +20,8 @@ export class Chuck extends AbstractCommand {
     public do(message: Message) {
         const command = this;
         command.info("Fetching new fact");
-        request(this.url, (error, response, body) => {
-            const jsonResponse = JSON.parse(body);
+        axios.get(this.url).then((response) => {
+            const jsonResponse = JSON.parse(response.data);
             const entities     = new AllHtmlEntities();
             const fact         = entities.decode(jsonResponse[0].fact);
             command.info(`New fact found (${message.author.username}) : ${fact}`);
