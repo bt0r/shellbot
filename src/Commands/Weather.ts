@@ -2,7 +2,6 @@
 import axios from "axios";
 import {Message} from "discord.js";
 import {AbstractCommand} from "./AbstractCommand";
-import {isString} from "util";
 
 export class Weather extends AbstractCommand {
 
