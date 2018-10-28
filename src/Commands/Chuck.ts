@@ -6,7 +6,7 @@ import {AbstractCommand} from "./AbstractCommand";
 
 export class Chuck extends AbstractCommand {
     public static NAME: string = "chuck";
-    private _url: string       = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
+    private _url: string = "https://chucknorrisfacts.fr/api/get?data=tri:alea;nb:1;type:txt";
 
     constructor() {
         super();
@@ -21,9 +21,8 @@ export class Chuck extends AbstractCommand {
         const command = this;
         command.info("Fetching new fact");
         axios.get(this.url).then((response) => {
-            const jsonResponse = JSON.parse(response.data);
-            const entities     = new AllHtmlEntities();
-            const fact         = entities.decode(jsonResponse[0].fact);
+            const entities = new AllHtmlEntities();
+            const fact = entities.decode(response.data[0].fact);
             command.info(`New fact found (${message.author.username}) : ${fact}`);
             message.reply(fact);
         });
