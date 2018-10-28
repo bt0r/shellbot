@@ -106,7 +106,7 @@ export class Weather extends AbstractCommand {
                 const list = jsonResponse.list;
                 const result = [];
                 let daysFetched = 0;
-                const isHour12 = dateFormat === "fr-FR" ? false : true;
+                const isHour12 = dateFormat !== "fr-FR";
                 for (const item of list) {
                     const date = new Date(item.dt_txt);
                     const temp = item.main.temp;
@@ -156,15 +156,19 @@ export class Weather extends AbstractCommand {
                 }
                 const embedFields = [];
                 for (const day in result) {
-                    let weatherValues = "";
-                    for (const weather in result[day]) {
-                        const weatherAll: any = result[day][weather];
-                        weatherValues += `${weatherAll.hour} ${weatherAll.value} 💧 ${weatherAll.humidity}% 🌡️ ${weatherAll.temp} ${tempLabel} \n`;
+                    if (typeof day === "string") {
+                        let weatherValues = "";
+                        for (const weather in result[day]) {
+                            if (weather as any) {
+                                const weatherAll: any = result[day][weather];
+                                weatherValues += `${weatherAll.hour} ${weatherAll.value} 💧 ${weatherAll.humidity}% 🌡️ ${weatherAll.temp} ${tempLabel} \n`;
+                            }
+                        }
+                        embedFields.push({
+                            name: day,
+                            value: weatherValues,
+                        });
                     }
-                    embedFields.push({
-                        name: day,
-                        value: weatherValues,
-                    });
                 }
                 const embed = {
                     embed: {
@@ -183,6 +187,9 @@ export class Weather extends AbstractCommand {
                 message.reply(config.lang.error);
                 logger.error(`An error occured, please create an issue on the shellbot github repository`);
             }
+        }).catch((reason) => {
+            message.reply(config.lang.not_found);
+            logger.error(`The city ${city} was not found`);
         });
     }
 }

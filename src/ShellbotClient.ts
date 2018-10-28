@@ -21,6 +21,8 @@ export class ShellbotClient {
      */
     private _discordClient: Client = new Client();
 
+    private _listener: Listener;
+
     /**
      * Logger
      * @type {Logger}
@@ -39,7 +41,7 @@ export class ShellbotClient {
             this.logger.error("Shellbot cannot login :'( ");
         });
         // Listen shellbot client
-        new Listener(this);
+        this._listener = new Listener(this);
 
         this.logger.info("Shellbot started");
     }
