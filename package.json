@@ -41,6 +41,7 @@
     "striptags": "^3.1.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
+    "twitter": "^1.7.1",
     "typeorm": "^0.2.7",
     "typescript": "^3.1.2",
     "typescript-ioc": "^1.2.3",
