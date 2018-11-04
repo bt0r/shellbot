@@ -32,7 +32,7 @@ export class Config {
      */
     public isCommandEnabled(command: string, channel: TextChannel) {
         const channelConfig = this.channelConfig(channel);
-        return channelConfig && channelConfig.modules_enabled[command];
+        return channelConfig && channelConfig.commands[command];
     }
 
     /**

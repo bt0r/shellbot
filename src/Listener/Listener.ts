@@ -2,8 +2,8 @@
 
 import {Channel, Client, GuildMember, Message, MessageReaction, TextChannel, User} from "discord.js";
 import {Container, Inject} from "typescript-ioc";
-import {CommandFactory} from "../Commands/CommandFactory";
-import {Welcome} from "../Commands/Welcome";
+import {CommandFactory} from "../Command/CommandFactory";
+import {Welcome} from "../Command/Welcome";
 import {User as DBUser} from "../Entity/User";
 import {UserRepository} from "../Repository/UserRepository";
 import {Config} from "../Service/Config";

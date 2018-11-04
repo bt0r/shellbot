@@ -27,7 +27,7 @@ channels: # Configurations of channels
         message_restriction:
             regexp: "(?:Hello|Hi|Hey)"
             error_message: Oh wait, start to say hi first 😏 // You can use %messageContent% to show the message user sent
-        modules_enabled:
+        commands:
             YourModule: true # Enable a specific module
             YourModule2:
                 enabled: true

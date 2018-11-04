@@ -1,8 +1,8 @@
 import axios from "axios";
 import {Message, RichEmbed} from "discord.js";
 import {Inject} from "typescript-ioc";
-import {Boobs} from "../../Commands/Boobs";
-import {Butts} from "../../Commands/Butts";
+import {Boobs} from "../../Command/Boobs";
+import {Butts} from "../../Command/Butts";
 import {CommandCalledRepository} from "../../Repository/CommandCalledRepository";
 import {Database} from "../Database";
 import {Logger} from "../Logger";
