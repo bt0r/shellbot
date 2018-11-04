@@ -1,6 +1,6 @@
 "use strict";
 import {EntityRepository, Repository} from "typeorm";
-import {AbstractCommand} from "../Commands/AbstractCommand";
+import {AbstractCommand} from "../Command/AbstractCommand";
 import {CommandCalled} from "../Entity/CommandCalled";
 import {User} from "../Entity/User";
 
