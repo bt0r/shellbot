@@ -19,18 +19,20 @@ export class Scheduler {
     public start() {
         const channelsConfig = this._config.config.channels;
         for (const channelConfigName in channelsConfig) {
-            const channelConfig = channelsConfig[channelConfigName];
-            const [channelName, channelPosition] = channelConfigName.split("_");
-            const schedulesConfig = channelConfig.schedules;
-            if (schedulesConfig !== undefined && schedulesConfig.length > 0) {
-                for (const scheduleConfig of schedulesConfig) {
-                    const schedule = ScheduleFactory.create(scheduleConfig);
-                    const channel = this._textChannels.filter((textChannel) => (textChannel.name === channelName && textChannel.position === Number(channelPosition)));
-                    if (schedule !== null) {
-                        schedule.discordClient = this._discordClient;
-                        scheduleJob(scheduleConfig.cron_rule, () => {
-                            schedule.do(channel[0]);
-                        });
+            if (channelConfigName as string) {
+                const channelConfig = channelsConfig[channelConfigName];
+                const [channelName, channelPosition] = channelConfigName.split("_");
+                const schedulesConfig = channelConfig.schedules;
+                if (schedulesConfig !== undefined && schedulesConfig.length > 0) {
+                    for (const scheduleConfig of schedulesConfig) {
+                        const schedule = ScheduleFactory.create(scheduleConfig);
+                        const channel = this._textChannels.filter((textChannel) => (textChannel.name === channelName && textChannel.position === Number(channelPosition)));
+                        if (schedule !== null) {
+                            schedule.discordClient = this._discordClient;
+                            scheduleJob(scheduleConfig.cron_rule, () => {
+                                schedule.do(channel[0]);
+                            });
+                        }
                     }
                 }
             }
