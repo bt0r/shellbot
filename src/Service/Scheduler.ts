@@ -1,4 +1,4 @@
-import {Channel, Client, Collection, Snowflake, TextChannel} from "discord.js";
+import {Client, TextChannel} from "discord.js";
 import {scheduleJob} from "node-schedule";
 import {Inject} from "typescript-ioc";
 import {ScheduleFactory} from "../Schedule/ScheduleFactory";
