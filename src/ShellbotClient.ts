@@ -38,7 +38,6 @@ export class ShellbotClient {
         DependencyConfigurator.configure();
         this.discordClient.login(this.config.parameters.token).then(() => {
             this.logger.info("Shellbot logged !");
-            // Listen the last 25 private messages the bot received, allow the bot to listen reaction event
             this._listener = new Listener(this);
             const s = new Scheduler(this.discordClient);
             this.logger.info("Shellbot started");
