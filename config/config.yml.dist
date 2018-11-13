@@ -67,3 +67,8 @@ channels: # Configurations of channels
                     error: Cannot fetch stats from the database, please check your configuration.
                     description: What's the most used commands ? here is the result ..
                     title: Commands statistics
+        schedules:
+            - type: message
+              cron_rule: "*/10 * * * * *" // Cron-task rule based
+              arguments:
+                - "Send this message every 10 minutes inside the Welcome channel" // Only the first argument is used with this schedule
