@@ -5,7 +5,7 @@ import {User} from "../Entity/User";
 export class UserRepository extends Repository<User> {
     public findOneByDiscordId(discordId: string) {
         return this.createQueryBuilder("u")
-            .where("discordId = :discordId", {discordId})
+            .where("discord_id = :discordId", {discordId})
             .getOne();
     }
 

@@ -7,7 +7,7 @@ export class User {
     })
     private _id: number;
     @Column({
-        name: "discordId",
+        name: "discord_id",
         unique: true,
     })
     private _discordId: string;

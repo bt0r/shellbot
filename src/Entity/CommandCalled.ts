@@ -26,9 +26,9 @@ export class CommandCalled {
     private _commandName: string;
 
     @Column("datetime", {
-        name: "lastest_use",
+        name: "latest_use",
     })
-    private _lastestUse: Date = new Date();
+    private _latestUse: Date = new Date();
 
     get id(): number {
         return this._id;
@@ -62,11 +62,11 @@ export class CommandCalled {
         this._commandName = value;
     }
 
-    get lastestUse(): Date {
-        return this._lastestUse;
+    get latestUse(): Date {
+        return this._latestUse;
     }
 
-    set lastestUse(value: Date) {
-        this._lastestUse = value;
+    set latestUse(value: Date) {
+        this._latestUse = value;
     }
 }
