@@ -5,6 +5,7 @@
   "username": "root",
   "password": "azerty",
   "database": "shellcode",
+  "charset": "utf8mb4",
   "synchronize": false,
   "logging": false,
   "migrationsTableName": "migrations",
