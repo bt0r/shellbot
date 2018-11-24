@@ -23,6 +23,7 @@ export class Initial1542319466382 implements MigrationInterface {
                     name: "name",
                     type: "varchar",
                     length: "255",
+                    charset: "utf8mb4",
                 },
                 {
                     name: "status",
@@ -56,6 +57,7 @@ export class Initial1542319466382 implements MigrationInterface {
                     name: "command_name",
                     type: "varchar",
                     length: "255",
+                    charset: "utf8mb4",
                 },
                 {
                     name: "latest_use",
