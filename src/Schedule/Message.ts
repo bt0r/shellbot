@@ -7,6 +7,7 @@ export class Message extends AbstractSchedule {
 
     public constructor(args) {
         super();
+        this.name = Message.NAME;
         if (args.length > 0) {
             this._message = args[0];
         }
