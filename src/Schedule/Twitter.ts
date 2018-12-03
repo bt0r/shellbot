@@ -1,5 +1,7 @@
-import {TextChannel} from "discord.js";
+import {RichEmbed, TextChannel} from "discord.js";
 import * as TwitterApi from "twitter";
+import {Twitter as TwitterVO} from "../Entity/Twitter";
+import {TwitterRepository} from "../Repository/TwitterRepository";
 import {AbstractSchedule} from "./AbstractSchedule";
 
 enum TwitterSearchType {
@@ -17,6 +19,7 @@ export class Twitter extends AbstractSchedule {
 
     public constructor(args) {
         super();
+        this.name = Twitter.NAME;
         if (args.api_key !== undefined && args.api_secret_key !== undefined && args.access_token !== undefined && args.access_token_secret !== undefined) {
             this._twitterApi = new TwitterApi({
                 consumer_key: args.api_key ,
@@ -46,13 +49,40 @@ export class Twitter extends AbstractSchedule {
         }
     }
 
-    public lastTweets(channel: TextChannel, max: number = 10) {
+    public async lastTweets(channel: TextChannel, max: number = 10) {
+        const twitterRepository = this.database.manager.getCustomRepository(TwitterRepository);
+
         for (const screenName of this._queryValues) {
-            const params = { screen_name: screenName, count: max };
-            this._twitterApi.get("statuses/user_timeline", params, (error, tweets, response) => {
+            const lastTweetId = await twitterRepository.getLastTweetId(screenName, channel.name);
+            const params: any = {
+                screen_name: screenName,
+                count: max,
+            };
+            if (lastTweetId !== null && lastTweetId !== undefined) {
+                params.since_id = lastTweetId;
+            }
+            this._twitterApi.get("statuses/user_timeline", params, async (error, tweets) => {
                 if (!error) {
+                    this.info(`${tweets.length} fetched`);
                     for (const tweet of tweets) {
-                        channel.send(tweet.text);
+                        const twitterVO = new TwitterVO();
+                        twitterVO.twitterId = tweet.id_str;
+                        twitterVO.channel = channel.name;
+                        twitterVO.username = screenName;
+
+                        const tweetExists = await twitterRepository.isTweetExists(twitterVO.twitterId, twitterVO.channel);
+                        if (tweetExists != null) {
+                            this.info(`Tweet ${tweet.id_str} already exists in database.`);
+                            continue;
+                        }
+                        const tweetEmbed = this.renderEmbed(tweet);
+                        channel.send(tweetEmbed).then(() => {
+                            this.database.manager.save(twitterVO).then(() => {
+                                this.info(`Tweet ${tweet.id_str} added in database.`);
+                            });
+                        }).catch((reason) => {
+                            this.error(`Cannot fetch or send tweet: ${reason}`);
+                        });
                     }
                 } else {
                     this.error(error);
@@ -74,7 +104,15 @@ export class Twitter extends AbstractSchedule {
 
         });*/
     }
-    public renderEmbed(tweet: string, previewUrl: string, accountName: string, accountProfilePictureUrl: string) {
+    public renderEmbed(tweet: any) {
+        const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
+        const tweetEmbed = new RichEmbed();
+        tweetEmbed.setAuthor(tweet.user.name, tweet.user.profile_image_url, tweetUrl);
+        tweetEmbed.setColor(3447003);
+        tweetEmbed.setDescription(tweet.text);
+        tweetEmbed.setFooter(`${tweet.favorite_count} ❤️ ${tweet.retweet_count} 🔁`);
+        tweetEmbed.setTimestamp(tweet.created_at);
 
+        return tweetEmbed;
     }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "upgrade": "ts-node typeorm migration:run"
+    "upgrade-bot": "ts-node ./node_modules/.bin/typeorm migration:run"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "@types/node": "^10.11.7",
     "@types/node-schedule": "^1.2.2",
     "@types/request": "^2.47.1",
+    "@types/uuid": "^3.4.4",
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.4.2",
@@ -48,6 +49,7 @@
     "typeorm": "^0.2.7",
     "typescript": "^3.1.2",
     "typescript-ioc": "^1.2.3",
+    "uuid": "^3.3.2",
     "yamljs": "^0.3.0"
   }
 }
