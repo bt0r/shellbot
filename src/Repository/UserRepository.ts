@@ -13,10 +13,11 @@ export class UserRepository extends Repository<User> {
         let user = await this.findOneByDiscordId(newUser.discordId);
         if (user == null) {
             user = new User();
-            user.name = newUser.name;
             user.discordId = newUser.discordId;
+            user.name = newUser.name;
             await this.save(user);
         }
+        user.name = newUser.name;
         user.lastConnection = new Date();
         return user;
     }
