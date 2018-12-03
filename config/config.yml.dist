@@ -67,3 +67,38 @@ channels: # Configurations of channels
                     error: Cannot fetch stats from the database, please check your configuration.
                     description: What's the most used commands ? here is the result ..
                     title: Commands statistics
+        schedules:
+            - type: message
+              cron_rule: "*/10 * * * * *" // Cron-task rule based
+              arguments:
+                - "Send this message every 10 minutes inside the Welcome channel" // Only the first argument is used with this schedule
+            - type: twitter
+              cron_rule: "* */5 * * * *"
+              arguments:
+                api_key: <api_token>
+                api_secret_key: <api_secret_token>
+                access_token: <access_token>
+                access_token_secret: <access_token_secret>
+                query:
+                    type: account
+                    values:
+                      - nextinpact
+                      - korben_rss
+                    restriction:
+                        allow: ~
+                        deny: ~
+            - type: twitter
+              cron_rule: "* */5 * * * *"
+              arguments:
+                api_key: <api_token>
+                api_secret_key: <api_secret_token>
+                access_token: <access_token>
+                access_token_secret: <access_token_secret>
+                query:
+                    type: tweet
+                    values:
+                      - php // Search every tweet which contains PHP or java word
+                      - java
+                    restriction:
+                        allow: ~
+                        deny: javascript

@@ -1,10 +1,11 @@
 "use strict";
-import {Client} from "discord.js";
-import { Inject} from "typescript-ioc";
+import {Client, Collection} from "discord.js";
+import {Inject} from "typescript-ioc";
 import * as YAML from "yamljs";
 import {Listener} from "./Listener/Listener";
 import {DependencyConfigurator} from "./Service/DependencyConfigurator";
 import {Logger} from "./Service/Logger";
+import {Scheduler} from "./Service/Scheduler";
 
 export class ShellbotClient {
     /**
@@ -37,13 +38,12 @@ export class ShellbotClient {
         DependencyConfigurator.configure();
         this.discordClient.login(this.config.parameters.token).then(() => {
             this.logger.info("Shellbot logged !");
+            this._listener = new Listener(this);
+            const s = new Scheduler(this.discordClient);
+            this.logger.info("Shellbot started");
         }).catch(() => {
             this.logger.error("Shellbot cannot login :'( ");
         });
-        // Listen shellbot client
-        this._listener = new Listener(this);
-
-        this.logger.info("Shellbot started");
     }
 
     /**

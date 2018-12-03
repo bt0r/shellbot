@@ -139,8 +139,8 @@ export class Listener {
 
     private async presenceUpdate(oldMember: GuildMember, newMember: GuildMember) {
         this.logger.info("[STATUS] User " + oldMember.user.username + " is now " + newMember.user.presence.status);
-
         let user = new DBUser();
+
         user.discordId = newMember.user.id;
         user.name = newMember.user.username;
         user = await this._database.manager.getCustomRepository(UserRepository).findOrCreate(user);

@@ -17,7 +17,7 @@ export class CommandCalledRepository extends Repository<CommandCalled> {
             commandCalled.commandName = command.name;
         }
         commandCalled.count = commandCalled.count + 1;
-        commandCalled.lastestUse = new Date();
+        commandCalled.latestUse = new Date();
 
         return await this.save(commandCalled);
     }
