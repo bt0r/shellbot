@@ -43,7 +43,7 @@ export class Welcome {
         if (welcomeConfig && welcomeConfig.enabled) {
             member.send(welcomeConfig.message).then(async (message: Message) => {
                 const reactions = welcomeConfig.reactions;
-                for (const reactionName of reactions) {
+                for (const reactionName  in reactions) {
                     const reaction: any = reactions[reactionName];
                     if (reaction.role && reaction.emoji) {
                         const emojiValue = reaction.emoji.toString().trim();
@@ -86,7 +86,7 @@ export class Welcome {
                 const guildMember = guild.members.get(user.id);
                 // Fetch role by the emoji
                 const reactions = this.welcomeConfig.reactions;
-                for (const reactionName of reactions) {
+                for (const reactionName in reactions) {
                     const reaction: any = reactions[reactionName];
                     const reactionEmoji = messageReaction.emoji;
                     if (reactionEmoji.name === reaction.emoji || reactionEmoji.id === reaction.emoji) {
