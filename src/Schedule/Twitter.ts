@@ -14,13 +14,14 @@ export class Twitter extends AbstractSchedule {
     private _twitterApi: TwitterApi;
     private readonly _queryType: string;
     private readonly _queryValues: string[];
-    private _restrictionAllow: string = null;
-    private _restrictionDeny: string = null;
+    private readonly _restrictionAllow: string[] = null;
+    private readonly _restrictionDeny: string[] = null;
 
     public constructor(args) {
         super();
         this.name = Twitter.NAME;
-        if (args.api_key !== undefined && args.api_secret_key !== undefined && args.access_token !== undefined && args.access_token_secret !== undefined) {
+        const restrictions = args.query.restriction;
+        if (args.api_key && args.api_secret_key && args.access_token && args.access_token_secret) {
             this._twitterApi = new TwitterApi({
                 consumer_key: args.api_key ,
                 consumer_secret: args.api_secret_key,
@@ -32,6 +33,14 @@ export class Twitter extends AbstractSchedule {
                 this._queryValues = args.query.values;
             } else {
                 this.error("TwitterSchedule config parameters are not correct, please RTFM.");
+            }
+            if (restrictions) {
+               if (restrictions.allow && Array.isArray(restrictions.allow)) {
+                    this._restrictionAllow = restrictions.allow;
+               }
+               if (restrictions.deny && Array.isArray(restrictions.deny)) {
+                    this._restrictionDeny = restrictions.deny;
+                }
             }
         } else {
             this.error("There is one or more api_key missing with TwitterAPI, please RTFM.");
@@ -51,7 +60,6 @@ export class Twitter extends AbstractSchedule {
 
     public async lastTweets(channel: TextChannel, max: number = 10) {
         const twitterRepository = this.database.manager.getCustomRepository(TwitterRepository);
-
         for (const screenName of this._queryValues) {
             const lastTweetId = await twitterRepository.getLastTweetId(screenName, channel.name);
             const params: any = {
@@ -62,6 +70,7 @@ export class Twitter extends AbstractSchedule {
                 params.since_id = lastTweetId;
             }
             this._twitterApi.get("statuses/user_timeline", params, async (error, tweets) => {
+                tweets = tweets.reverse();
                 if (!error) {
                     this.info(`${tweets.length} fetched`);
                     for (const tweet of tweets) {
@@ -69,26 +78,49 @@ export class Twitter extends AbstractSchedule {
                         twitterVO.twitterId = tweet.id_str;
                         twitterVO.channel = channel.name;
                         twitterVO.username = screenName;
-
-                        const tweetExists = await twitterRepository.isTweetExists(twitterVO.twitterId, twitterVO.channel);
-                        if (tweetExists != null) {
-                            this.info(`Tweet ${tweet.id_str} already exists in database.`);
-                            continue;
-                        }
-                        const tweetEmbed = this.renderEmbed(tweet);
-                        channel.send(tweetEmbed).then(() => {
-                            this.database.manager.save(twitterVO).then(() => {
-                                this.info(`Tweet ${tweet.id_str} added in database.`);
+                        if (this.filter(true, tweet.text) && this.filter(false, tweet.text) && !tweet.in_reply_to_status_id && !tweet.in_reply_to_user_id) {
+                            const tweetExists = await twitterRepository.isTweetExists(twitterVO.twitterId, twitterVO.channel);
+                            if (tweetExists != null) {
+                                this.info(`Tweet ${tweet.id_str} already exists in database.`);
+                                continue;
+                            }
+                            const tweetEmbed = this.renderEmbed(tweet);
+                            channel.send(tweetEmbed).then(() => {
+                                this.database.manager.save(twitterVO).then(() => {
+                                    this.info(`Tweet ${tweet.id_str} added in database.`);
+                                });
+                            }).catch((reason) => {
+                                this.error(`Cannot fetch or send tweet: ${reason}`);
                             });
-                        }).catch((reason) => {
-                            this.error(`Cannot fetch or send tweet: ${reason}`);
-                        });
+                        }
                     }
                 } else {
                     this.error(error);
                 }
             });
         }
+    }
+
+    public filter(isAllowed: boolean, tweet: string) {
+        const restrictions: string[] = isAllowed ? this._restrictionAllow : this._restrictionDeny;
+        if (restrictions) {
+            for (const word of restrictions) {
+                if (isAllowed) {
+                    if (tweet.match(new RegExp(word, "ig"))) {
+                        return true;
+                    }
+                } else {
+                    if (!tweet.match(new RegExp(word, "ig"))) {
+                        return true;
+                    }
+                }
+
+            }
+        } else {
+            return true;
+        }
+
+        return false;
     }
 
     public searchTweets(channel: TextChannel, max: number = 10) {
