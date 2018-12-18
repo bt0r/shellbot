@@ -88,7 +88,7 @@ export class Listener {
             }
         }
         // Check if command exists
-        const commandPrefix = this.shellbotClient.config.parameters.commandPrefix;
+        const commandPrefix = this.shellbotClient.config.config.parameters.commandPrefix;
         const content       = message.content;
 
         if (content.length > 0 && commandPrefix === content.charAt(0)) {

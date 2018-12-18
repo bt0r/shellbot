@@ -6,6 +6,7 @@ import {Listener} from "./Listener/Listener";
 import {DependencyConfigurator} from "./Service/DependencyConfigurator";
 import {Logger} from "./Service/Logger";
 import {Scheduler} from "./Service/Scheduler";
+import {Config} from "./Service/Config";
 
 export class ShellbotClient {
     /**
@@ -13,7 +14,8 @@ export class ShellbotClient {
      * @type {any}
      * @private
      */
-    private _config = YAML.load("config/config.yml");
+    @Inject
+    private _config: Config;
 
     /**
      * Discord.JS bot client
@@ -35,8 +37,7 @@ export class ShellbotClient {
     constructor() {
         this.logger.info("Shellbot is starting...");
         this.logger.info("Shellbot is instantiating...");
-        DependencyConfigurator.configure();
-        this.discordClient.login(this.config.parameters.token).then(() => {
+        this.discordClient.login(this.config.config.parameters.token).then(() => {
             this.logger.info("Shellbot logged !");
             this._listener = new Listener(this);
             const s = new Scheduler(this.discordClient);
@@ -56,7 +57,7 @@ export class ShellbotClient {
 
     /**
      * Return the shellbot config
-     * @returns {any}
+     * @returns Config
      */
     public get config() {
         return this._config;

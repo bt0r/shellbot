@@ -1,17 +1,28 @@
 "use strict";
 import {TextChannel} from "discord.js";
+import * as fs from "fs";
+import {Inject} from "typescript-ioc";
 import * as YAML from "yamljs";
+import {Logger} from "./Logger";
 
 export class Config {
+    public static PATH = "config/config.yml";
     /**
      * Config
      * @type {Object}
      * @private
      */
     private _config;
+    /**
+     * Logger
+     * @type Logger
+     * @private
+     */
+    @Inject
+    private _logger: Logger;
 
     public constructor() {
-        this.config = YAML.load("config/config.yml");
+        this.config = YAML.load(Config.PATH);
     }
     /**
      * Return the shellbot config
@@ -42,5 +53,17 @@ export class Config {
      */
     public channelConfig(channel: TextChannel): any {
         return this._config.channels[channel.name + "_" + channel.position];
+    }
+
+    public write(config = this.config, destinationPath = Config.PATH) {
+        const yamlStr = YAML.stringify(config, 20);
+        fs.writeFile(destinationPath, yamlStr, (e) => {
+            if (e) {
+                this._logger.error(`Cannot write file ${destinationPath}, error: ${e.message}`);
+                return false;
+            }
+
+            return true;
+        });
     }
 }
