@@ -12,6 +12,7 @@ import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
 import {Stats} from "./Stats";
 import {Weather} from "./Weather";
+import {TwitterAdmin} from "./TwitterAdmin";
 
 export class CommandFactory {
 
@@ -46,6 +47,9 @@ export class CommandFactory {
                 break;
             case Stats.NAME:
                 commandFound = new Stats();
+                break;
+            case TwitterAdmin.NAME:
+                commandFound = new TwitterAdmin();
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
