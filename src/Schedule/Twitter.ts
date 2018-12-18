@@ -70,8 +70,8 @@ export class Twitter extends AbstractSchedule {
                 params.since_id = lastTweetId;
             }
             this._twitterApi.get("statuses/user_timeline", params, async (error, tweets) => {
-                tweets = tweets.reverse();
-                if (!error) {
+                if (!error && tweets) {
+                    tweets = tweets.reverse();
                     this.info(`${tweets.length} fetched`);
                     for (const tweet of tweets) {
                         const twitterVO = new TwitterVO();
