@@ -49,6 +49,7 @@ export class CommandFactory {
                 commandFound = new Stats();
                 break;
             case TwitterAdmin.NAME:
+            case TwitterAdmin.NAME_ALIAS:
                 commandFound = new TwitterAdmin();
                 break;
         }

@@ -8,6 +8,7 @@ export class TwitterAdmin extends AbstractCommand {
     protected configAdmin: Config;
 
     public static NAME: string = "twitterAdmin";
+    public static NAME_ALIAS: string = "twa";
 
     constructor() {
         super();
