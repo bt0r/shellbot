@@ -46,10 +46,29 @@ export class TwitterAdmin extends AbstractCommand {
                                 break;
                         }
                     }
-            }
-            const listEmbed = this.list();
-            for (const scheduleEmbed of listEmbed) {
-                message.reply(scheduleEmbed);
+                case "help":
+                    message.reply(this.help()).catch((reason) => {
+                        this.error("Error with help command, error: " + reason);
+                    });
+                    break;
+                case "account":
+                    switch (args[2]) {
+                        case "add":
+                            // !twa account add <channel> <account>
+                            this.addAccount(args[3], args[4]);
+                            break;
+                        case "del":
+                            // !twa account del <channel> <account>
+                            this.delAccount(args[3], args[4]);
+                            break;
+                    }
+                    break;
+                case "config":
+                    const listEmbed = this.list();
+                    for (const scheduleEmbed of listEmbed) {
+                        message.reply(scheduleEmbed);
+                    }
+                    break;
             }
         }
     }
@@ -96,12 +115,49 @@ export class TwitterAdmin extends AbstractCommand {
         return results;
     }
 
-    public addAccount(targetChannel: string, keyword: string) {
-
+    public addAccount(targetChannel: string, account: string) {
+        const config = this.replaceAccount(targetChannel, account, true);
+        this.configAdmin.write(config);
     }
 
-    public delAccount(targetChannel: string, keyword: string) {
+    public delAccount(targetChannel: string, account: string) {
+        const config = this.replaceAccount(targetChannel, account, false);
+        this.configAdmin.write(config);
+    }
 
+    private replaceAccount(targetChannel: string, accountName: string, toAdd: boolean) {
+        const channels = this.configAdmin.config.channels;
+        for (const channel in channels) {
+            const channelObject = channels[channel];
+            if (channelObject.schedules) {
+                for (const schedule of channelObject.schedules) {
+                    if (schedule.type === "twitter" && channel === targetChannel) {
+                        const query = schedule.arguments.query;
+                        const accounts = query.values;
+                        if (toAdd) {
+                            schedule.arguments.query.values.push(accountName);
+                        } else {
+                            schedule.arguments.query.values = accounts.filter((account) => account !== accountName);
+                        }
+                    }
+                }
+            }
+        }
+        return this.configAdmin.config;
+    }
+
+    public help() {
+        const help = `Manage the twitter config by adding/removing restrictions. \n\n` +
+            `Command: \n\`\`\`BASH\n${this.configAdmin.config.parameters.commandPrefix}<${TwitterAdmin.NAME}|${TwitterAdmin.NAME_ALIAS}>` +
+            ` <allow|deny> <add|del> <channel>_<channelPosition> <expression> \`\`\`\n` +
+            "Examples:\n\n" +
+            "* `!twa allow add general_14 apple` will allow the word apple in the tweets fetched for the channel `general_14`\n" +
+            "* `!twa allow del general++++++_14 apple` will remove the word apple from the allowed word-list of the channel `general_14`\n" +
+            "* `!twa deny add general_14 sex` will remove all tweets containing `sex`\n" +
+            "* `!twitterAdmin deny del general_14 iOS` will remove iOS from the 'banned word list' for the channel `general_14`\n" +
+            "* `!twitterAdmin config` will show the twitter config for all channels"
+        ;
+        return help;
     }
 
     private replaceRules(targetChannel: string, expression: string = "", toAdd: boolean, isAllowed: boolean) {
