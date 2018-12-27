@@ -85,7 +85,7 @@ export class TwitterAdmin extends AbstractCommand {
                         const accounts = "**Accounts**\n- " + query.values.join("\n- ");
                         let restrictions = null;
                         const resultEmbed = new RichEmbed();
-                        resultEmbed.setAuthor("Channel: " + channel);
+                        resultEmbed.setTitle("Channel: " + channel);
                         resultEmbed.setColor(0xf4424e);
 
                         if (query.restrictions) {
@@ -147,17 +147,22 @@ export class TwitterAdmin extends AbstractCommand {
     }
 
     public help() {
-        const help = `Manage the twitter config by adding/removing restrictions. \n\n` +
-            `Command: \n\`\`\`BASH\n${this.configAdmin.config.parameters.commandPrefix}<${TwitterAdmin.NAME}|${TwitterAdmin.NAME_ALIAS}>` +
-            ` <allow|deny> <add|del> <channel>_<channelPosition> <expression> \`\`\`\n` +
-            "Examples:\n\n" +
-            "* `!twa allow add general_14 apple` will allow the word apple in the tweets fetched for the channel `general_14`\n" +
-            "* `!twa allow del general++++++_14 apple` will remove the word apple from the allowed word-list of the channel `general_14`\n" +
-            "* `!twa deny add general_14 sex` will remove all tweets containing `sex`\n" +
-            "* `!twitterAdmin deny del general_14 iOS` will remove iOS from the 'banned word list' for the channel `general_14`\n" +
-            "* `!twitterAdmin config` will show the twitter config for all channels"
-        ;
-        return help;
+        const commandPrefix = this.configAdmin.config.parameters.commandPrefix;
+        const examples = "* `!twa account add test_12 microsoft` Add microsoft account to the channel test_12\n" +
+            "* `!twa account del test_12 apple` Remove microsoft account from the channel test_12\n" +
+            "* `!twa allow add general_14 apple` Allow the word apple in the tweets fetched for the channel general_14\n" +
+            "* `!twa allow del general++++++_14 apple` Remove the word apple from the allowed word-list of the channel general_14\n" +
+            "* `!twa deny add general_14 sex` Remove all tweets containing `sex`\n" +
+            "* `!twitterAdmin deny del general_14 iOS` Remove iOS from the 'banned word list' for the channel general_14\n" +
+            "* `!twitterAdmin config` Show the twitter config for all channels\n";
+        const embed = new RichEmbed();
+        embed.setColor(0xf4424e);
+        embed.setTitle("Manage the twitter config by adding/removing restrictions or accounts.");
+        embed.addField("Accounts", `\`\`\`BASH\n${commandPrefix}<${TwitterAdmin.NAME}|${TwitterAdmin.NAME_ALIAS}> account <add|del> <channel>_<channelPosition> <accountName> \`\`\``);
+        embed.addField("Restrictions", `\`\`\`BASH\n${commandPrefix}<${TwitterAdmin.NAME}|${TwitterAdmin.NAME_ALIAS}> <allow|deny> <add|del> <channel>_<channelPosition> <expression> \`\`\``);
+        embed.addField("Examples", examples);
+
+        return embed;
     }
 
     private replaceRules(targetChannel: string, expression: string = "", toAdd: boolean, isAllowed: boolean) {
