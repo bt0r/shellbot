@@ -58,7 +58,6 @@ export class Initial1542319466382 implements MigrationInterface {
                     type: "varchar",
                     length: "255",
                     charset: "utf8mb4",
-                    isUnique: true,
                 },
                 {
                     name: "latest_use",
@@ -68,7 +67,6 @@ export class Initial1542319466382 implements MigrationInterface {
                     name: "user_id",
                     type: "int",
                     length: "11",
-                    isUnique: true,
                 },
             ],
         }), true);
@@ -88,6 +86,7 @@ export class Initial1542319466382 implements MigrationInterface {
         await queryRunner.createIndex("command_called", new TableIndex({
             name: "IDX_COMMAND_CALLED_USER",
             columnNames: ["command_name", "user_id"],
+            isUnique: true,
         }));
     }
 
