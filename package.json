@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node index.ts",
+    "start": "node src/index.js",
     "migration": "ts-node ./node_modules/.bin/typeorm migration:run"
   },
   "repository": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/bt0r/shellbot/issues"
   },
   "homepage": "https://github.com/bt0r/shellbot#readme",
-  "dependencies": {
+  "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.9",
     "@types/html-entities": "^1.2.16",
@@ -45,13 +45,17 @@
     "reflect-metadata": "^0.1.12",
     "request": "^2.88.0",
     "striptags": "^3.1.1",
+    "ts-loader": "^5.3.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "twitter": "^1.7.1",
     "typeorm": "^0.2.7",
-    "typescript": "^3.1.2",
+    "typescript": "^3.2.2",
     "typescript-ioc": "^1.2.3",
     "uuid": "^3.3.2",
     "yamljs": "^0.3.0"
+  },
+  "dependencies": {
+    "@types/yamljs": "^0.2.30"
   }
 }

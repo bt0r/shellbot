@@ -1,5 +1,3 @@
-"use strict";
-
 import {Client, DMChannel, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {Config} from "../Service/Config";

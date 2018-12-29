@@ -1,4 +1,3 @@
-"use strict";
 import {Message, TextChannel} from "discord.js";
 import {Container} from "typescript-ioc";
 import {Config} from "../Service/Config";

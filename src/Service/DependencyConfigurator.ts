@@ -1,4 +1,3 @@
-"use strict";
 import {Container} from "typescript-ioc";
 import {SexService} from "./Command/SexService";
 import {Database} from "./Database";

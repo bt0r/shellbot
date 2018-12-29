@@ -1,4 +1,3 @@
-"use strict";
 import {Message, RichEmbed} from "discord.js";
 import {CommandCalledRepository} from "../Repository/CommandCalledRepository";
 import {AbstractCommand} from "./AbstractCommand";

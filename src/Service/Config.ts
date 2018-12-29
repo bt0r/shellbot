@@ -1,12 +1,12 @@
-"use strict";
 import {TextChannel} from "discord.js";
 import * as fs from "fs";
+import {resolve} from "path";
 import {Inject} from "typescript-ioc";
 import * as YAML from "yamljs";
 import {Logger} from "./Logger";
 
 export class Config {
-    public static PATH = "config/config.yml";
+    public static PATH = resolve("config/config.yml");
     /**
      * Config
      * @type {Object}

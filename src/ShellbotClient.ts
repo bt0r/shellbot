@@ -1,12 +1,9 @@
-"use strict";
-import {Client, Collection} from "discord.js";
+import {Client} from "discord.js";
 import {Inject} from "typescript-ioc";
-import * as YAML from "yamljs";
 import {Listener} from "./Listener/Listener";
-import {DependencyConfigurator} from "./Service/DependencyConfigurator";
+import {Config} from "./Service/Config";
 import {Logger} from "./Service/Logger";
 import {Scheduler} from "./Service/Scheduler";
-import {Config} from "./Service/Config";
 
 export class ShellbotClient {
     /**

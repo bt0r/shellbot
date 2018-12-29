@@ -1,5 +1,3 @@
-"use strict";
-
 import {Channel, Client, GuildMember, Message, MessageReaction, TextChannel, User} from "discord.js";
 import {Container, Inject} from "typescript-ioc";
 import {CommandFactory} from "../Command/CommandFactory";

@@ -1,4 +1,3 @@
-"use strict";
 import {EntityRepository, Repository} from "typeorm";
 import {AbstractCommand} from "../Command/AbstractCommand";
 import {CommandCalled} from "../Entity/CommandCalled";

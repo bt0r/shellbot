@@ -1,4 +1,3 @@
-"use strict";
 import {configure, getLogger} from "log4js";
 
 export class Logger {

@@ -1,4 +1,3 @@
-"use strict";
 import axios, {AxiosResponse} from "axios";
 import * as cheerio from "cheerio";
 import {Message, RichEmbed} from "discord.js";

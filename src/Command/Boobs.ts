@@ -1,4 +1,3 @@
-"use strict";
 import {Message} from "discord.js";
 import {Container} from "typescript-ioc";
 import {SexService} from "../Service/Command/SexService";

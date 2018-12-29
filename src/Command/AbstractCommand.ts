@@ -1,4 +1,3 @@
-"use strict";
 import {Message} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {UserFactory} from "../Entity/UserFactory";
