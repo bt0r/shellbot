@@ -58,6 +58,7 @@ export class Initial1542319466382 implements MigrationInterface {
                     type: "varchar",
                     length: "255",
                     charset: "utf8mb4",
+                    isUnique: true,
                 },
                 {
                     name: "latest_use",
