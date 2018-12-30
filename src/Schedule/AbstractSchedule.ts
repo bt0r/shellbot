@@ -6,7 +6,7 @@ import {Logger} from "../Service/Logger";
 
 interface ISchedule {
     name: string;
-    do(channel?: TextChannel);
+    do(channel?: TextChannel): void;
 }
 
 export abstract class AbstractSchedule implements ISchedule {
@@ -38,19 +38,19 @@ export abstract class AbstractSchedule implements ISchedule {
         this._name = name;
     }
 
-    protected debug(message) {
+    protected debug(message: string) {
         this.log("debug", message);
     }
 
-    protected info(message) {
+    protected info(message: string) {
         this.log("info", message);
     }
 
-    protected warning(message) {
+    protected warning(message: string) {
         this.log("warning", message);
     }
 
-    protected error(message) {
+    protected error(message: string) {
         this.log("error", message);
     }
 
@@ -68,7 +68,21 @@ export abstract class AbstractSchedule implements ISchedule {
      * @param message
      */
     private log(severity: string, message: string) {
-        this.logger[severity](`[SCH:${this.name}] ${message}`);
+        const logMessage = `[SCH:${this.name}] ${message}`;
+        switch (severity) {
+            case "debug":
+                this.logger.debug(logMessage);
+                break;
+            case "info":
+                this.logger.info(logMessage);
+                break;
+            case "warning":
+                this.logger.warning(logMessage);
+                break;
+            case "error":
+                this.logger.error(logMessage);
+                break;
+        }
     }
 
     public set discordClient(discordClient: Client) {
@@ -79,5 +93,5 @@ export abstract class AbstractSchedule implements ISchedule {
         return this._discordClient;
     }
 
-    public abstract do(channel?: TextChannel);
+    public abstract do(channel?: TextChannel): void;
 }

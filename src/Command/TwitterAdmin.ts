@@ -76,7 +76,7 @@ export class TwitterAdmin extends AbstractCommand {
     public list() {
         const channels = this.configAdmin.config.channels;
         const results: any[] = [];
-        for (const channel in channels) {
+        for (const channel of Object.keys(channels)) {
             const channelObject = channels[channel];
             if (channelObject.schedules) {
                 for (const schedule of channelObject.schedules) {
@@ -127,7 +127,7 @@ export class TwitterAdmin extends AbstractCommand {
 
     private replaceAccount(targetChannel: string, accountName: string, toAdd: boolean) {
         const channels = this.configAdmin.config.channels;
-        for (const channel in channels) {
+        for (const channel of Object.keys(channels)) {
             const channelObject = channels[channel];
             if (channelObject.schedules) {
                 for (const schedule of channelObject.schedules) {
@@ -137,7 +137,7 @@ export class TwitterAdmin extends AbstractCommand {
                         if (toAdd) {
                             schedule.arguments.query.values.push(accountName);
                         } else {
-                            schedule.arguments.query.values = accounts.filter((account) => account !== accountName);
+                            schedule.arguments.query.values = accounts.filter((account: any) => account !== accountName);
                         }
                     }
                 }
@@ -167,7 +167,7 @@ export class TwitterAdmin extends AbstractCommand {
 
     private replaceRules(targetChannel: string, expression: string = "", toAdd: boolean, isAllowed: boolean) {
         const channels = this.configAdmin.config.channels;
-        for (const channel in channels) {
+        for (const channel of Object.keys(channels)) {
             const channelObject = channels[channel];
             if (channelObject.schedules && channel === targetChannel) {
                 for (const schedule of channelObject.schedules) {
@@ -180,7 +180,7 @@ export class TwitterAdmin extends AbstractCommand {
                             if (toAdd) {
                                 rules.push(expression);
                             } else {
-                                rules = rules.filter((rule) => rule !== expression);
+                                rules = rules.filter((rule: any) => rule !== expression);
                             }
                             if (isAllowed) {
                                 schedule.arguments.query.restrictions.allow = rules;

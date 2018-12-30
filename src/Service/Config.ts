@@ -12,7 +12,7 @@ export class Config {
      * @type {Object}
      * @private
      */
-    private _config;
+    private _config: any;
     /**
      * Logger
      * @type Logger

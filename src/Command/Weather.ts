@@ -1,6 +1,17 @@
 import axios from "axios";
 import {Message} from "discord.js";
 import {AbstractCommand} from "./AbstractCommand";
+interface IWeatherItem {
+    humidity: string;
+    temp: string;
+    value: string|null;
+}
+class WeatherItem implements IWeatherItem {
+    public hour: string;
+    public humidity: string;
+    public temp: string;
+    public value: string | null = null;
+};
 
 export class Weather extends AbstractCommand {
 
@@ -63,10 +74,10 @@ export class Weather extends AbstractCommand {
         const matchesWithCC = message.content.match(regexpWithCC);
         const matchesWithoutCC = message.content.match(regexpWithoutCC);
         let _ = null;
-        let city = null;
-        let countryCode = null;
+        let city: string|null = null;
+        let countryCode: any|null = null;
         const unit = config.unit ? config.unit : this.defaultUnit;
-        let tempLabel = null;
+        let tempLabel: string|null = null;
         const dateFormat = config.datetime_format ? config.datetime_format : this.defaultDateFormat;
         if (matchesWithCC && matchesWithCC.length === 3) {
             [_, city, countryCode] = matchesWithCC;
@@ -103,7 +114,7 @@ export class Weather extends AbstractCommand {
             if (jsonResponse.cod === "200") {
                 logger.debug(`Weather for ${city} city was fetch.`);
                 const list = jsonResponse.list;
-                const result = [];
+                const result: any = [];
                 let daysFetched = 0;
                 const isHour12 = dateFormat !== "fr-FR";
                 for (const item of list) {
@@ -123,12 +134,7 @@ export class Weather extends AbstractCommand {
                         result[day] = [];
                         daysFetched++;
                     }
-                    const weatherItem = {
-                        hour,
-                        humidity,
-                        temp,
-                        value: null,
-                    };
+                    const weatherItem: IWeatherItem = new WeatherItem();
 
                     switch (Math.floor(weatherId / 100)) {
                         case 2:

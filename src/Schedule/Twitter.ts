@@ -14,10 +14,10 @@ export class Twitter extends AbstractSchedule {
     private _twitterApi: TwitterApi;
     private readonly _queryType: string;
     private readonly _queryValues: string[];
-    private readonly _restrictionAllow: string[] = null;
-    private readonly _restrictionDeny: string[] = null;
+    private readonly _restrictionAllow: string[]|null = null;
+    private readonly _restrictionDeny: string[]|null = null;
 
-    public constructor(args) {
+    public constructor(args: any) {
         super();
         this.name = Twitter.NAME;
         const restrictions = args.query.restriction;
@@ -69,9 +69,9 @@ export class Twitter extends AbstractSchedule {
             if (lastTweetId !== null && lastTweetId !== undefined) {
                 params.since_id = lastTweetId;
             }
-            this._twitterApi.get("statuses/user_timeline", params, async (error, tweets) => {
-                if (!error && tweets) {
-                    tweets = tweets.reverse();
+            this._twitterApi.get("statuses/user_timeline", params, async (error, response) => {
+                if (!error && response) {
+                    const tweets = response.reverse();
                     this.info(`${tweets.length} fetched`);
                     for (const tweet of tweets) {
                         const twitterVO = new TwitterVO();
@@ -84,7 +84,7 @@ export class Twitter extends AbstractSchedule {
                                 this.info(`Tweet ${tweet.id_str} already exists in database.`);
                                 continue;
                             }
-                            const tweetEmbed = this.renderEmbed(tweet);
+                            const tweetEmbed = Twitter.renderEmbed(tweet);
                             channel.send(tweetEmbed).then(() => {
                                 this.database.manager.save(twitterVO).then(() => {
                                     this.info(`Tweet ${tweet.id_str} added in database.`);
@@ -102,7 +102,7 @@ export class Twitter extends AbstractSchedule {
     }
 
     public filter(isAllowed: boolean, tweet: string) {
-        const restrictions: string[] = isAllowed ? this._restrictionAllow : this._restrictionDeny;
+        const restrictions: string[]|null = isAllowed ? this._restrictionAllow : this._restrictionDeny;
         if (restrictions) {
             for (const word of restrictions) {
                 if (isAllowed) {
@@ -123,20 +123,7 @@ export class Twitter extends AbstractSchedule {
         return false;
     }
 
-    public searchTweets(channel: TextChannel, max: number = 10) {
-        /*
-        this._twitterApi.get("search/tweets", {}, (error, tweets, response) => {
-            if (!error) {
-                for (const tweet of tweets.statuses) {
-                    channel.send(tweet.text);
-                }
-            } else {
-                console.log(error);
-            }
-
-        });*/
-    }
-    public renderEmbed(tweet: any) {
+    protected static renderEmbed(tweet: any) {
         const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
         const tweetEmbed = new RichEmbed();
         tweetEmbed.setAuthor(tweet.user.name, tweet.user.profile_image_url, tweetUrl);

@@ -19,12 +19,14 @@ export class Boobs extends AbstractCommand {
         command.info("Fetching new booby picture");
         const sexService = Container.get(SexService);
         try {
-            sexService.randomBoobs((boobsRichEmbed) => {
+            sexService.randomBoobs((boobsRichEmbed: any) => {
                 const messageResponse = message.channel.send(boobsRichEmbed);
 
-                messageResponse.then(async (message2: Message) => {
-                    await message2.react("👍");
-                    await message2.react("👎");
+                messageResponse.then(async (message2) => {
+                    if (message2 instanceof Message) {
+                        await message2.react("👍");
+                        await message2.react("👎");
+                    }
                 });
             });
         } catch (e) {
