@@ -1,4 +1,3 @@
-"use strict";
 import {Client, TextChannel} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {Database} from "../Service/Database";
