@@ -1,9 +1,8 @@
 import {Connection, createConnection, EntityManager} from "typeorm";
-import {AutoWired, Inject, Singleton} from "typescript-ioc";
+import {Inject, Singleton} from "typescript-ioc";
 import {Logger} from "./Logger";
 
 @Singleton
-@AutoWired
 export class Database {
     /**
      * Logger

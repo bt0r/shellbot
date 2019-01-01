@@ -8,14 +8,8 @@ import {Config} from "../Service/Config";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 import {ShellbotClient} from "../ShellbotClient";
-import {CommandEmitter} from "./CommandEmitter";
 
 export class Listener {
-    /**
-     * Static CommandEmitter instance
-     */
-    public static EMITTER: CommandEmitter;
-
     /**
      * Log4js Logger
      */
@@ -25,6 +19,7 @@ export class Listener {
     /**
      * Shellbot Client
      */
+    @Inject
     private _shellbotClient: ShellbotClient;
 
     /**
@@ -35,10 +30,9 @@ export class Listener {
     @Inject
     private _database: Database;
 
-    constructor(shellbotClient: ShellbotClient) {
-        Listener.getInstance();
-        this.shellbotClient = shellbotClient;
+    constructor() {
         const discordClient   = this.shellbotClient.discordClient;
+        this._discordClient = discordClient;
         discordClient.on("ready", () => this.ready());
         discordClient.on("message", (message) => this.message(message));
         discordClient.on("guildMemberAdd", (member) => this.guildMemberAdd(member));
@@ -50,14 +44,7 @@ export class Listener {
         discordClient.on("messageReactionRemove", (messageReaction, user) => this.messageReactionRemove(messageReaction, user));
         discordClient.on("presenceUpdate", (oldMember, newMember) => this.presenceUpdate(oldMember, newMember));
         discordClient.on("error", (error) => this.error(error));
-    }
-
-    public static getInstance() {
-        if (!this.EMITTER) {
-            this.EMITTER = new CommandEmitter();
-        }
-
-        return this.EMITTER;
+        this.shellbotClient.login();
     }
 
     private ready(): void {
