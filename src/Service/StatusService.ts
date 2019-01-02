@@ -1,7 +1,7 @@
 import {Inject, Singleton} from "typescript-ioc";
-import {ShellbotClient} from "../ShellbotClient";
 import {Config} from "./Config";
 import {Logger} from "./Logger";
+import {ShellbotClient} from "./ShellbotClient";
 
 @Singleton
 export class StatusService {

@@ -1,9 +1,9 @@
 import {Client} from "discord.js";
 import {Inject, Singleton} from "typescript-ioc";
-import {Config} from "./Service/Config";
-import {Logger} from "./Service/Logger";
-import {Scheduler} from "./Service/Scheduler";
-import {StatusService} from "./Service/StatusService";
+import {Config} from "./Config";
+import {Logger} from "./Logger";
+import {Scheduler} from "./Scheduler";
+import {StatusService} from "./StatusService";
 
 @Singleton
 export class ShellbotClient {

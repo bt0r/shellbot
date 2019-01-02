@@ -1,9 +1,9 @@
 import {Container} from "typescript-ioc";
 import {Listener} from "../Listener/Listener";
-import {ShellbotClient} from "../ShellbotClient";
 import {SexService} from "./Command/SexService";
 import {Database} from "./Database";
 import {Logger} from "./Logger";
+import {ShellbotClient} from "./ShellbotClient";
 import {StatusService} from "./StatusService";
 
 export class DependencyConfigurator {

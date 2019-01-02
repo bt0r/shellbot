@@ -7,7 +7,7 @@ import {UserRepository} from "../Repository/UserRepository";
 import {Config} from "../Service/Config";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
-import {ShellbotClient} from "../ShellbotClient";
+import {ShellbotClient} from "../Service/ShellbotClient";
 
 export class Listener {
     /**
