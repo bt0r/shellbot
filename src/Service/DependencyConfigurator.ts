@@ -21,4 +21,11 @@ export class DependencyConfigurator {
         Container.bind(SexService);
         Container.get(SexService);
     }
+
+    public static configureCommand() {
+        Container.bind(Logger);
+        Container.get(Logger);
+        Container.bind(Database);
+        Container.get(Database);
+    }
 }
