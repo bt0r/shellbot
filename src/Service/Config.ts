@@ -20,9 +20,12 @@ export class Config {
      * @private
      */
     @Inject
-    private _logger: Logger;
+    private logger: Logger;
 
     public constructor() {
+        if (!fs.existsSync(Config.PATH)) {
+            this.init();
+        }
         this.config = YAML.load(Config.PATH);
     }
     /**
@@ -60,11 +63,19 @@ export class Config {
         const yamlStr = YAML.stringify(config, 20);
         fs.writeFile(destinationPath, yamlStr, (e) => {
             if (e) {
-                this._logger.error(`Cannot write file ${destinationPath}, error: ${e.message}`);
+                this.logger.error(`Cannot write file ${destinationPath}, error: ${e.message}`);
                 return false;
             }
 
             return true;
+        });
+    }
+
+    public init() {
+        fs.copyFile(Config.PATH + ".dist", Config.PATH, (error) => {
+            if (error) {
+                this.logger.error("Can't init the config, error:" + error.message);
+            }
         });
     }
 }

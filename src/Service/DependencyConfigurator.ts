@@ -1,6 +1,7 @@
 import {Container} from "typescript-ioc";
 import {Listener} from "../Listener/Listener";
 import {SexService} from "./Command/SexService";
+import {Config} from "./Config";
 import {Database} from "./Database";
 import {Logger} from "./Logger";
 import {ShellbotClient} from "./ShellbotClient";
@@ -25,6 +26,8 @@ export class DependencyConfigurator {
     public static configureCommand() {
         Container.bind(Logger);
         Container.get(Logger);
+        Container.bind(Config);
+        Container.get(Config);
         Container.bind(Database);
         Container.get(Database);
     }
