@@ -6,7 +6,7 @@ import * as YAML from "yamljs";
 import {Logger} from "./Logger";
 
 export class Config {
-    public static version = "0.1.0";
+    public static version = "0.1.1";
     public static PATH = resolve("config/config.yml");
     /**
      * Config

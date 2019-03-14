@@ -14,7 +14,7 @@ build:
 	@npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
 create-config: build
 	@echo 'Creating the config file.'
-	node dist/Service/ConfigCreator.js
+	@node dist/Service/ConfigCreator.js
 start:
 	@echo 'Starting the bot...'
 	@if [ $(USE_DOCKER) = "Y" ]; then docker-compose up -d && echo '✅ Bot started'; else npm start && echo '✅ Bot started' || echo '❌ Cannot start the bot'; fi
