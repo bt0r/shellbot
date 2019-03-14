@@ -56,7 +56,17 @@ export class Config {
      * @return any
      */
     public channelConfig(channel: TextChannel): any {
-        return this._config.channels[channel.name + "_" + channel.position];
+        const channelNameAndPosition = channel.name + "_" + channel.position;
+        const channelId = channel.id;
+        let channelConfig: any = null;
+        if (this._config.channels[channelId]) {
+            channelConfig = this._config.channels[channelId];
+        } else if (this._config.channels[channelNameAndPosition]) {
+            channelConfig = this._config.channels[channelNameAndPosition];
+        } else {
+            return null;
+        }
+        return channelConfig;
     }
 
     public write(config = this.config, destinationPath = Config.PATH) {

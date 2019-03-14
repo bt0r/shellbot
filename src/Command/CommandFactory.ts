@@ -10,8 +10,8 @@ import {Chuck} from "./Chuck";
 import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
 import {Stats} from "./Stats";
-import {Weather} from "./Weather";
 import {TwitterAdmin} from "./TwitterAdmin";
+import {Weather} from "./Weather";
 
 export class CommandFactory {
 
@@ -53,7 +53,7 @@ export class CommandFactory {
                 break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
-            const configChannel = config.config.channels[channel.name + "_" + channel.position];
+            const configChannel = config.channelConfig(channel);
             commandFound.config = configChannel.commands[commandName];
 
             this.send(commandFound, message);

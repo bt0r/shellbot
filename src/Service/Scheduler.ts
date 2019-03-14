@@ -30,7 +30,7 @@ export class Scheduler {
                 if (schedulesConfig !== undefined && schedulesConfig.length > 0) {
                     for (const scheduleConfig of schedulesConfig) {
                         const schedule = ScheduleFactory.create(scheduleConfig);
-                        const channel = this._textChannels.filter((textChannel) => (textChannel.name === channelName && textChannel.position === Number(channelPosition)));
+                        const channel = this._textChannels.filter((textChannel) => ((textChannel.name === channelName && textChannel.position === Number(channelPosition))) || textChannel.id === channelConfigName);
                         if (schedule !== null && scheduleConfig.enabled === true) {
                             schedule.discordClient = this._discordClient;
                             const scheduleUuid = uuid();
