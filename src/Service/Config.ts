@@ -6,7 +6,7 @@ import * as YAML from "yamljs";
 import {Logger} from "./Logger";
 
 export class Config {
-    public static version = "0.1.1";
+    public version = "0.1.0";
     public static PATH = resolve("config/config.yml");
     /**
      * Config
@@ -27,6 +27,7 @@ export class Config {
             this.init();
         }
         this.config = YAML.load(Config.PATH);
+        this.version = this.config.version;
     }
     /**
      * Return the shellbot config

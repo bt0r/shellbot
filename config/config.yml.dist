@@ -1,3 +1,4 @@
+version: 0.1.1
 parameters:
     token: ~ # Your bot token
     commandPrefix: "!" # Commands prefix

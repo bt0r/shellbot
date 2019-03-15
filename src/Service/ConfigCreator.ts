@@ -18,7 +18,7 @@ interface ChannelTemplate {
 }
 
 @program()
-@version(Config.version)
+@version("0.0.1")
 @description("Build a config file easily !")
 export class ConfigCreator {
     @Inject
