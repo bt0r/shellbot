@@ -17,7 +17,7 @@ create-config: build
 	@node dist/Service/ConfigCreator.js
 lint:
 	tslint -c tslint.json 'src/**/*.ts'
-start:
+start: build
 	@echo 'Starting the bot...'
 	@if [ $(USE_DOCKER) = "Y" ]; then docker-compose up -d && echo '✅ Bot started'; else npm start && echo '✅ Bot started' || echo '❌ Cannot start the bot'; fi
 stop:
