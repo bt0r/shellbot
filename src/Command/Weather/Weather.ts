@@ -1,6 +1,7 @@
 import axios from "axios";
 import {Message} from "discord.js";
 import {AbstractCommand} from "../AbstractCommand";
+import {WeatherItem, WeatherItemInterface} from "./WeatherItem";
 
 export class Weather extends AbstractCommand {
 
@@ -124,6 +125,9 @@ export class Weather extends AbstractCommand {
                         daysFetched++;
                     }
                     const weatherItem: WeatherItemInterface = new WeatherItem();
+                    weatherItem.temp = temp;
+                    weatherItem.humidity = humidity;
+                    weatherItem.hour = hour;
 
                     switch (Math.floor(weatherId / 100)) {
                         case 2:
@@ -145,7 +149,6 @@ export class Weather extends AbstractCommand {
                             weatherItem.value = Weather.COND_CLEAR.emoji;
                             break;
                     }
-
                     result[day].push(weatherItem);
                 }
                 const embedFields = [];
@@ -183,7 +186,7 @@ export class Weather extends AbstractCommand {
             }
         }).catch((reason) => {
             message.reply(config.lang.not_found);
-            logger.error(`The city ${city} was not found`);
+            logger.error(`An error occured with the city ${city}, reason:${reason}`);
         });
     }
 }

@@ -1,10 +1,11 @@
-interface WeatherItemInterface {
+export interface WeatherItemInterface {
     humidity: string;
     temp: string;
     value: string | null;
+    hour: string;
 }
 
-class WeatherItem implements WeatherItemInterface {
+export class WeatherItem implements WeatherItemInterface {
     public hour: string;
     public humidity: string;
     public temp: string;
