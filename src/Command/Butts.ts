@@ -1,3 +1,4 @@
+"use strict";
 import {Message} from "discord.js";
 import {Container} from "typescript-ioc";
 import {SexService} from "../Service/Command/SexService";
@@ -20,14 +21,12 @@ export class Butts extends AbstractCommand {
         command.info("Fetching new booby picture");
         const sexService = Container.get(SexService);
         try {
-            sexService.randomButts((buttsRichEmbed: void) => {
+            sexService.randomButts((buttsRichEmbed) => {
                 const messageResponse = message.channel.send(buttsRichEmbed);
 
-                messageResponse.then(async (message2) => {
-                   if (message2 instanceof Message) {
-                       await message2.react("👍");
-                       await message2.react("👎");
-                   }
+                messageResponse.then(async (message2: Message) => {
+                    await message2.react("👍");
+                    await message2.react("👎");
                 });
             });
         } catch (e) {

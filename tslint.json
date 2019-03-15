@@ -5,10 +5,6 @@
     ],
     "jsRules": {},
     "rules": {
-      "interface-name": [
-        true,
-        "never-prefix"
-      ],
         "variable-name": [true,
             "check-format",
             "allow-leading-underscore"

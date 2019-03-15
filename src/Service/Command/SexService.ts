@@ -23,10 +23,10 @@ export class SexService {
     public get boobsUrl() { return this._boobsUrl; }
     public get buttsUrl() { return this._buttsUrl; }
 
-    public randomButts(callback: object) {
+    public randomButts(callback) {
         return this.randomSex(Butts.NAME, this.buttsUrl, callback);
     }
-    public randomBoobs(callback: object) {
+    public randomBoobs(callback) {
         return this.randomSex(Boobs.NAME, this.boobsUrl, callback);
     }
 

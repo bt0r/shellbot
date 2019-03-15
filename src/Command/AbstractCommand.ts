@@ -1,18 +1,18 @@
+"use strict";
 import {Message} from "discord.js";
 import {Inject} from "typescript-ioc";
-import {User} from "../Entity/User";
 import {UserFactory} from "../Entity/UserFactory";
 import {CommandCalledRepository} from "../Repository/CommandCalledRepository";
 import {UserRepository} from "../Repository/UserRepository";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
-interface CommandInterface {
+interface ICommand {
     name: string;
-    do(message: Message): void;
+    do(message: Message);
 }
 
-export abstract class AbstractCommand implements CommandInterface {
+export abstract class AbstractCommand implements ICommand {
     /**
      * Logger Log4Js
      * @type {Logger}
@@ -43,17 +43,15 @@ export abstract class AbstractCommand implements CommandInterface {
         this._name = name;
     }
 
-    public abstract do(message: Message): void;
+    public abstract do(message: Message);
 
     public async worker(message: Message) {
         const commandCalledRepo = await this.database.manager.getCustomRepository(CommandCalledRepository);
         const userRepo = await this.database.manager.getCustomRepository(UserRepository);
 
         let user = UserFactory.create(message.author);
-        if (user instanceof User) {
-            user = await userRepo.findOrCreate(user);
-            commandCalledRepo.add(user, this);
-        }
+        user = await userRepo.findOrCreate(user);
+        commandCalledRepo.add(user, this);
         try {
             this.do(message);
         } catch (e) {
@@ -71,19 +69,19 @@ export abstract class AbstractCommand implements CommandInterface {
         this._config = config;
     }
 
-    protected debug(message: string) {
+    protected debug(message) {
         this.log("debug", message);
     }
 
-    protected info(message: string) {
+    protected info(message) {
         this.log("info", message);
     }
 
-    protected warning(message: string) {
+    protected warning(message) {
         this.log("warning", message);
     }
 
-    protected error(message: string) {
+    protected error(message) {
         this.log("error", message);
     }
 
@@ -101,20 +99,6 @@ export abstract class AbstractCommand implements CommandInterface {
      * @param message
      */
     private log(severity: string, message: string) {
-        const logMessage = `[${this.name}] ${message}`;
-        switch (severity) {
-            case "debug":
-                this.logger.debug(logMessage);
-                break;
-            case "info":
-                this.logger.info(logMessage);
-                break;
-            case "warning":
-                this.logger.warning(logMessage);
-                break;
-            case "error":
-                this.logger.error(logMessage);
-                break;
-        }
+        this.logger[severity](`[${this.name}] ${message}`);
     }
 }

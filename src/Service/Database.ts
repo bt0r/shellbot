@@ -1,8 +1,10 @@
+"use strict";
 import {Connection, createConnection, EntityManager} from "typeorm";
-import {Inject, Singleton} from "typescript-ioc";
+import {AutoWired, Inject, Singleton} from "typescript-ioc";
 import {Logger} from "./Logger";
 
 @Singleton
+@AutoWired
 export class Database {
     /**
      * Logger

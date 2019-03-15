@@ -1,10 +1,11 @@
-import {configure, getLogger, Logger as Logger4j} from "log4js";
+"use strict";
+import {configure, getLogger} from "log4js";
 
 export class Logger {
     /**
      * Log4Js Logger
      */
-    private _logger: Logger4j;
+    private _logger;
 
     public constructor() {
         configure("./config/log4js.json");
@@ -16,11 +17,11 @@ export class Logger {
         }
     }
 
-    get logger(): Logger4j {
+    get logger() {
         return this._logger;
     }
 
-    set logger(logger: Logger4j) {
+    set logger(logger: any) {
         this._logger = logger;
     }
 

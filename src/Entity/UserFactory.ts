@@ -3,7 +3,7 @@ import {User} from "./User";
 
 export class UserFactory {
     public static create(object: any) {
-        let user: User|null = null;
+        let user = null;
         if (object instanceof DiscordUser) {
             user = this.createFromDiscordUser(object);
         }

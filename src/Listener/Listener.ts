@@ -1,3 +1,5 @@
+"use strict";
+
 import {Channel, Client, GuildMember, Message, MessageReaction, TextChannel, User} from "discord.js";
 import {Container, Inject} from "typescript-ioc";
 import {CommandFactory} from "../Command/CommandFactory";
@@ -7,9 +9,15 @@ import {UserRepository} from "../Repository/UserRepository";
 import {Config} from "../Service/Config";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
-import {ShellbotClient} from "../Service/ShellbotClient";
+import {ShellbotClient} from "../ShellbotClient";
+import {CommandEmitter} from "./CommandEmitter";
 
 export class Listener {
+    /**
+     * Static CommandEmitter instance
+     */
+    public static EMITTER: CommandEmitter;
+
     /**
      * Log4js Logger
      */
@@ -19,7 +27,6 @@ export class Listener {
     /**
      * Shellbot Client
      */
-    @Inject
     private _shellbotClient: ShellbotClient;
 
     /**
@@ -30,9 +37,10 @@ export class Listener {
     @Inject
     private _database: Database;
 
-    constructor() {
+    constructor(shellbotClient: ShellbotClient) {
+        Listener.getInstance();
+        this.shellbotClient = shellbotClient;
         const discordClient   = this.shellbotClient.discordClient;
-        this._discordClient = discordClient;
         discordClient.on("ready", () => this.ready());
         discordClient.on("message", (message) => this.message(message));
         discordClient.on("guildMemberAdd", (member) => this.guildMemberAdd(member));
@@ -44,7 +52,14 @@ export class Listener {
         discordClient.on("messageReactionRemove", (messageReaction, user) => this.messageReactionRemove(messageReaction, user));
         discordClient.on("presenceUpdate", (oldMember, newMember) => this.presenceUpdate(oldMember, newMember));
         discordClient.on("error", (error) => this.error(error));
-        this.shellbotClient.login();
+    }
+
+    public static getInstance() {
+        if (!this.EMITTER) {
+            this.EMITTER = new CommandEmitter();
+        }
+
+        return this.EMITTER;
     }
 
     private ready(): void {
@@ -73,7 +88,7 @@ export class Listener {
             }
         }
         // Check if command exists
-        const commandPrefix = this.shellbotClient.config.config.parameters.commandPrefix;
+        const commandPrefix = this.shellbotClient.config.parameters.commandPrefix;
         const content       = message.content;
 
         if (content.length > 0 && commandPrefix === content.charAt(0)) {
@@ -124,8 +139,8 @@ export class Listener {
 
     private async presenceUpdate(oldMember: GuildMember, newMember: GuildMember) {
         this.logger.info("[STATUS] User " + oldMember.user.username + " is now " + newMember.user.presence.status);
-        let user = new DBUser();
 
+        let user = new DBUser();
         user.discordId = newMember.user.id;
         user.name = newMember.user.username;
         user = await this._database.manager.getCustomRepository(UserRepository).findOrCreate(user);

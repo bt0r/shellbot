@@ -8,24 +8,29 @@ Shellcode.fr est une communauté passionné par tout ce qui touche à l'informat
 
 L'objectif est de se retrouver autour d'une même passion afin de s'entraider/discuter/s'informer.
 
-# Installation
-## With docker
-- Clone this repository `git clone git@github.com:bt0r/shellbot.git .`
-- Create your config file `cp config/config.yml.dist config/config.yml`
-- Edit your config with the commands you want to enable
-- Install the dependencies `make install`
-- 🎉 Start the bot `make start`
+# How to install it
+#### Clone it `git clone https://github.com/bt0r/shellbot.git`
 
-## Without docker
-- Clone this repository `git clone git@github.com:bt0r/shellbot.git .`
-- Create your config file `cp config/config.yml.dist config/config.yml`
-- Edit your config with the commands you want to enable
-- Install the dependencies `make install`
-- Create a MariaDB server `sudo apt install mariadb-server` if you're on ubuntu.
-- In your MariaDB server, create a database
-- Edit the file `ormconfig.json` with the parameters of your database (host, port, user, password ...)
-- 🎉 Start the bot `make start`
+#### Npm it 
+```SHELL 
+npm install
+```
 
+#### Edit it `config/config.yml` (based on `config.yml.dist`)
+
+
+Launch it `docker-compose up -d`
+
+**🎉 That's it ! 🎉 **
+
+
+You can use this repository without docker/docker-compose by using a more classical way :
+```
+git clone https://github.com/bt0r/shellbot.git
+npm install
+npm install -g typescript ts-node
+npm start
+ ```
 # Features
 - **Chuck**: Show a random chuck norris fact (actually in french), command: `!chuck`
 - **Weather**: Show the weather for a specific city, can be use for all the city around the world (OpenWeatherMap API), command: `!weather <city> <countryCode ISO2>`. Example: `!weather montreal ca`
@@ -37,12 +42,12 @@ L'objectif est de se retrouver autour d'une même passion afin de s'entraider/di
 - **Quote** : Allow a user to quote someone, usage: `!quote <messageId> <reply>` [/!\ Need to activate the discord developer mod](https://discordia.me/developer-mode)
 
 # Contact
-![](doc/images/discord.png) [shellcode](https://discord.gg/NDpZXN5)
+[ShellCode Discord](https://discord.gg/NDpZXN5)
 
-![](doc/images/www.png) [shellCode.fr](https://shellcode.fr)
+[ShellCode.fr](https://shellcode.fr)
 
-![](doc/images/twitter.png) [biiitor](https://twitter.com/biiitor)
+[Twitter](https://twitter.com/biiitor)
 
-![](doc/images/www.png) [btor.fr](https://btor.fr)
+[btor.fr](https://btor.fr)
 
-![](doc/images/twitch.png) [bt0r](https://twitch.tv/bt0r)
+[Twitch](https://twitch.tv/bt0r)

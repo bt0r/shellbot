@@ -1,3 +1,4 @@
+"use strict";
 import {EntityRepository, Repository} from "typeorm";
 import {AbstractCommand} from "../Command/AbstractCommand";
 import {CommandCalled} from "../Entity/CommandCalled";
@@ -16,7 +17,7 @@ export class CommandCalledRepository extends Repository<CommandCalled> {
             commandCalled.commandName = command.name;
         }
         commandCalled.count = commandCalled.count + 1;
-        commandCalled.latestUse = new Date();
+        commandCalled.lastestUse = new Date();
 
         return await this.save(commandCalled);
     }

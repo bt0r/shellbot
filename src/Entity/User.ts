@@ -7,7 +7,7 @@ export class User {
     })
     private _id: number;
     @Column({
-        name: "discord_id",
+        name: "discordId",
         unique: true,
     })
     private _discordId: string;
@@ -41,11 +41,11 @@ export class User {
         this._discordId = value;
     }
 
-    public get name(): string {
+    get name(): string {
         return this._name;
     }
 
-    public set name(value: string) {
+    set name(value: string) {
         this._name = value;
     }
 

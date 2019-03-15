@@ -5,4 +5,3 @@ npm-debug.log
 src/**/*.js
 /var
 docker-compose.override.yml
-.data/

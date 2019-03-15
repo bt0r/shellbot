@@ -5,7 +5,7 @@ import {User} from "../Entity/User";
 export class UserRepository extends Repository<User> {
     public findOneByDiscordId(discordId: string) {
         return this.createQueryBuilder("u")
-            .where("discord_id = :discordId", {discordId})
+            .where("discordId = :discordId", {discordId})
             .getOne();
     }
 
@@ -13,11 +13,10 @@ export class UserRepository extends Repository<User> {
         let user = await this.findOneByDiscordId(newUser.discordId);
         if (user == null) {
             user = new User();
-            user.discordId = newUser.discordId;
             user.name = newUser.name;
+            user.discordId = newUser.discordId;
             await this.save(user);
         }
-        user.name = newUser.name;
         user.lastConnection = new Date();
         return user;
     }
