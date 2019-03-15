@@ -1,4 +1,3 @@
-"use strict";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import {Message, RichEmbed} from "discord.js";
@@ -38,7 +37,7 @@ export class Bonjour extends AbstractCommand {
         const command = this;
 
         const [, choiceAsked] = message.content.split(" ");
-        let selectedChoice = null;
+        let selectedChoice: any|null = null;
         if (choiceAsked) {
             for (const choice of this.choices) {
                 if (choice.name.toLowerCase().includes(choiceAsked.toLowerCase())) {
@@ -70,9 +69,11 @@ export class Bonjour extends AbstractCommand {
                         const richEmbed = new RichEmbed();
                         richEmbed.setImage(imageSrc);
                         richEmbed.setTitle(selectedChoice.name);
-                        message.channel.send(richEmbed).then(async (message2: Message) => {
-                            await message2.react("👍");
-                            await message2.react("👎");
+                        message.channel.send(richEmbed).then(async (message2) => {
+                            if (message2 instanceof Message) {
+                                await message2.react("👍");
+                                await message2.react("👎");
+                            }
                         });
                     }
                 } catch (e) {

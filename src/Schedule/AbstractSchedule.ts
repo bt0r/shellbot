@@ -1,18 +1,14 @@
-import {Message} from "discord.js";
+import {Client, TextChannel} from "discord.js";
 import {Inject} from "typescript-ioc";
-import {User} from "../Entity/User";
-import {UserFactory} from "../Entity/UserFactory";
-import {CommandCalledRepository} from "../Repository/CommandCalledRepository";
-import {UserRepository} from "../Repository/UserRepository";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
-interface CommandInterface {
+interface ScheduleInterface {
     name: string;
-    do(message: Message): void;
+    do(channel?: TextChannel): void;
 }
 
-export abstract class AbstractCommand implements CommandInterface {
+export abstract class AbstractSchedule implements ScheduleInterface {
     /**
      * Logger Log4Js
      * @type {Logger}
@@ -24,10 +20,8 @@ export abstract class AbstractCommand implements CommandInterface {
     @Inject
     private _database: Database;
 
-    /**
-     * Config of current command
-     */
-    private _config: object;
+    private _discordClient: Client;
+
     /**
      * Name of the command
      * @type string
@@ -41,34 +35,6 @@ export abstract class AbstractCommand implements CommandInterface {
 
     public set name(name: string) {
         this._name = name;
-    }
-
-    public abstract do(message: Message): void;
-
-    public async worker(message: Message) {
-        const commandCalledRepo = await this.database.manager.getCustomRepository(CommandCalledRepository);
-        const userRepo = await this.database.manager.getCustomRepository(UserRepository);
-
-        let user = UserFactory.create(message.author);
-        if (user instanceof User) {
-            user = await userRepo.findOrCreate(user);
-            commandCalledRepo.add(user, this);
-        }
-        try {
-            this.do(message);
-        } catch (e) {
-            this.error(e);
-        }
-
-        return this;
-    }
-
-    public get config(): any {
-        return this._config;
-    }
-
-    public set config(config: any) {
-        this._config = config;
     }
 
     protected debug(message: string) {
@@ -101,7 +67,7 @@ export abstract class AbstractCommand implements CommandInterface {
      * @param message
      */
     private log(severity: string, message: string) {
-        const logMessage = `[${this.name}] ${message}`;
+        const logMessage = `[SCH:${this.name}] ${message}`;
         switch (severity) {
             case "debug":
                 this.logger.debug(logMessage);
@@ -117,4 +83,14 @@ export abstract class AbstractCommand implements CommandInterface {
                 break;
         }
     }
+
+    public set discordClient(discordClient: Client) {
+        this._discordClient = discordClient;
+    }
+
+    public get discordClient() {
+        return this._discordClient;
+    }
+
+    public abstract do(channel?: TextChannel): void;
 }

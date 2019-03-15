@@ -2,7 +2,7 @@ parameters:
     token: ~ # Your bot token
     commandPrefix: "!" # Commands prefix
     welcome: # Will send a welcome message with reactions to auto-assign roles to the new users.
-        enabled: true
+        enabled: false
         message: Hey ! Welcome to our discord server, please select a role betweens these ones: \n :computer: Geek \n :video_game: Gamer
         success_message: ✔ Role %role% added !
         success_removed_message: ✔ Role %role% removed !
@@ -19,37 +19,31 @@ parameters:
                 role: "2222222"
                 emoji: "379722463313002516" # Custom emoji ID
 channels: # Configurations of channels
-    news_3: # Channel named as "news" with position 3
-        message_restriction: # If you want to apply a regexp on posted messages
-            regexp: "^\[[\w\.\-\(\)#éùàè\&'\"\|@]+\].+https?:\/\/.+\.\w{1,4}$"
-            error_message: Your message does not support the supported format, please format your sentence like this : "[Category] Title of your news http://link.com"
     welcome_0:
         message_restriction:
             regexp: "(?:Hello|Hi|Hey)"
-            error_message: Oh wait, start to say hi first 😏 // You can use %messageContent% to show the message user sent
+            error_message: Oh wait, start to say hi first 😏 # You can use %messageContent% to show the message user sent
+    test_0:
         commands:
-            YourModule: true # Enable a specific module
-            YourModule2:
-                enabled: true
-                conf:
-                    - A
-                    - B
-            chuck: true
-            boobs: true
-            qwant: true
+            chuck:
+                enabled: false
+            boobs:
+                enabled: false
+            qwant:
+                enabled: false
             quote:
-                enabled: true
+                enabled: false
                 replied_label: replied to you
             cat:
-                enabled: true
-                token: YourToken # Add your API token here, want to have one ? check this out : http://thecatapi.com/api-key-registration.html
-                loading_image: "https://media.giphy.com/media/3o7WTJ0yHFA2GzOA2k/giphy.gif"
+                enabled: false
+                token: YourToken # Add your API token here, want to have one ? check this out : http:#thecatapi.com/api-key-registration.html
+                loading_image: "https:#media.giphy.com/media/3o7WTJ0yHFA2GzOA2k/giphy.gif"
                 lang:
                   waiting: Please wait while trying to find a cat ...
                   error: An error occured when trying to find a cat :'(
             weather:
-                enabled: true
-                token: YourToken # Add your API token here, want to have one ? check this out : https://openweathermap.org/appid#get
+                enabled: false
+                token: YourToken # Add your API token here, want to have one ? check this out : https:#openweathermap.org/appid#get
                 default_country_code: en
                 unit: metric  # Can be metric (meter/seconds and °C), imperial(miles/seconds and °F) or Kelvin (meter/seconds and K)
                 datetime_format: fr-FR # DateTime format, should be a ISO code (en-GB, en-US, fr-FR ...)
@@ -60,10 +54,49 @@ channels: # Configurations of channels
                   unit_missing: There is no unit, please add one in your config file, allowed : metric or imperial
                   error: An error occured, please report this to an admin
                   not_found: This city was not found, please try another one.
-            bonjour: true
+            bonjour:
+                enabled: false
             stats:
-                enabled: true
+                enabled: false
                 lang:
                     error: Cannot fetch stats from the database, please check your configuration.
                     description: What's the most used commands ? here is the result ..
                     title: Commands statistics
+        schedules:
+            - type: message
+              enabled: false
+              cron_rule: "*/10 * * * * *" # Cron-task rule based
+              arguments:
+                - "Send this message every 10 minutes inside the Welcome channel" # Only the first argument is used with this schedule
+            - type: twitter
+              enabled: false
+              cron_rule: "* */5 * * * *"
+              arguments:
+                api_key: <api_token>
+                api_secret_key: <api_secret_token>
+                access_token: <access_token>
+                access_token_secret: <access_token_secret>
+                query:
+                    type: account
+                    values:
+                      - nextinpact
+                      - korben_rss
+                    restriction:
+                        allow: ~
+                        deny: ~
+            - type: twitter
+              enabled: false
+              cron_rule: "* */5 * * * *"
+              arguments:
+                api_key: <api_token>
+                api_secret_key: <api_secret_token>
+                access_token: <access_token>
+                access_token_secret: <access_token_secret>
+                query:
+                    type: tweet
+                    values:
+                      - php # Search every tweet which contains PHP or java word
+                      - java
+                    restriction:
+                        allow: ~
+                        deny: javascript

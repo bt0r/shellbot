@@ -1,5 +1,3 @@
-"use strict";
-
 import {Client, DMChannel, GuildMember, Message, MessageReaction, User} from "discord.js";
 import {Inject} from "typescript-ioc";
 import {Config} from "../Service/Config";
@@ -41,21 +39,23 @@ export class Welcome {
     public sendMessage(member: GuildMember, discordClient: Client) {
         const welcomeConfig = this.welcomeConfig;
         if (welcomeConfig && welcomeConfig.enabled) {
-            member.send(welcomeConfig.message).then(async (message: Message) => {
-                const reactions = welcomeConfig.reactions;
-                for (const reactionName of reactions) {
-                    const reaction: any = reactions[reactionName];
-                    if (reaction.role && reaction.emoji) {
-                        const emojiValue = reaction.emoji.toString().trim();
-                        const emojiId = Number(emojiValue);
-                        if (isNaN(emojiId)) {
-                            await message.react(reaction.emoji);
-                        } else {
-                            const customEmoji = discordClient.emojis.get(emojiValue);
-                            if (customEmoji !== undefined) {
-                                await message.react(customEmoji);
+            member.send(welcomeConfig.message).then(async (message) => {
+                if (message instanceof Message) {
+                    const reactions = welcomeConfig.reactions;
+                    for (const reactionName  of Object.keys(reactions)) {
+                        const reaction: any = reactions[reactionName];
+                        if (reaction.role && reaction.emoji) {
+                            const emojiValue = reaction.emoji.toString().trim();
+                            const emojiId = Number(emojiValue);
+                            if (isNaN(emojiId)) {
+                                await message.react(reaction.emoji);
                             } else {
-                                this.logger.error(`Cannot find emoji for reaction: ${reactionName}`);
+                                const customEmoji = discordClient.emojis.get(emojiValue);
+                                if (customEmoji !== undefined) {
+                                    await message.react(customEmoji);
+                                } else {
+                                    this.logger.error(`Cannot find emoji for reaction: ${reactionName}`);
+                                }
                             }
                         }
                     }
@@ -86,7 +86,7 @@ export class Welcome {
                 const guildMember = guild.members.get(user.id);
                 // Fetch role by the emoji
                 const reactions = this.welcomeConfig.reactions;
-                for (const reactionName of reactions) {
+                for (const reactionName of Object.keys(reactions)) {
                     const reaction: any = reactions[reactionName];
                     const reactionEmoji = messageReaction.emoji;
                     if (reactionEmoji.name === reaction.emoji || reactionEmoji.id === reaction.emoji) {

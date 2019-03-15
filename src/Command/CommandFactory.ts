@@ -1,4 +1,3 @@
-"use strict";
 import {Message, TextChannel} from "discord.js";
 import {Container} from "typescript-ioc";
 import {Config} from "../Service/Config";
@@ -11,7 +10,8 @@ import {Chuck} from "./Chuck";
 import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
 import {Stats} from "./Stats";
-import {Weather} from "./Weather";
+import {TwitterAdmin} from "./TwitterAdmin";
+import {Weather} from "./Weather/Weather";
 
 export class CommandFactory {
 
@@ -47,9 +47,13 @@ export class CommandFactory {
             case Stats.NAME:
                 commandFound = new Stats();
                 break;
+            case TwitterAdmin.NAME:
+            case TwitterAdmin.NAME_ALIAS:
+                commandFound = new TwitterAdmin();
+                break;
         }
         if (commandFound !== null && config.isCommandEnabled(commandName, channel)) {
-            const configChannel = config.config.channels[channel.name + "_" + channel.position];
+            const configChannel = config.channelConfig(channel);
             commandFound.config = configChannel.commands[commandName];
 
             this.send(commandFound, message);

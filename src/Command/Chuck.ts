@@ -1,4 +1,3 @@
-"use strict";
 import axios from "axios";
 import {Message} from "discord.js";
 import {AllHtmlEntities} from "html-entities";

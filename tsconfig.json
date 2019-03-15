@@ -1,8 +1,17 @@
 {
   "compilerOptions": {
+    "strict": true,
     "target": "es5",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": ["es2015","dom"]
+    "strictPropertyInitialization": false,
+    "lib": ["es2015","dom"],
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "paths": {
+      "*": [
+        "/src/*"
+      ]
+    }
   }
 }

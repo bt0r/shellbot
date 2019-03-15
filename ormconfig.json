@@ -5,19 +5,20 @@
   "username": "root",
   "password": "azerty",
   "database": "shellcode",
-  "synchronize": true,
+  "charset": "utf8mb4",
+  "synchronize": false,
   "logging": false,
   "migrationsTableName": "migrations",
   "entities": [
-    "src/Entity/**/*.ts"
+    "dist/Entity/**/*.js"
   ],
   "migrations": [
-    "src/Migration/**/*.ts"
+    "dist/Migration/**/*.js"
   ],
   "cli": {
-    "migrationsDir": "src/Migration/"
+    "migrationsDir": "dist/Migration/**/*.js"
   },
   "subscribers": [
-    "src/Subscriber/**/*.ts"
+    "src/Subscriber/**/*.js"
   ]
 }
