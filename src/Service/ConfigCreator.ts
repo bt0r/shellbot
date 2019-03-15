@@ -17,10 +17,6 @@ interface ChannelTemplate {
     commands: string[];
 }
 
-interface ChannelConfigTemplate {
-
-}
-
 @program()
 @version(Config.version)
 @description("Build a config file easily !")
@@ -88,4 +84,4 @@ export class ConfigCreator {
     }
 }
 
-new ConfigCreator();
+const configCreator = new ConfigCreator();

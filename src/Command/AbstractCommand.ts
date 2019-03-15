@@ -7,12 +7,12 @@ import {UserRepository} from "../Repository/UserRepository";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
-interface ICommand {
+interface CommandInterface {
     name: string;
     do(message: Message): void;
 }
 
-export abstract class AbstractCommand implements ICommand {
+export abstract class AbstractCommand implements CommandInterface {
     /**
      * Logger Log4Js
      * @type {Logger}

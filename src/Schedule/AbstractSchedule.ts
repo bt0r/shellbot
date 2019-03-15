@@ -3,12 +3,12 @@ import {Inject} from "typescript-ioc";
 import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
-interface ISchedule {
+interface ScheduleInterface {
     name: string;
     do(channel?: TextChannel): void;
 }
 
-export abstract class AbstractSchedule implements ISchedule {
+export abstract class AbstractSchedule implements ScheduleInterface {
     /**
      * Logger Log4Js
      * @type {Logger}

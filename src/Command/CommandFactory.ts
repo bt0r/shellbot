@@ -11,7 +11,7 @@ import {Quote} from "./Quote";
 import {Qwant} from "./Qwant";
 import {Stats} from "./Stats";
 import {TwitterAdmin} from "./TwitterAdmin";
-import {Weather} from "./Weather";
+import {Weather} from "./Weather/Weather";
 
 export class CommandFactory {
 
