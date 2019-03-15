@@ -17,15 +17,15 @@ export class StatusService {
     }
 
     public logged(): void {
-        this.activity("🔑 Logged ! v:" + Config.version);
+        this.activity("🔑 Logged ! v:" + this.config.version);
     }
 
     public ready(): void {
-        this.activity("✅ Ready ! v:" + Config.version);
+        this.activity("✅ Ready ! v:" + this.config.version);
     }
 
     public error(): void {
-        this.activity("❌ Error ! v:" + Config.version);
+        this.activity("❌ Error ! v:" + this.config.version);
     }
 
     public activity(activity: string) {
