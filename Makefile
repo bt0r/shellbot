@@ -5,7 +5,7 @@ migrate:
 install:
 	@echo 'Installing dependencies...'
 	@docker-compose build
-	@docker-compose run node npm install
+	@docker-compose run node npm install --only=dev
 build:
 	@echo 'Buildind javascript files from typescript.'
 	@docker-compose run node npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
