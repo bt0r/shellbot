@@ -4,7 +4,8 @@ migrate:
 	@docker exec -it shellbot_node_1 node ./node_modules/.bin/typeorm migration:run
 install:
 	@echo 'Installing dependencies...'
-	@docker-compose run node npm install -g typescript
+	@docker-compose build
+	@docker-compose run node npm install
 build:
 	@echo 'Buildind javascript files from typescript.'
 	@docker-compose run node npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
