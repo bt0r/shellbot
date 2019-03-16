@@ -21,5 +21,3 @@ services:
       - NODE_ENV=production
     volumes:
       - ./:/home/node/app
-    links:
-      - db

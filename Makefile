@@ -1,25 +1,21 @@
 #! /usr/bin/make -f
-USE_DOCKER="Y" # Change it to "N" if you don't want to use docker
-
 migrate:
 	@echo 'Executing migrations files...'
-	@if [ $(USE_DOCKER) = "Y" ]; then docker exec -it shellbot_node_1 node ./node_modules/.bin/typeorm migration:run; fi
-	@if [ $(USE_DOCKER) != "Y" ]; then node ./node_modules/.bin/typeorm migration:run ; fi
+	@docker exec -it shellbot_node_1 node ./node_modules/.bin/typeorm migration:run
 install:
 	@echo 'Installing dependencies...'
-	npm install
-	@if [ $(USE_DOCKER) != "Y" ]; then npm install -g typescript; fi
+	@docker-compose run node npm install -g typescript
 build:
 	@echo 'Buildind javascript files from typescript.'
-	@npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
+	@docker-compose run node npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
 create-config: build
 	@echo 'Creating the config file.'
-	@node dist/Service/ConfigCreator.js
+	@docker-compose run node dist/Service/ConfigCreator.js
 lint:
 	tslint -c tslint.json 'src/**/*.ts'
 start: build
 	@echo 'Starting the bot...'
-	@if [ $(USE_DOCKER) = "Y" ]; then docker-compose up -d && echo '✅ Bot started'; else npm start && echo '✅ Bot started' || echo '❌ Cannot start the bot'; fi
+	@docker-compose up -d && echo '✅ Bot started'
 stop:
 	@echo 'Stopping the bot...'
-	@if [ $(USE_DOCKER) = "Y" ]; then docker-compose down && echo '✅ Bot stopped !' || echo '❌ Error when trying to stop the bot' ; else @echo '❌ You should stop the bot by yourself'; fi
+	@docker-compose down && echo '✅ Bot stopped !'
