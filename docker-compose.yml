@@ -16,15 +16,10 @@ services:
     restart: always
   node:
     container_name: shellbot-node
-    image: "node:8"
-    user: "node"
-    working_dir: /home/node/app
+    build: docker/node
     environment:
       - NODE_ENV=production
     volumes:
       - ./:/home/node/app
-    expose:
-      - "8081"
-    command: "npm start"
     links:
       - db
