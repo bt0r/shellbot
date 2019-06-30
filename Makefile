@@ -13,7 +13,7 @@ create-config: build
 	@echo 'Creating the config file.'
 	@docker-compose run node dist/Service/ConfigCreator.js
 lint:
-	tslint -c tslint.json 'src/**/*.ts'
+	@docker-compose run node ./node_modules/.bin/tslint -c tslint.json 'src/**/*.ts'
 start: build
 	@echo 'Starting the bot...'
 	@docker-compose up -d && echo '✅ Bot started'
