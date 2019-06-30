@@ -27,9 +27,9 @@ export class User {
     @Column("datetime", {
         name: "created_on",
         default: null,
-        nullable: true
+        nullable: true,
     })
-    private _created_on: Date;
+    private _createdOn: Date;
 
     get id(): number {
         return this._id;
@@ -72,10 +72,10 @@ export class User {
     }
 
     get createdOn(): Date {
-        return this._created_on;
+        return this._createdOn;
     }
 
     set createdOn(value: Date) {
-        this._created_on = value;
+        this._createdOn = value;
     }
 }

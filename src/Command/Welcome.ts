@@ -149,10 +149,10 @@ export class Welcome {
             user = await userRepo.findOrCreate(user);
             if (user.createdOn === null) {
                 user.createdOn = new Date();
-                let logger = this.logger;
-                userRepo.save(user).then((user: User) => {
+                const logger = this.logger;
+                userRepo.save(user).then(() => {
                     logger.info(`User ${user.name} registered.`);
-                    channel.send(userRegisteredConfig.message.replace('%user%', `<@${user.discordId}>`));
+                    channel.send(userRegisteredConfig.message.replace("%user%", `<@${user.discordId}>`));
                 });
             }
         }
