@@ -20,7 +20,7 @@ export class Twitter extends AbstractSchedule {
     public constructor(args: any) {
         super();
         this.name = Twitter.NAME;
-        const restrictions = args.query.restriction;
+        const restrictions = args.query.restrictions;
         if (args.api_key && args.api_secret_key && args.access_token && args.access_token_secret) {
             this._twitterApi = new TwitterApi({
                 consumer_key: args.api_key ,
