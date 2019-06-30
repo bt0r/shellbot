@@ -2,7 +2,7 @@
   "type": "mysql",
   "host": "db",
   "port": 3306,
-  "username": "root",
+  "username": "shellcode",
   "password": "azerty",
   "database": "shellcode",
   "charset": "utf8mb4",
@@ -13,12 +13,12 @@
     "dist/Entity/**/*.js"
   ],
   "migrations": [
-    "dist/Migration/**/*.js"
+    "dist/Migration/*.js"
   ],
   "cli": {
-    "migrationsDir": "dist/Migration/**/*.js"
+    "migrationsDir": "src/Migration/"
   },
   "subscribers": [
-    "src/Subscriber/**/*.js"
+    "dist/Subscriber/**/*.js"
   ]
 }

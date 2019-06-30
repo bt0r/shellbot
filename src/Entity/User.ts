@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class User {
@@ -24,6 +24,12 @@ export class User {
         name: "last_connection",
     })
     private _lastConnection: Date = new Date();
+    @Column("datetime", {
+        name: "created_on",
+        default: null,
+        nullable: true
+    })
+    private _created_on: Date;
 
     get id(): number {
         return this._id;
@@ -63,5 +69,13 @@ export class User {
 
     set lastConnection(value: Date) {
         this._lastConnection = value;
+    }
+
+    get createdOn(): Date {
+        return this._created_on;
+    }
+
+    set createdOn(value: Date) {
+        this._created_on = value;
     }
 }

@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 migrate:
 	@echo 'Executing migrations files...'
-	@docker exec -it shellbot_node_1 node ./node_modules/.bin/typeorm migration:run
+	@docker-compose run node node ./node_modules/.bin/typeorm migration:run
 install:
 	@echo 'Installing dependencies...'
 	@docker-compose build
