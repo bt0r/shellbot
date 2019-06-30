@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 migrate:
 	@echo 'Executing migrations files...'
-	@docker exec -it shellbot_node_1 node ./node_modules/.bin/typeorm migration:run
+	@docker-compose run node node ./node_modules/.bin/typeorm migration:run
 install:
 	@echo 'Installing dependencies...'
 	@docker-compose build
@@ -13,7 +13,7 @@ create-config: build
 	@echo 'Creating the config file.'
 	@docker-compose run node dist/Service/ConfigCreator.js
 lint:
-	tslint -c tslint.json 'src/**/*.ts'
+	@docker-compose run node ./node_modules/.bin/tslint -c tslint.json 'src/**/*.ts'
 start: build
 	@echo 'Starting the bot...'
 	@docker-compose up -d && echo '✅ Bot started'

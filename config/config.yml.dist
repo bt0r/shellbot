@@ -1,4 +1,4 @@
-version: 0.1.1
+version: 0.1.2
 parameters:
     token: ~ # Your bot token
     commandPrefix: "!" # Commands prefix
@@ -9,6 +9,9 @@ parameters:
         success_removed_message: ✔ Role %role% removed !
         error_message: ❌ Cannot add %role% role ! please contact an administrator.
         error_removed_message: ❌ Cannot remove role %role% ! please contact an administrator.
+        user_registered:
+            message: 'Make some noise for %user% !'
+            channel_id: '594867877811716098'
         reactions:
             computer: # A name for the reaction, can be what you want.
                 role: "000000000"  # The role ID to apply, Be careful and use double quote "" and do not use role ID as an integer
@@ -82,7 +85,7 @@ channels: # Configurations of channels
                     values:
                       - nextinpact
                       - korben_rss
-                    restriction:
+                    restrictions:
                         allow: ~
                         deny: ~
             - type: twitter
@@ -98,6 +101,6 @@ channels: # Configurations of channels
                     values:
                       - php # Search every tweet which contains PHP or java word
                       - java
-                    restriction:
+                    restrictions:
                         allow: ~
                         deny: javascript

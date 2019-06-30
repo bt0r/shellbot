@@ -97,9 +97,9 @@ export class Listener {
     private guildMemberAdd(member: GuildMember): void {
         this.logger.info(`[MEMBER-JOIN] ${member.user.username}[${member.user.id}] joined the server.`);
         // Send welcome message
-        const welcome = new Welcome();
         const discordClient = this.shellbotClient.discordClient;
-        welcome.sendMessage(member, discordClient);
+        const welcome = new Welcome(discordClient);
+        welcome.sendMessage(member);
     }
 
     private guildMemberRemove(member: GuildMember): void {
@@ -111,15 +111,15 @@ export class Listener {
     }
 
     private messageReactionAdd(messageReaction: MessageReaction, user: User): void {
-        const welcome = new Welcome();
         const discordClient = this.shellbotClient.discordClient;
-        welcome.addRole(messageReaction, user, discordClient);
+        const welcome = new Welcome(discordClient);
+        welcome.addRole(messageReaction, user);
     }
 
     private messageReactionRemove(messageReaction: MessageReaction, user: User): void {
-        const welcome = new Welcome();
         const discordClient = this.shellbotClient.discordClient;
-        welcome.removeRole(messageReaction, user, discordClient);
+        const welcome = new Welcome(discordClient);
+        welcome.removeRole(messageReaction, user);
     }
 
     private async presenceUpdate(oldMember: GuildMember, newMember: GuildMember) {

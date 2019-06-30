@@ -1,6 +1,10 @@
-import {Client, DMChannel, GuildMember, Message, MessageReaction, User} from "discord.js";
+import {Client, DMChannel, GuildMember, Message, MessageReaction, TextChannel, User as DiscordUser} from "discord.js";
 import {Inject} from "typescript-ioc";
+import {User} from "../Entity/User";
+import {UserFactory} from "../Entity/UserFactory";
+import {UserRepository} from "../Repository/UserRepository";
 import {Config} from "../Service/Config";
+import {Database} from "../Service/Database";
 import {Logger} from "../Service/Logger";
 
 export class Welcome {
@@ -8,6 +12,9 @@ export class Welcome {
     private _config: Config;
     @Inject
     private _logger: Logger;
+    @Inject
+    private _database: Database;
+    private _client: Client;
     /**
      * Config object for Welcome feature
      */
@@ -29,14 +36,15 @@ export class Welcome {
         this._welcomeConfig = welcomeConfig;
     }
 
-    public constructor() {
+    public constructor(discordClient: Client) {
         this.welcomeConfig = this.config.config.parameters.welcome;
+        this._client = discordClient;
     }
 
     /**
      * Send the welcome message in DM
      */
-    public sendMessage(member: GuildMember, discordClient: Client) {
+    public sendMessage(member: GuildMember) {
         const welcomeConfig = this.welcomeConfig;
         if (welcomeConfig && welcomeConfig.enabled) {
             member.send(welcomeConfig.message).then(async (message) => {
@@ -50,7 +58,7 @@ export class Welcome {
                             if (isNaN(emojiId)) {
                                 await message.react(reaction.emoji);
                             } else {
-                                const customEmoji = discordClient.emojis.get(emojiValue);
+                                const customEmoji = this._client.emojis.get(emojiValue);
                                 if (customEmoji !== undefined) {
                                     await message.react(customEmoji);
                                 } else {
@@ -67,21 +75,21 @@ export class Welcome {
     /**
      * Add role when user clicks on a reaction
      */
-    public addRole(messageReaction: MessageReaction, user: User, discordClient: Client): void {
-        this.changeRole(messageReaction, user, discordClient, "add");
+    public addRole(messageReaction: MessageReaction, user: DiscordUser): void {
+        this.changeRole(messageReaction, user, "add");
     }
 
     /**
      * Remove role when user clicks on a reaction
      */
-    public removeRole(messageReaction: MessageReaction, user: User, discordClient: Client): void {
-        this.changeRole(messageReaction, user, discordClient, "remove");
+    public removeRole(messageReaction: MessageReaction, user: DiscordUser): void {
+        this.changeRole(messageReaction, user, "remove");
     }
 
-    private changeRole(messageReaction: MessageReaction, user: User, discordClient: Client, action: string) {
+    private changeRole(messageReaction: MessageReaction, user: DiscordUser, action: string) {
         if (messageReaction.message.channel instanceof DMChannel && user !== messageReaction.message.author) {
             if (this.welcomeConfig && this.welcomeConfig.enabled) {
-                const guilds = discordClient.guilds;
+                const guilds = this._client.guilds;
                 const guild = guilds.first();
                 const guildMember = guild.members.get(user.id);
                 // Fetch role by the emoji
@@ -97,6 +105,7 @@ export class Welcome {
                                     guildMember.removeRole(reaction.role, removeRoleReason).then(() => {
                                         this.logger.info(removeRoleReason);
                                         guildMember.send(this.welcomeConfig.success_removed_message.replace("%role%", reactionName));
+                                        this.userRegistered(guildMember.user);
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
@@ -109,6 +118,7 @@ export class Welcome {
                                     guildMember.addRole(reaction.role, addRoleReason).then(() => {
                                         this.logger.info(addRoleReason);
                                         guildMember.send(this.welcomeConfig.success_message.replace("%role%", reactionName));
+                                        this.userRegistered(guildMember.user);
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_message.replace("%role%", reactionName));
@@ -120,6 +130,30 @@ export class Welcome {
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    private async userRegistered(discordUser: DiscordUser) {
+        let user = UserFactory.create(discordUser);
+        const userRegisteredConfig = this.welcomeConfig.user_registered;
+        const channel = this._client.channels.get(userRegisteredConfig.channel_id);
+        if (user instanceof User
+            && userRegisteredConfig
+            && userRegisteredConfig.message
+            && userRegisteredConfig.channel_id
+            && channel instanceof TextChannel
+        ) {
+            this.logger.info(`Trying to register user ${user.name}.`);
+            const userRepo = await this._database.manager.getCustomRepository(UserRepository);
+            user = await userRepo.findOrCreate(user);
+            if (user.createdOn === null) {
+                user.createdOn = new Date();
+                const logger = this.logger;
+                userRepo.save(user).then(() => {
+                    logger.info(`User ${user.name} registered.`);
+                    channel.send(userRegisteredConfig.message.replace("%user%", `<@${user.discordId}>`));
+                });
             }
         }
     }
