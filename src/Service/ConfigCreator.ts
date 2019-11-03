@@ -26,6 +26,7 @@ export class ConfigCreator {
 
     public constructor() {
         DependencyConfigurator.configureCommand();
+        ConfigCreator.config.init();
     }
 
     public static writeConfig(configTemplate: ConfigTemplate) {
@@ -64,9 +65,13 @@ export class ConfigCreator {
         }
         configToCreate.channels = [];
         let anotherChannel = true;
+        let firstView = true;
         while (anotherChannel) {
+            const continueMessage = firstView
+                ? "Do you want to enabled commands for a channel ?"
+                : "Do you want to enabled another command for a channel ?";
             const addChannel = await prompt([
-                confirm("continue", "Do you want to enabled commands for a channel ?", {default: true}),
+                confirm("continue", continueMessage, {default: true}),
             ]);
             if (addChannel.continue) {
                 const channel = await prompt<ChannelTemplate>([
@@ -79,6 +84,7 @@ export class ConfigCreator {
             } else {
                 anotherChannel = false;
             }
+            firstView = false;
         }
         ConfigCreator.writeConfig(configToCreate);
     }
