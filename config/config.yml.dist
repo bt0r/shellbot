@@ -55,7 +55,7 @@ channels: # Configurations of channels
                   title: Weather
                   city_missing: There is no city, how can i help you ?
                   country_code_missing: There is no country code, please add an default ISO country code like 'fr', 'us'.. in your config file or in your request
-                  unit_missing: There is no unit, please add one in your config file, allowed : metric or imperial
+                  unit_missing: "There is no unit, please add one in your config file, allowed : metric or imperial"
                   error: An error occured, please report this to an admin
                   not_found: This city was not found, please try another one.
             bonjour:
