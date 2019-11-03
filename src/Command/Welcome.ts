@@ -135,7 +135,7 @@ export class Welcome {
     }
 
     private async userRegistered(discordUser: DiscordUser) {
-        let user = UserFactory.create(discordUser);
+        const user = UserFactory.create(discordUser);
         const userRegisteredConfig = this.welcomeConfig.user_registered;
         const channel = this._client.channels.get(userRegisteredConfig.channel_id);
         if (user instanceof User
