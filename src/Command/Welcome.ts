@@ -135,7 +135,7 @@ export class Welcome {
     }
 
     private async userRegistered(discordUser: DiscordUser) {
-        let user = UserFactory.create(discordUser);
+        const user = UserFactory.create(discordUser);
         const userRegisteredConfig = this.welcomeConfig.user_registered;
         const channel = this._client.channels.get(userRegisteredConfig.channel_id);
         if (user instanceof User
@@ -146,13 +146,13 @@ export class Welcome {
         ) {
             this.logger.info(`Trying to register user ${user.name}.`);
             const userRepo = await this._database.manager.getCustomRepository(UserRepository);
-            user = await userRepo.findOrCreate(user);
-            if (user.createdOn === null) {
-                user.createdOn = new Date();
+            const userCreated = await userRepo.findOrCreate(user);
+            if (userCreated.createdOn === null) {
+                userCreated.createdOn = new Date();
                 const logger = this.logger;
                 userRepo.save(user).then(() => {
-                    logger.info(`User ${user.name} registered.`);
-                    channel.send(userRegisteredConfig.message.replace("%user%", `<@${user.discordId}>`));
+                    logger.info(`User ${userCreated.name} registered.`);
+                    channel.send(userRegisteredConfig.message.replace("%user%", `<@${userCreated.discordId}>`));
                 });
             }
         }

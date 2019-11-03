@@ -1,7 +1,9 @@
 [![CircleCI](https://circleci.com/gh/bt0r/shellbot.svg?style=svg)](https://circleci.com/gh/bt0r/shellbot)
 
 # ShellBot
-Shellbot is a discord bot of the shellcode.fr community, want to improve this bot ? Just create a pull-request ! 
+Shellbot is a discord bot of the shellcode.fr community, a french community about programming, devops, sysadmin and much more.
+
+Want to improve this bot ? Feel free to create a pull request ! 
 
 # [FR] ShellCode - Discord
 Shellcode.fr est une communauté passionné par tout ce qui touche à l'informatique, on y parle administration système, réseaux, développement web & applicatif, scripting, sécurité etc...
@@ -11,19 +13,8 @@ L'objectif est de se retrouver autour d'une même passion afin de s'entraider/di
 # Installation
 ## With docker
 - Clone this repository `git clone git@github.com:bt0r/shellbot.git .`
-- Create your config file `cp config/config.yml.dist config/config.yml`
-- Edit your config with the commands you want to enable
-- Install the dependencies `make install`
-- 🎉 Start the bot `make start`
-
-## Without docker
-- Clone this repository `git clone git@github.com:bt0r/shellbot.git .`
-- Create your config file `cp config/config.yml.dist config/config.yml`
-- Edit your config with the commands you want to enable
-- Install the dependencies `make install`
-- Create a MariaDB server `sudo apt install mariadb-server` if you're on ubuntu.
-- In your MariaDB server, create a database
-- Edit the file `ormconfig.json` with the parameters of your database (host, port, user, password ...)
+- Run `make install`
+- If it's your first install, please run `make create-config`, otherwise, don't forget to edit your config file (located on `config/config.yml`)
 - 🎉 Start the bot `make start`
 
 # Features

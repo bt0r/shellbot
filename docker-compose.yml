@@ -1,13 +1,15 @@
 # docker-compose.yml
-version: '2'
+version: '3'
 
 services:
   db:
     container_name: shellbot-db
-    image: mariadb
+    image: mariadb:10.4
     environment:
       MYSQL_DATABASE: shellcode
       MYSQL_USER: shellcode
+      MYSQL_PASSWORD: azerty
+      MYSQL_ROOT_PASSWORD: rootpasswordtochange
     volumes:
       - ./.data/database:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -17,6 +19,8 @@ services:
   node:
     container_name: shellbot-node
     build: docker/node
+    depends_on:
+      - db
     environment:
       - NODE_ENV=production
     volumes:
