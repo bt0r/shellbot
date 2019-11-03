@@ -11,7 +11,6 @@ Shellcode.fr est une communauté passionné par tout ce qui touche à l'informat
 L'objectif est de se retrouver autour d'une même passion afin de s'entraider/discuter/s'informer.
 
 # Installation
-## With docker
 - Clone this repository `git clone git@github.com:bt0r/shellbot.git .`
 - Run `make install`
 - If it's your first install, please run `make create-config`, otherwise, don't forget to edit your config file (located on `config/config.yml`)
