@@ -72,21 +72,10 @@ export class Config {
 
     public write(config = this.config, destinationPath = Config.PATH) {
         const yamlStr = YAML.stringify(config, 20);
-        fs.writeFile(destinationPath, yamlStr, (e) => {
-            if (e) {
-                this.logger.error(`Cannot write file ${destinationPath}, error: ${e.message}`);
-                return false;
-            }
-
-            return true;
-        });
+        fs.writeFileSync(destinationPath, yamlStr);
     }
 
     public init() {
-        fs.copyFile(Config.PATH + ".dist", Config.PATH, (error) => {
-            if (error) {
-                this.logger.error("Can't init the config, error:" + error.message);
-            }
-        });
+        fs.copyFileSync(Config.PATH + ".dist", Config.PATH);
     }
 }

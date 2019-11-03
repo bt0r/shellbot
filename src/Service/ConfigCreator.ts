@@ -18,7 +18,7 @@ interface ChannelTemplate {
 }
 
 @program()
-@version("0.0.1")
+@version("0.0.2")
 @description("Build a config file easily !")
 export class ConfigCreator {
     @Inject
@@ -51,7 +51,6 @@ export class ConfigCreator {
     }
 
     public async run() {
-        const config = ConfigCreator.config;
         const configToCreate: ConfigTemplate = await prompt<ConfigTemplate>([
             input("discordToken", "Please fill your discord token:"),
             input("commandPrefix", "Which prefix commands do you want to use ", {default: "!"}),
@@ -87,6 +86,7 @@ export class ConfigCreator {
             firstView = false;
         }
         ConfigCreator.writeConfig(configToCreate);
+        process.exit();
     }
 }
 
