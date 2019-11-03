@@ -7,11 +7,12 @@ install:
 	@docker-compose build
 	@docker-compose run node npm install --only=dev
 build:
-	@echo 'Buildind javascript files from typescript.'
+	@echo 'Building javascript files from typescript.'
 	@docker-compose run node npm run-script build && echo '✅ Build succeeded' || echo '❌ Build failed'
 create-config: build
 	@echo 'Creating the config file.'
-	@docker-compose run node dist/Service/ConfigCreator.js
+	@chmod +x ./dist/Service/ConfigCreator.js
+	@docker-compose run node node ./dist/Service/ConfigCreator.js
 lint:
 	@docker-compose run node ./node_modules/.bin/tslint -c tslint.json 'src/**/*.ts'
 start: build
