@@ -2,8 +2,8 @@ config/config.yml
 .idea
 node_modules
 npm-debug.log
-src/**/*.js
 /var
 /dist
 docker-compose.override.yml
 .data/
+.env.prod
