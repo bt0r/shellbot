@@ -18,5 +18,9 @@ spec:
         - name: node
           image: btor/shellbot
           workingDir: /home/node/app
+          envFrom:
+            - secretRef:
+                name: mysql-credential
       imagePullSecrets:
-        - name: regcred
+        - name: docker-credential
+
