@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deployment
+  labels:
+    app: shellbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shellbot
+  template:
+    metadata:
+      labels:
+        app: shellbot
+    spec:
+      containers:
+        - name: node
+          image: btor/shellbot
+          workingDir: /home/node/app
+          envFrom:
+            - secretRef:
+                name: mysql-credential
+      imagePullSecrets:
+        - name: docker-credential
+

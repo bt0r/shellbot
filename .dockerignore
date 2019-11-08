@@ -1,5 +1,8 @@
 node_modules
 npm-debug.log
-src
 .data
+doc
+infra
+docker
+var
 
