@@ -27,6 +27,10 @@ spec:
       containers:
         - image: mariadb:10.4.6
           name: mariadb
+          imagePullPolicy: Always
+          args:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
           envFrom:
             - secretRef:
                 name: mysql-credential
