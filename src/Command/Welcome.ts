@@ -86,7 +86,7 @@ export class Welcome {
         this.changeRole(messageReaction, user, "remove");
     }
 
-    private changeRole(messageReaction: MessageReaction, user: DiscordUser, action: string) {
+    private async changeRole(messageReaction: MessageReaction, user: DiscordUser, action: string) {
         if (messageReaction.message.channel instanceof DMChannel && user !== messageReaction.message.author) {
             if (this.welcomeConfig && this.welcomeConfig.enabled) {
                 const guilds = this._client.guilds;
@@ -102,10 +102,10 @@ export class Welcome {
                             case "remove":
                                 const removeRoleReason = `Role ${reactionName} automatically removed to user ${user.username}`;
                                 if (guildMember !== undefined) {
-                                    guildMember.removeRole(reaction.role, removeRoleReason).then(() => {
+                                    guildMember.removeRole(reaction.role, removeRoleReason).then(async () => {
                                         this.logger.info(removeRoleReason);
                                         guildMember.send(this.welcomeConfig.success_removed_message.replace("%role%", reactionName));
-                                        this.userRegistered(guildMember.user);
+                                        await this.userRegistered(guildMember.user);
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
@@ -115,10 +115,10 @@ export class Welcome {
                             case "add":
                                 const addRoleReason = `Role ${reactionName} automatically added to user ${user.username}`;
                                 if (guildMember !== undefined) {
-                                    guildMember.addRole(reaction.role, addRoleReason).then(() => {
+                                    guildMember.addRole(reaction.role, addRoleReason).then(async () => {
                                         this.logger.info(addRoleReason);
                                         guildMember.send(this.welcomeConfig.success_message.replace("%role%", reactionName));
-                                        this.userRegistered(guildMember.user);
+                                        await this.userRegistered(guildMember.user);
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_message.replace("%role%", reactionName));
@@ -150,7 +150,7 @@ export class Welcome {
             if (userCreated.createdOn === null) {
                 userCreated.createdOn = new Date();
                 const logger = this.logger;
-                userRepo.save(user).then(() => {
+                userRepo.save(userCreated).then(() => {
                     logger.info(`User ${userCreated.name} registered.`);
                     channel.send(userRegisteredConfig.message.replace("%user%", `<@${userCreated.discordId}>`));
                 });
