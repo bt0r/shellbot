@@ -8,7 +8,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "migration": "node ./node_modules/.bin/typeorm migration:run",
-    "dev": "tsc-watch "
+    "dev": "tsc-watch --onSuccess \"node ./dist/index.js\" --onFailure \"echo Beep! Compilation Failed\" --outDir ./dist"
   },
   "repository": {
     "type": "git",
