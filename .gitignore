@@ -7,3 +7,5 @@ npm-debug.log
 docker-compose.override.yml
 .data/
 .env.prod
+/yarn.lock
+ormconfig.json

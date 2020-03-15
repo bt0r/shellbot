@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
     "build": "tsc",
-    "migration": "node ./node_modules/.bin/typeorm migration:run"
+    "migration": "node ./node_modules/.bin/typeorm migration:run",
+    "dev": "tsc-watch "
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
     "striptags": "^3.1.1",
+    "tsc-watch": "^4.2.3",
     "tslint": "^5.14.0",
     "twitter": "^1.7.1",
     "typed-prompts": "^1.5.0",
@@ -57,5 +59,7 @@
     "uuid": "^3.3.2",
     "yamljs": "^0.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "pg": "^7.18.2"
+  }
 }
