@@ -21,6 +21,7 @@ export class Twitter extends AbstractSchedule {
         super();
         this.name = Twitter.NAME;
         const restrictions = args.query.restrictions;
+
         if (args.api_key && args.api_secret_key && args.access_token && args.access_token_secret) {
             this._twitterApi = new TwitterApi({
                 consumer_key: args.api_key ,
@@ -28,19 +29,21 @@ export class Twitter extends AbstractSchedule {
                 access_token_key: args.access_token,
                 access_token_secret: args.access_token_secret,
             });
+
             if (args.query.type !== undefined && args.query.type !== null && args.query.values.length > 0) {
                 this._queryType = args.query.type;
                 this._queryValues = args.query.values;
             } else {
                 this.error("TwitterSchedule config parameters are not correct, please RTFM.");
             }
+
             if (restrictions) {
-               if (restrictions.allow && Array.isArray(restrictions.allow)) {
-                    this._restrictionAllow = restrictions.allow;
-               }
-               if (restrictions.deny && Array.isArray(restrictions.deny)) {
-                    this._restrictionDeny = restrictions.deny;
-                }
+                this._restrictionAllow = restrictions.allow && Array.isArray(restrictions.allow)
+                    ? restrictions.allow
+                    : null;
+                this._restrictionDeny = restrictions.deny && Array.isArray(restrictions.deny)
+                    ? restrictions.deny
+                    : null;
             }
         } else {
             this.error("There is one or more api_key missing with TwitterAPI, please RTFM.");
@@ -53,32 +56,38 @@ export class Twitter extends AbstractSchedule {
                 this.lastTweets(channel);
                 break;
             case TwitterSearchType.Tweet:
-
                 break;
         }
     }
 
     public async lastTweets(channel: TextChannel, max: number = 10) {
         const twitterRepository = this.database.manager.getCustomRepository(TwitterRepository);
+
         for (const screenName of this._queryValues) {
             const lastTweetId = await twitterRepository.getLastTweetId(screenName, channel.name);
             const params: any = {
                 screen_name: screenName,
                 count: max,
             };
+
             if (lastTweetId !== null && lastTweetId !== undefined) {
                 params.since_id = lastTweetId;
             }
+
             this._twitterApi.get("statuses/user_timeline", params, async (error, response) => {
                 if (!error && response) {
                     const tweets = response.reverse();
                     this.info(`${tweets.length} fetched`);
                     for (const tweet of tweets) {
                         const twitterVO = new TwitterVO();
+                        const tweetDate = new Date(new Date(tweet.created_at).setHours(0, 0, 0, 0));
+                        const today = new Date(new Date().setHours( 0, 0, 0, 0 ));
                         twitterVO.twitterId = tweet.id_str;
                         twitterVO.channel = channel.name;
                         twitterVO.username = screenName;
-                        if (this.filter(true, tweet.text) && this.filter(false, tweet.text) && !tweet.in_reply_to_status_id && !tweet.in_reply_to_user_id) {
+                        twitterVO.date = tweetDate;
+
+                        if (this.filter(true, tweet.text) && this.filter(false, tweet.text) && !tweet.in_reply_to_status_id && !tweet.in_reply_to_user_id && tweetDate >= today) {
                             const tweetExists = await twitterRepository.isTweetExists(twitterVO.twitterId, twitterVO.channel);
                             if (tweetExists != null) {
                                 this.info(`Tweet ${tweet.id_str} already exists in database.`);
@@ -106,15 +115,14 @@ export class Twitter extends AbstractSchedule {
         if (restrictions) {
             for (const word of restrictions) {
                 if (isAllowed) {
-                    if (tweet.match(new RegExp(word, "ig"))) {
+                    if (new RegExp(word, "ig").test(tweet)) {
                         return true;
                     }
                 } else {
-                    if (!tweet.match(new RegExp(word, "ig"))) {
+                    if (!new RegExp(word, "ig").test(tweet)) {
                         return true;
                     }
                 }
-
             }
         } else {
             return true;

@@ -38,7 +38,7 @@ export class Scheduler {
                             scheduleJob(scheduleName, scheduleConfig.cron_rule, () => {
                                 this._logger.info(`[SCH:${schedule.name}][${scheduleUuid}] Task launched`);
                                 schedule.do(channel[0]);
-                            });
+                            }).invoke();
                         }
                     }
                 }
