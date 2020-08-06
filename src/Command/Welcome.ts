@@ -47,28 +47,31 @@ export class Welcome {
     public sendMessage(member: GuildMember) {
         const welcomeConfig = this.welcomeConfig;
         if (welcomeConfig && welcomeConfig.enabled) {
-            member.send(welcomeConfig.message).then(async (message) => {
-                if (message instanceof Message) {
-                    const reactions = welcomeConfig.reactions;
-                    for (const reactionName  of Object.keys(reactions)) {
-                        const reaction: any = reactions[reactionName];
-                        if (reaction.role && reaction.emoji) {
-                            const emojiValue = reaction.emoji.toString().trim();
-                            const emojiId = Number(emojiValue);
-                            if (isNaN(emojiId)) {
-                                await message.react(reaction.emoji);
-                            } else {
-                                const customEmoji = this._client.emojis.get(emojiValue);
-                                if (customEmoji !== undefined) {
-                                    await message.react(customEmoji);
+            setTimeout(() => {
+                // @ts-ignore
+                this._client.channels.get(welcomeConfig.channelId).send(welcomeConfig.message).then(async (message) => {
+                    if (message instanceof Message) {
+                        const reactions = welcomeConfig.reactions;
+                        for await (const reactionName of Object.keys(reactions)) {
+                            const reaction: any = reactions[reactionName];
+                            if (reaction.role && reaction.emoji) {
+                                const emojiValue = reaction.emoji.toString().trim();
+                                const emojiId = Number(emojiValue);
+                                if (isNaN(emojiId)) {
+                                    await message.react(reaction.emoji);
                                 } else {
-                                    this.logger.error(`Cannot find emoji for reaction: ${reactionName}`);
+                                    const customEmoji = this._client.emojis.get(emojiValue);
+                                    if (customEmoji !== undefined) {
+                                        await message.react(customEmoji);
+                                    } else {
+                                        this.logger.error(`Cannot find emoji for reaction: ${reactionName}`);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            }, 2000);
         }
     }
 
@@ -87,7 +90,7 @@ export class Welcome {
     }
 
     private async changeRole(messageReaction: MessageReaction, user: DiscordUser, action: string) {
-        if (messageReaction.message.channel instanceof DMChannel && user !== messageReaction.message.author) {
+        if (messageReaction.message.channel instanceof TextChannel && user !== messageReaction.message.author) {
             if (this.welcomeConfig && this.welcomeConfig.enabled) {
                 const guilds = this._client.guilds;
                 const guild = guilds.first();
@@ -99,26 +102,27 @@ export class Welcome {
                     const reactionEmoji = messageReaction.emoji;
                     if (reactionEmoji.name === reaction.emoji || reactionEmoji.id === reaction.emoji) {
                         switch (action) {
-                            case "remove":
-                                const removeRoleReason = `Role ${reactionName} automatically removed to user ${user.username}`;
-                                if (guildMember !== undefined) {
-                                    guildMember.removeRole(reaction.role, removeRoleReason).then(async () => {
-                                        this.logger.info(removeRoleReason);
-                                        guildMember.send(this.welcomeConfig.success_removed_message.replace("%role%", reactionName));
-                                        await this.userRegistered(guildMember.user);
-                                    }).catch(() => {
-                                        this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
-                                        guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
-                                    });
-                                }
-                                break;
+                            // case "remove":
+                            //     const removeRoleReason = `Role ${reactionName} automatically removed to user ${user.username}`;
+                            //     if (guildMember !== undefined) {
+                            //         guildMember.removeRole(reaction.role, removeRoleReason).then(async () => {
+                            //             this.logger.info(removeRoleReason);
+                            //             guildMember.send(this.welcomeConfig.success_removed_message.replace("%role%", reactionName));
+                            //             await this.userRegistered(guildMember.user);
+                            //         }).catch(() => {
+                            //             this.logger.error(`Cannot automatically remove role ${reactionName} to user ${user.username}`);
+                            //             guildMember.send(this.welcomeConfig.error_removed_message.replace("%role%", reactionName));
+                            //         });
+                            //     }
+                            //     break;
                             case "add":
                                 const addRoleReason = `Role ${reactionName} automatically added to user ${user.username}`;
                                 if (guildMember !== undefined) {
                                     guildMember.addRole(reaction.role, addRoleReason).then(async () => {
                                         this.logger.info(addRoleReason);
-                                        guildMember.send(this.welcomeConfig.success_message.replace("%role%", reactionName));
+                                        // guildMember.send(this.welcomeConfig.success_message.replace("%role%", reactionName));
                                         await this.userRegistered(guildMember.user);
+                                        await messageReaction.message.delete(0);
                                     }).catch(() => {
                                         this.logger.error(`Cannot automatically add role ${reactionName} to user ${user.username}`);
                                         guildMember.send(this.welcomeConfig.error_message.replace("%role%", reactionName));
