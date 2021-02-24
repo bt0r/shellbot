@@ -38,7 +38,7 @@ All the kubernetes resources are available in the `infra` directory, all you hav
   - One secret called `mysql-credential` which is base on `.env.prod.dist` file with your database credential
 
 # Features
-- **Chuck**: Show a random chuck norris fact (actually in french), command: `!chuck`
+- **Chuck**: Show a random chuck norris fact (currently only in french, see https://github.com/bt0r/shellbot/issues/28), command: `!chuck`
 - **Weather**: Show the weather for a specific city, can be use for all the city around the world (OpenWeatherMap API), command: `!weather <city> <countryCode ISO2>`. Example: `!weather montreal ca`
 - **Qwant**: Search a term on Qwant search engine, command : `!qwant <query>`
 - **Cat**: Show a random cat picture, command : `!cat`
