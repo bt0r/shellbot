@@ -53,7 +53,7 @@
     "tslint": "^5.14.0",
     "twitter": "^1.7.1",
     "typed-prompts": "^1.5.0",
-    "typeorm": "^0.2.15",
+    "typeorm": "^0.2.25",
     "typescript": "^3.3.3333",
     "typescript-ioc": "^1.2.5",
     "uuid": "^3.3.2",
