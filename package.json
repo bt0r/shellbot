@@ -36,7 +36,7 @@
     "@types/twitter": "^1.7.0",
     "@types/uuid": "^3.4.4",
     "@types/yamljs": "^0.2.30",
-    "axios": "^0.18.1",
+    "axios": "^0.21.2",
     "cheerio": "^1.0.0-rc.2",
     "commander-ts": "^0.1.5",
     "discord.js": "^11.4.2",
